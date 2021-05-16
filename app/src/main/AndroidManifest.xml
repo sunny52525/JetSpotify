@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.shaun.spotonmusic">
+
+    <application
+        android:name=".SpotOnApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.SpotOnMusic">
+
+        <activity
+            android:name="com.spotify.sdk.android.authentication.LoginActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="http"
+                    android:host="192.168.1.37"
+                    android:port="8888"
+                    android:pathPattern="/accesstoken" />
+            </intent-filter>
+        </activity>
+
+<!--        <activity-->
+
+<!--            android:launchMode="singleTop"-->
+<!--            android:name=".presentation.ui.activity.HomeActivity">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
+
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+
+
+<!--                <data-->
+<!--                    android:host="callback"-->
+<!--                    android:scheme="spotonmusic" />-->
+<!--            </intent-filter>-->
+
+<!--        </activity>-->
+        <activity
+            android:name=".presentation.ui.activity.LoginActivity"
+            android:exported="true">
+            <intent-filter>
+
+                <data
+                    android:host="accesstoken"
+                    android:scheme="spotonmusic" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".presentation.ui.activity.SplashActivity"
+            android:exported="true"
+
+            android:label="@string/app_name"
+            android:theme="@style/Theme.SpotOnMusic.NoActionBar">
+
+
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+
+        </activity>
+        <activity android:name=".presentation.ui.activity.TokenActivity">
+
+        </activity>
+        <activity android:name=".presentation.ui.components.LoginActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
