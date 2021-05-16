@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.MainThread
 import com.shaun.spotonmusic.AppConstants.AUTH_SCOPES
 import com.shaun.spotonmusic.AppConstants.CLIENT_ID
 import com.shaun.spotonmusic.AppConstants.REDIRECT_URL
@@ -14,9 +15,11 @@ import com.shaun.spotonmusic.presentation.ui.components.LoginScreen
 import com.spotify.sdk.android.auth.AuthorizationRequest
 import com.spotify.sdk.android.auth.AuthorizationResponse
 import com.spotify.sdk.android.authentication.AuthenticationResponse
+import io.github.kaaes.spotify.webapi.core.models.UserPrivate
+import net.openid.appauth.TokenResponse
 
 
-class LoginActivity : ComponentActivity() {
+class LoginActivity : BaseSpotifyActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,20 +35,10 @@ class LoginActivity : ComponentActivity() {
     }
 
     private fun startLoginFlow() {
-        val builder =
-            AuthorizationRequest.Builder(
-                CLIENT_ID,
-                AuthorizationResponse.Type.TOKEN,
-                REDIRECT_URL
-            )
-
-        builder.setScopes(AUTH_SCOPES)
-        val request = builder.build()
-        com.spotify.sdk.android.auth.AuthorizationClient.openLoginInBrowser(this, request)
+        spotifyAuthClient.authorize(this, REQUEST_CODE_AUTHORIZATION)
     }
 
     override fun onNewIntent(intent: Intent?) {
-
 
 
         if (intent == null)
@@ -80,10 +73,54 @@ class LoginActivity : ComponentActivity() {
         super.onNewIntent(intent)
     }
 
-    companion object {
-        private const val TAG = "LoginActivity"
+    override fun onAuthorizationCancelled() {
+        super.onAuthorizationCancelled()
+        showSnackBar("Canceled")
+
     }
 
+    override fun onAuthorizationFailed(error: String?) {
+        super.onAuthorizationFailed(error)
+        showSnackBar("Authorization failed")
+
+    }
+
+    override fun onAuthorizationRefused(error: String?) {
+        super.onAuthorizationRefused(error)
+        showSnackBar("Authorization refused")
+
+    }
+
+    override fun onAuthorizationSucceed(tokenResponse: TokenResponse?, user: UserPrivate?) {
+        super.onAuthorizationSucceed(tokenResponse, user)
+        Toast.makeText(this, "AccessTokenwo: " + tokenResponse!!.accessToken, Toast.LENGTH_SHORT)
+            .show()
+        val intent = getTokenActivityIntent()
+        startActivity(intent)
+        finish()
+    }
+
+    override fun onRefreshAccessTokenSucceed(tokenResponse: TokenResponse?, user: UserPrivate?) {
+        super.onRefreshAccessTokenSucceed(tokenResponse, user)
+        val intent = getTokenActivityIntent()
+        startActivity(intent)
+        finish()
+    }
+
+    private fun getTokenActivityIntent(): Intent {
+        return Intent(this, HomeActivity::class.java)
+    }
+
+    companion object {
+        private const val TAG = "LoginActivity"
+
+        private const val REQUEST_CODE_AUTHORIZATION = 100
+    }
+
+    @MainThread
+    private fun showSnackBar(message: String) {
+        Toast.makeText(this, "$message", Toast.LENGTH_SHORT).show()
+    }
 }
 
 

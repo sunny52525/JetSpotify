@@ -2,17 +2,19 @@ package com.shaun.spotonmusic.presentation.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.pghaz.spotify.webapi.auth.SpotifyAuthorizationCallback
 import com.pghaz.spotify.webapi.auth.SpotifyAuthorizationClient
+import com.shaun.spotonmusic.AppConstants.AUTH_SCOPES
 import com.shaun.spotonmusic.AppConstants.CLIENT_ID
 import com.shaun.spotonmusic.AppConstants.REDIRECT_URL
 import com.shaun.spotonmusic.R
 import io.github.kaaes.spotify.webapi.core.models.UserPrivate
 import net.openid.appauth.TokenResponse
 
-abstract class BaseSpotifyActivity : AppCompatActivity(), SpotifyAuthorizationCallback.Authorize,
+abstract class BaseSpotifyActivity : ComponentActivity(), SpotifyAuthorizationCallback.Authorize,
     SpotifyAuthorizationCallback.RefreshToken {
 
     companion object {
@@ -28,10 +30,7 @@ abstract class BaseSpotifyActivity : AppCompatActivity(), SpotifyAuthorizationCa
             CLIENT_ID,
             REDIRECT_URL
         )
-            /*.setScopes(arrayOf(
-                    "user-top-read",
-                    "user-read-recently-played"
-            ))*/
+            .setScopes(AUTH_SCOPES)
             .setFetchUserAfterAuthorization(true)
             .setCustomTabColor(ContextCompat.getColor(this, R.color.spotifyGreen))
             .build(this)

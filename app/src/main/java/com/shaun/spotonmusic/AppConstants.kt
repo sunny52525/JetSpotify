@@ -3,7 +3,7 @@ package com.shaun.spotonmusic
 object AppConstants {
      val REDIRECT_URL = "spotonmusic://callback"
      val CLIENT_ID = "a4308528f35d4e27898de471f9ae8102"
-     val AUTH_SCOPES = arrayOf(
+     val AUTH_SCOPES: Array<String?> = arrayOf(
         "streaming",
         "user-read-recently-played",
         "user-top-read",

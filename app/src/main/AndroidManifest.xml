@@ -14,47 +14,13 @@
         <activity
             android:name="com.spotify.sdk.android.authentication.LoginActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:scheme="http"
-                    android:host="192.168.1.37"
-                    android:port="8888"
-                    android:pathPattern="/accesstoken" />
-            </intent-filter>
         </activity>
 
-<!--        <activity-->
 
-<!--            android:launchMode="singleTop"-->
-<!--            android:name=".presentation.ui.activity.HomeActivity">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.VIEW" />-->
-
-<!--                <category android:name="android.intent.category.DEFAULT" />-->
-<!--                <category android:name="android.intent.category.BROWSABLE" />-->
-
-
-<!--                <data-->
-<!--                    android:host="callback"-->
-<!--                    android:scheme="spotonmusic" />-->
-<!--            </intent-filter>-->
-
-<!--        </activity>-->
         <activity
             android:name=".presentation.ui.activity.LoginActivity"
             android:exported="true">
-            <intent-filter>
 
-                <data
-                    android:host="accesstoken"
-                    android:scheme="spotonmusic" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".presentation.ui.activity.SplashActivity"
@@ -62,25 +28,15 @@
 
             android:label="@string/app_name"
             android:theme="@style/Theme.SpotOnMusic.NoActionBar">
-
-
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-
-        </activity>
-        <activity android:name=".presentation.ui.activity.TokenActivity">
-
-        </activity>
-        <activity android:name=".presentation.ui.components.LoginActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".presentation.ui.activity.HomeActivity">
+
+        </activity>
+
     </application>
 
 </manifest>

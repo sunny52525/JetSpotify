@@ -19,6 +19,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.annotation.MainThread
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
@@ -29,14 +30,7 @@ import io.github.kaaes.spotify.webapi.core.models.UserPublic
 import net.openid.appauth.TokenResponse
 import org.joda.time.format.DateTimeFormat
 
-/**
- * Displays the authorized state of the user. This activity is provided with the outcome of the
- * authorization flow, which it uses to negotiate the final authorized state,
- * by performing an authorization code exchange if necessary. After this, the activity provides
- * additional post-authorization operations if available, such as fetching user info and refreshing
- * access tokens.
- */
-class TokenActivity : BaseSpotifyActivity() {
+class HomeActivity : BaseSpotifyActivity()  {
     val TAG = "LOL"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

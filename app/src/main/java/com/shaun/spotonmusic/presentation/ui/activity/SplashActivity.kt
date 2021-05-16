@@ -2,9 +2,10 @@ package com.shaun.spotonmusic.presentation.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.ComponentActivity
+import android.os.Handler
+import android.widget.Toast
 import androidx.activity.compose.setContent
+import androidx.annotation.MainThread
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,123 +18,54 @@ import androidx.compose.ui.unit.dp
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.createDataStore
-import com.shaun.spotonmusic.AppConstants
-import com.shaun.spotonmusic.AppConstants.CLIENT_ID
-import com.shaun.spotonmusic.AppConstants.REDIRECT_URL
 import com.shaun.spotonmusic.R
 import com.shaun.spotonmusic.database.accesscode.AccessCodeDao
-import com.shaun.spotonmusic.database.datastore.read
-import com.shaun.spotonmusic.database.datastore.save
 import com.shaun.spotonmusic.ui.theme.SpotOnMusicTheme
 import com.shaun.spotonmusic.ui.theme.black
-import com.spotify.sdk.android.auth.AuthorizationRequest
-import com.spotify.sdk.android.auth.AuthorizationResponse
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import io.github.kaaes.spotify.webapi.core.models.UserPrivate
+import net.openid.appauth.TokenResponse
 import javax.inject.Inject
 import javax.inject.Named
 
-@AndroidEntryPoint
-class SplashActivity : ComponentActivity() {
+
+class SplashActivity : BaseSpotifyActivity() {
 
 
-    lateinit var dataStore: DataStore<Preferences>
-
-    @Inject
-    @Named("dao")
-    lateinit var accessCodeDao: AccessCodeDao
-
-    private val REQUEST_CODE = 1337
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        dataStore = createDataStore(name = "settings")
 
         setContent {
             SpotOnMusicTheme {
                 Surface(color = black) {
                     Splash(onclick = {
-                        Log.d(TAG, "onCreate: $REQUEST_CODE")
-                        GlobalScope.launch {
-                            Log.d(TAG, "onCreate: ${read("code", dataStore)}")
-                        }
+
                     })
                 }
             }
         }
 
-
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        val builder =
-            AuthorizationRequest.Builder(
-                CLIENT_ID,
-                AuthorizationResponse.Type.CODE,
-                REDIRECT_URL
-            )
-
-
-
-        builder.setScopes(AppConstants.AUTH_SCOPES)
-        val request = builder.build()
-        com.spotify.sdk.android.auth.AuthorizationClient.openLoginActivity(
-            this,
-            REQUEST_CODE,
-            request
-        )
-
-
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-
-        if (requestCode == REQUEST_CODE) {
-            val response =
-                com.spotify.sdk.android.auth.AuthorizationClient.getResponse(resultCode, intent)
-            Log.d(TAG, "onActivityResult: ${response.state} ")
-
-            when (response.type) {
-                AuthorizationResponse.Type.CODE -> {
-
-
-                    GlobalScope.launch {
-//                        accessCodeDao.insertCode(AccessCodeEntity(response.code, 1))
-                        save("code", response.code, dataStore = dataStore)
-                        withContext(Dispatchers.Main) {
-                            Intent(this@SplashActivity, com.shaun.spotonmusic.presentation.ui.components.LoginActivity::class.java).apply {
-                                startActivity(this)
-                                finish()
-                            }
-                        }
-                    }
-                    Log.d(TAG, "onActivityResulst: ${response.code}")
-
+        Handler().postDelayed({
+            if (!spotifyAuthClient.isAuthorized())
+                Intent(this, LoginActivity::class.java).apply {
+                    startActivity(this)
+                    finish()
                 }
-
-                AuthorizationResponse.Type.ERROR -> {
-                    startActivity()
-                    Log.d(TAG, "onActivityResult2wwwww: ${response.state}")
-                }
-                else -> {
-                    startActivity()
-                    Log.d(TAG, "onActivityResult3: error")
-                }
+            else {
+                val intent = getTokenActivityIntent()
+                startActivity(intent)
+                finish()
             }
-        }
+
+        }, 1000)
+
+
     }
 
-    private fun startActivity() {
-        Intent(this, LoginActivity::class.java).apply {
-            startActivity(this)
-            finish()
-        }
+    private fun getTokenActivityIntent(): Intent {
+        return Intent(this, HomeActivity::class.java)
     }
+
 
     companion object {
         private const val TAG = "SplashActivity"
@@ -166,5 +98,9 @@ class SplashActivity : ComponentActivity() {
 
     }
 
+    @MainThread
+    private fun showSnackBar(message: String) {
+        Toast.makeText(this, "$message", Toast.LENGTH_SHORT).show()
+    }
 
 }
