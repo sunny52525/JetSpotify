@@ -113,7 +113,6 @@ class LoginActivity : BaseSpotifyActivity() {
 
     companion object {
         private const val TAG = "LoginActivity"
-
         private const val REQUEST_CODE_AUTHORIZATION = 100
     }
 

@@ -15,18 +15,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.createDataStore
+import androidx.lifecycle.lifecycleScope
 import com.shaun.spotonmusic.R
-import com.shaun.spotonmusic.database.accesscode.AccessCodeDao
+import com.shaun.spotonmusic.presentation.ui.components.Splash
 import com.shaun.spotonmusic.ui.theme.SpotOnMusicTheme
 import com.shaun.spotonmusic.ui.theme.black
-import dagger.hilt.android.AndroidEntryPoint
-import io.github.kaaes.spotify.webapi.core.models.UserPrivate
-import net.openid.appauth.TokenResponse
-import javax.inject.Inject
-import javax.inject.Named
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class SplashActivity : BaseSpotifyActivity() {
@@ -38,69 +33,37 @@ class SplashActivity : BaseSpotifyActivity() {
         setContent {
             SpotOnMusicTheme {
                 Surface(color = black) {
-                    Splash(onclick = {
-
-                    })
+                    Splash()
                 }
             }
         }
 
-        Handler().postDelayed({
+        lifecycleScope.launch {
+            delay(1000)
             if (!spotifyAuthClient.isAuthorized())
-                Intent(this, LoginActivity::class.java).apply {
-                    startActivity(this)
-                    finish()
+                Intent(this@SplashActivity, LoginActivity::class.java).apply {
+                    startApp(this)
                 }
             else {
-                val intent = getTokenActivityIntent()
-                startActivity(intent)
-                finish()
+                Intent(this@SplashActivity, HomeActivity::class.java).apply {
+                    startApp(this)
+                }
             }
-
-        }, 1000)
+        }
 
 
     }
 
-    private fun getTokenActivityIntent(): Intent {
-        return Intent(this, HomeActivity::class.java)
+    private fun startApp(intent: Intent) {
+        startActivity(intent)
+        finish()
     }
+
 
 
     companion object {
         private const val TAG = "SplashActivity"
     }
 
-
-    @Composable
-    fun Splash(onclick: () -> Unit) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxSize(1f)
-                .background(black)
-        ) {
-
-
-            Image(
-                painter = painterResource(id = R.drawable.ic_spotify_logo),
-                contentDescription = "Spotify Logo",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 30.dp, end = 30.dp)
-                    .clickable {
-                        onclick()
-                    }
-
-            )
-        }
-
-
-    }
-
-    @MainThread
-    private fun showSnackBar(message: String) {
-        Toast.makeText(this, "$message", Toast.LENGTH_SHORT).show()
-    }
 
 }
