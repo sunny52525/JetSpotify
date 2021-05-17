@@ -93,6 +93,12 @@ class LoginActivity : BaseSpotifyActivity() {
 
     override fun onAuthorizationSucceed(tokenResponse: TokenResponse?, user: UserPrivate?) {
         super.onAuthorizationSucceed(tokenResponse, user)
+
+        tokenResponse?.let {
+            Log.d(TAG, "onAuthorizationSucceed: ${tokenResponse.accessToken}")
+            Log.d(TAG, "onAuthorizationSucceed: ${tokenResponse.refreshToken}")
+            Log.d(TAG, "onAuthorizationSucceed: ${tokenResponse.tokenType}")
+        }
         Toast.makeText(this, "AccessTokenwo: " + tokenResponse!!.accessToken, Toast.LENGTH_SHORT)
             .show()
         val intent = getTokenActivityIntent()
