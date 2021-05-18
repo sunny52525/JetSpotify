@@ -56,7 +56,6 @@ fun BottomNavigationSpotOnMusic(
     Surface(
         modifier = Modifier
             .background(black)
-            .background(black)
     ) {
         BottomNavigation(
             modifier = Modifier
@@ -114,7 +113,8 @@ fun HomeScreenNavigationConfiguration(
     navHostController: NavHostController
 ) {
 
-    NavHost(navController = navHostController, startDestination = Routes.Home.route) {
+    NavHost(navController = navHostController, startDestination = Routes.Home.route,modifier = Modifier.background(
+        black)) {
 
         composable(Routes.Home.route) {
             Home()

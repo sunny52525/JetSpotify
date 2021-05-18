@@ -9,5 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="spotiyBlack">#191414</color>
     <color name="spotifyGreen">#1DB954</color>
+    <color name="transparent">#00000000</color>
 
 </resources>

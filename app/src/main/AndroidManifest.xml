@@ -13,8 +13,7 @@
 
         <activity
             android:name="com.spotify.sdk.android.authentication.LoginActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
-        </activity>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
 
 
         <activity
@@ -33,7 +32,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.ui.activity.HomeActivity">
+        <activity
+            android:name=".presentation.ui.activity.HomeActivity"
+            android:theme="@style/Theme.SpotOnMusic.NoActionBar">
 
         </activity>
 

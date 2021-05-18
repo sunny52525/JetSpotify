@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -75,19 +76,24 @@ fun LoginScreen(
                 }, shape = RoundedCornerShape(25.dp)
 
         ) {
-            Text(
-                text = "Login", modifier = Modifier
-                    .fillMaxWidth(1f)
-                    .background(green)
-                    .padding(top = 16.dp)
-                    .align(CenterHorizontally),
-                textAlign = TextAlign.Center,
-                lineHeight = 40.sp,
-                color = Color.White,
-                fontWeight = FontWeight.Bold
+            Row(
+                Modifier
+                    .fillMaxHeight()
+                    .background(green)) {
+                Text(
+                    text = "Login", modifier = Modifier
+                        .fillMaxWidth(1f)
 
 
-            )
+                        .align(Alignment.CenterVertically),
+                    textAlign = TextAlign.Center,
+                    lineHeight = 40.sp,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
+
+
+                )
+            }
         }
         Column(
             modifier = Modifier
@@ -105,19 +111,24 @@ fun LoginScreen(
                     }, shape = RoundedCornerShape(25.dp)
 
             ) {
-                Text(
-                    text = "Signup", modifier = Modifier
-                        .fillMaxWidth(1f)
-                        .background(green)
-                        .padding(top = 16.dp)
-                        .align(CenterHorizontally),
-                    textAlign = TextAlign.Center,
-                    lineHeight = 40.sp,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
+                Row(
+                    Modifier
+                        .fillMaxHeight()
+                        .background(green)) {
+                    Text(
+                        text = "Signup", modifier = Modifier
+                            .fillMaxWidth(1f)
 
 
-                )
+                            .align(Alignment.CenterVertically),
+                        textAlign = TextAlign.Center,
+                        lineHeight = 40.sp,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+
+
+                    )
+                }
             }
         }
     }

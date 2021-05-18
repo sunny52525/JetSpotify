@@ -8,3 +8,5 @@ val black= Color(0xFF191414)
 val green= Color(0xFF1DB954)
 
 val spotifyGray= Color(0xFF212121)
+    
+

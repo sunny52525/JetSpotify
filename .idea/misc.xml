@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android_development/SpotOnMusic/app/src/main/res/drawable/ic_library.xml" value="0.29010416666666666" />
         <entry key="..\:/Android_development/SpotOnMusic/app/src/main/res/drawable/ic_spotify_no_name.xml" value="0.3828125" />
+        <entry key="..\:/Android_development/SpotOnMusic/app/src/main/res/drawable/spotify_liked.xml" value="0.3828125" />
         <entry key="..\:/Android_development/SpotOnMusic/app/src/main/res/layout/activity_login.xml" value="0.36666666666666664" />
         <entry key="..\:/Android_development/SpotOnMusic/app/src/main/res/layout/activity_token.xml" value="0.16458333333333333" />
       </map>
