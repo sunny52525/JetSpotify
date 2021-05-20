@@ -39,6 +39,7 @@ fun SuggestionsRow(title: String = "Throwback", playlistsPager: PlaylistsPager) 
 
 
             playlistsPager.playlists?.let {
+
                 it.items.forEach {
                     item {
 

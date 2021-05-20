@@ -26,14 +26,10 @@ fun Home(
     viewModel: HomeScreenViewModel, context: HomeActivity
 ) {
 
-    val playList: PlaylistsPager by viewModel.categoryPlaylistsPager.observeAsState(initial = PlaylistsPager())
-//
+    val playList: PlaylistsPager by viewModel.categoryPlaylistsPager.observeAsState(PlaylistsPager())
 
-//    var title: Album by viewModel.albums.observeAsState(initial = Album())
 
-    var tru = remember {
-        mutableStateOf(false)
-    }
+
     Column(
         Modifier
             .fillMaxSize()
@@ -66,8 +62,7 @@ fun Home(
                 }, 2000)
 
                 Greeting(title = title, onClick = { it ->
-                    tru.value = true
-                    Log.d("TAG", "Home: $tru")
+
                     viewModel.getAlbum(it)
 //                    Log.d("TAG", "Home: ${viewModel.albums.hasActiveObservers()}")
                     Log.d("TAG", "Home:${title.name} ")
@@ -84,7 +79,7 @@ fun Home(
 
             item {
 
-                SuggestionsRow(playlistsPager = playList)
+                SuggestionsRow(playlistsPager = playList,title = "Mood")
             }
 
 

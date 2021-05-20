@@ -27,7 +27,8 @@ import com.shaun.spotonmusic.viewmodel.HomeScreenViewModel
 
 @Composable
 fun HomeScreen(
-    context: HomeActivity
+    context: HomeActivity,
+    viewModel: HomeScreenViewModel
 ) {
 
     val navController = rememberNavController()
@@ -47,8 +48,8 @@ fun HomeScreen(
 
         }
     ) {
-        HomeScreenNavigationConfiguration(navController
-            , context
+        HomeScreenNavigationConfiguration(
+            navController, context
         )
     }
 }
@@ -116,8 +117,7 @@ fun BottomNavigationSpotOnMusic(
 
 @Composable
 fun HomeScreenNavigationConfiguration(
-    navHostController: NavHostController
-    , context: HomeActivity
+    navHostController: NavHostController, context: HomeActivity
 ) {
 
     NavHost(
@@ -132,8 +132,9 @@ fun HomeScreenNavigationConfiguration(
             val factory = HiltViewModelFactory(LocalContext.current, it)
             val viewModel: HomeScreenViewModel = viewModel("HomeScreenViewModel", factory)
 
-            Home(viewModel
-                , context
+
+            Home(
+                viewModel, context
             )
         }
         composable(Routes.Search.route) {

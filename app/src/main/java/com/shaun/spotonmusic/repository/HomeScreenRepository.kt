@@ -17,7 +17,7 @@ import retrofit.client.Response
 class HomeScreenRepository(private val mSpotifyApi: SpotifyService, val accessToken: String) {
     private var api = SpotifyApi()
     private var spotify: kaaes.spotify.webapi.android.SpotifyService
-//     var tokenExpired = MutableLiveData<Boolean>()
+     var tokenExpired = MutableLiveData<Boolean>()
 
     var album = MutableLiveData<Album>()
     var categoryPlaylistPager = MutableLiveData<PlaylistsPager>()
@@ -43,7 +43,7 @@ class HomeScreenRepository(private val mSpotifyApi: SpotifyService, val accessTo
 
             override fun failure(error: RetrofitError?) {
                 Log.d(TAG, "onFailure: ${error?.message}")
-//                tokenExpired.postValue(true)
+                tokenExpired.postValue(true)
 
             }
 

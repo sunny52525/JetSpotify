@@ -6,11 +6,12 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.annotation.MainThread
-import androidx.core.view.WindowCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.material.snackbar.Snackbar
 import com.shaun.spotonmusic.R
 import com.shaun.spotonmusic.presentation.ui.components.screens.HomeScreen
 import com.shaun.spotonmusic.ui.theme.SpotOnMusicTheme
+import com.shaun.spotonmusic.viewmodel.HomeScreenViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kaaes.spotify.webapi.core.models.UserPrivate
 import net.openid.appauth.TokenResponse
@@ -26,9 +27,12 @@ class HomeActivity : BaseSpotifyActivity() {
             return
         }
         setContent {
-            SpotOnMusicTheme() {
+            SpotOnMusicTheme {
+
+                val viewModel:HomeScreenViewModel= viewModel()
                 HomeScreen(
-                    this
+                    this,
+                    viewModel
                 )
             }
         }

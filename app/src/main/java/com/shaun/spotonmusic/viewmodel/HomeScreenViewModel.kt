@@ -27,11 +27,10 @@ class HomeScreenViewModel @Inject constructor(context: SpotOnApplication, privat
     private lateinit var spotifyService: io.github.kaaes.spotify.webapi.retrofit.v2.SpotifyService
     var accessToken = mutableStateOf("")
 
-//    private var dataStore: DataStore<Preferences> = context.createDataStore(name = "accesstoken")
     private lateinit var repo: HomeScreenRepository
     var albums = MutableLiveData<Album>()
 
-    //    var tokenExpired = MutableLiveData<Boolean>()
+        var tokenExpired = MutableLiveData<Boolean>()
     var categoryPlaylistsPager = MutableLiveData<PlaylistsPager>()
 
     init {
@@ -45,7 +44,7 @@ class HomeScreenViewModel @Inject constructor(context: SpotOnApplication, privat
         albums = repo.album
         categoryPlaylistsPager=repo.categoryPlaylistPager
 
-//        tokenExpired = repo.tokenExpired
+        tokenExpired = repo.tokenExpired
 
     }
 
