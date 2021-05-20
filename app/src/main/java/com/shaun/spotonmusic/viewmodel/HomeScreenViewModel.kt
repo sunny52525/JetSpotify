@@ -1,10 +1,8 @@
 package com.shaun.spotonmusic.viewmodel
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.createDataStore
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,26 +10,30 @@ import com.shaun.spotonmusic.SpotOnApplication
 import com.shaun.spotonmusic.read
 import com.shaun.spotonmusic.repository.HomeScreenRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.kaaes.spotify.webapi.retrofit.v2.Spotify
-import kaaes.spotify.webapi.android.models.Album
-import kaaes.spotify.webapi.android.models.CategoriesPager
-import kaaes.spotify.webapi.android.models.PlaylistsPager
+import kaaes.spotify.webapi.android.models.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
-class HomeScreenViewModel @Inject constructor(context: SpotOnApplication, private val dataStore: DataStore<Preferences>) : ViewModel() {
+class HomeScreenViewModel @Inject constructor(
+    context: SpotOnApplication,
+    private val dataStore: DataStore<Preferences>
+) : ViewModel() {
 
-
-    private lateinit var spotifyService: io.github.kaaes.spotify.webapi.retrofit.v2.SpotifyService
     var accessToken = mutableStateOf("")
 
     private lateinit var repo: HomeScreenRepository
     var albums = MutableLiveData<Album>()
 
-        var tokenExpired = MutableLiveData<Boolean>()
-    var categoryPlaylistsPager = MutableLiveData<PlaylistsPager>()
+    var moodAlbum = MutableLiveData<PlaylistsPager>()
+    var partyAlbum = MutableLiveData<PlaylistsPager>()
+    var featuredPlaylists = MutableLiveData<FeaturedPlaylists>()
+    var favouriteArtist = MutableLiveData<Pager<Album>>()
+    var favouriteArtistImage = MutableLiveData<String>()
+    var tokenExpired = MutableLiveData<Boolean>()
+    var newReleases = MutableLiveData<NewReleases>()
+    var getMyPlayList = MutableLiveData<Pager<PlaylistSimple>>()
 
     init {
         getAccessToken()
@@ -39,12 +41,19 @@ class HomeScreenViewModel @Inject constructor(context: SpotOnApplication, privat
     }
 
     private fun setToken() {
-        spotifyService = Spotify.createAuthenticatedService(accessToken.toString())
-        repo = HomeScreenRepository(spotifyService, accessToken.value)
+        repo = HomeScreenRepository(accessToken.value)
         albums = repo.album
-        categoryPlaylistsPager=repo.categoryPlaylistPager
 
         tokenExpired = repo.tokenExpired
+
+        favouriteArtistImage = repo.favouriteArtistUrl
+        moodAlbum = repo.getCategoryPlaylist("mood")
+        partyAlbum = repo.getCategoryPlaylist("party")
+        featuredPlaylists = repo.getFeaturedPlaylist()
+        favouriteArtist = repo.getAlbumsFromFavouriteArtists()
+        newReleases = repo.getNewReleases()
+        getMyPlayList=repo.getUserPlaylist()
+
 
     }
 
@@ -60,10 +69,6 @@ class HomeScreenViewModel @Inject constructor(context: SpotOnApplication, privat
 
     fun getAlbum(albumId: String) {
         repo.getAlbum(albumID = albumId)
-    }
-
-    fun categoryPlaylist(category: String) {
-        repo.getCategoryPlaylist(category = category)
     }
 
 

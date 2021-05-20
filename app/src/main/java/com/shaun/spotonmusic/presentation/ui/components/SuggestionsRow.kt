@@ -2,6 +2,7 @@ package com.shaun.spotonmusic.presentation.ui.components
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,11 +19,44 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.glide.rememberGlidePainter
-import kaaes.spotify.webapi.android.models.PlaylistSimple
+import kaaes.spotify.webapi.android.models.NewReleases
 import kaaes.spotify.webapi.android.models.PlaylistsPager
 
 @Composable
 fun SuggestionsRow(title: String = "Throwback", playlistsPager: PlaylistsPager) {
+
+    Column(Modifier.padding(start = 20.dp, top = 30.dp)) {
+
+
+        Text(
+            text = title, textAlign = TextAlign.Left,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.fillMaxWidth(),
+            fontSize = 23.sp,
+            color = Color.White
+        )
+        LazyRow {
+
+
+            playlistsPager.playlists?.let {
+
+                it.items.forEach {
+                    item {
+
+                        SuggestionCard(0, modifier = Modifier.clickable {
+
+                        }, imageUrl = it.images[0].url, it.name)
+                    }
+                }
+            }
+
+        }
+    }
+}
+
+
+@Composable
+fun NewReleasesRow(title: String = "Throwback", newReleases: NewReleases) {
 
     Log.d("TAG", "SuggestionsRow: ")
     Column(Modifier.padding(start = 20.dp, top = 30.dp)) {
@@ -35,15 +69,17 @@ fun SuggestionsRow(title: String = "Throwback", playlistsPager: PlaylistsPager) 
             fontSize = 23.sp,
             color = Color.White
         )
-        LazyRow() {
+        LazyRow {
 
 
-            playlistsPager.playlists?.let {
+            newReleases.albums?.items?.let {
 
-                it.items.forEach {
+                it.forEach {
                     item {
 
-                        SuggestionCard(0, it)
+                        SuggestionCard(0, modifier = Modifier.clickable {
+
+                        }, imageUrl = it.images[0].url, it.name)
                     }
                 }
             }
@@ -57,27 +93,33 @@ fun SuggestionsRow(title: String = "Throwback", playlistsPager: PlaylistsPager) 
 @Composable
 fun SuggestionCard(
     cornerRadius: Int = 0,
-    playlistSimple: PlaylistSimple
+    modifier: Modifier,
+    imageUrl: String,
+    title: String,
+    size:Int=170
 ) {
 
 
-    Column(Modifier.padding(end = 10.dp, bottom = 10.dp, top = 10.dp)) {
+    Column(modifier.padding(end = 10.dp, bottom = 10.dp, top = 10.dp)) {
         Card(shape = RoundedCornerShape(cornerRadius.dp)) {
 
 
             Image(
-                painter = rememberGlidePainter(request = playlistSimple.images[0].url),
+                painter = rememberGlidePainter(request = imageUrl),
                 contentDescription = "",
 
                 modifier =
-                Modifier.size(170.dp)
+                Modifier.size(size.dp)
             )
         }
         Text(
-            text = playlistSimple.name,
+            text = title,
             color = Color.Gray,
-            textAlign = TextAlign.Left
+            textAlign = TextAlign.Left,
+            fontSize = 13.sp
         )
 
     }
+
+
 }
