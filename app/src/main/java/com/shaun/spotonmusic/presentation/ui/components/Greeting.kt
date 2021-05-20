@@ -22,6 +22,7 @@ import com.shaun.spotonmusic.R
 //@Preview
 @Composable
 fun GreetingCard(
+    title:String,
     onSettingClicked: () -> Unit,
     onHistoryClicked: () -> Unit
 
@@ -34,7 +35,7 @@ fun GreetingCard(
 
             Spacer(modifier = Modifier.width(20.dp))
             Text(
-                "Good Morning",
+                title,
                 color = Color.White,
                 textAlign = TextAlign.Left,
                 fontWeight = FontWeight.Bold,

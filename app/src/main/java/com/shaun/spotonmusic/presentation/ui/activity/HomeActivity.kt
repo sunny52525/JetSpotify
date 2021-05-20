@@ -10,21 +10,27 @@ import androidx.core.view.WindowCompat
 import com.google.android.material.snackbar.Snackbar
 import com.shaun.spotonmusic.R
 import com.shaun.spotonmusic.presentation.ui.components.screens.HomeScreen
+import com.shaun.spotonmusic.ui.theme.SpotOnMusicTheme
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.kaaes.spotify.webapi.core.models.UserPrivate
 import net.openid.appauth.TokenResponse
 
+@AndroidEntryPoint
 class HomeActivity : BaseSpotifyActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        WindowCompat.setDecorFitsSystemWindows(window, false)
         if (spotifyAuthClient.hasConfigurationChanged()) {
             Toast.makeText(this, "Configuration change detected", Toast.LENGTH_SHORT).show()
             signOut()
             return
         }
         setContent {
-            HomeScreen()
+            SpotOnMusicTheme() {
+                HomeScreen(
+                    this
+                )
+            }
         }
     }
 

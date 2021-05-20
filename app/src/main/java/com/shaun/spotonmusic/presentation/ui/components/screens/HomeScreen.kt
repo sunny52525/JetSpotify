@@ -8,23 +8,27 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.HiltViewModelFactory
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
+import com.shaun.spotonmusic.presentation.ui.activity.HomeActivity
 import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Home
 import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Library
 import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Search
 import com.shaun.spotonmusic.presentation.ui.navigation.Routes
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.spotifyGray
+import com.shaun.spotonmusic.viewmodel.HomeScreenViewModel
 
-
-@Preview
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    context: HomeActivity
+) {
 
     val navController = rememberNavController()
 
@@ -43,7 +47,9 @@ fun HomeScreen() {
 
         }
     ) {
-        HomeScreenNavigationConfiguration(navHostController = navController)
+        HomeScreenNavigationConfiguration(navController
+            , context
+        )
     }
 }
 
@@ -111,13 +117,24 @@ fun BottomNavigationSpotOnMusic(
 @Composable
 fun HomeScreenNavigationConfiguration(
     navHostController: NavHostController
+    , context: HomeActivity
 ) {
 
-    NavHost(navController = navHostController, startDestination = Routes.Home.route,modifier = Modifier.background(
-        black)) {
+    NavHost(
+        navController = navHostController,
+        startDestination = Routes.Home.route,
+        modifier = Modifier.background(
+            black
+        )
+    ) {
 
         composable(Routes.Home.route) {
-            Home()
+            val factory = HiltViewModelFactory(LocalContext.current, it)
+            val viewModel: HomeScreenViewModel = viewModel("HomeScreenViewModel", factory)
+
+            Home(viewModel
+                , context
+            )
         }
         composable(Routes.Search.route) {
             Search()

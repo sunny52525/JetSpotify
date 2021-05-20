@@ -6,18 +6,26 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.createDataStore
+import androidx.lifecycle.lifecycleScope
 import com.pghaz.spotify.webapi.auth.SpotifyAuthorizationCallback
 import com.pghaz.spotify.webapi.auth.SpotifyAuthorizationClient
 import com.shaun.spotonmusic.AppConstants.AUTH_SCOPES
 import com.shaun.spotonmusic.AppConstants.CLIENT_ID
 import com.shaun.spotonmusic.AppConstants.REDIRECT_URL
 import com.shaun.spotonmusic.R
+import com.shaun.spotonmusic.save
 import io.github.kaaes.spotify.webapi.core.models.UserPrivate
+import kotlinx.coroutines.launch
 import net.openid.appauth.TokenResponse
 
 abstract class BaseSpotifyActivity : ComponentActivity(), SpotifyAuthorizationCallback.Authorize,
     SpotifyAuthorizationCallback.RefreshToken {
 
+
+    private lateinit var dataStore: DataStore<Preferences>
     companion object {
         const val EXTRA_USING_PENDING_INTENT = "EXTRA_USING_PENDING_INTENT"
     }
@@ -27,14 +35,18 @@ abstract class BaseSpotifyActivity : ComponentActivity(), SpotifyAuthorizationCa
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        dataStore = createDataStore(name = "accesstoken")
+
         spotifyAuthClient = SpotifyAuthorizationClient.Builder(
             CLIENT_ID,
             REDIRECT_URL
+
         )
             .setScopes(AUTH_SCOPES)
             .setFetchUserAfterAuthorization(true)
             .setCustomTabColor(ContextCompat.getColor(this, R.color.spotifyGreen))
             .build(this)
+
 
         spotifyAuthClient.setDebugMode(true)
         spotifyAuthClient.addAuthorizationCallback(this)
@@ -90,7 +102,9 @@ abstract class BaseSpotifyActivity : ComponentActivity(), SpotifyAuthorizationCa
     }
 
     override fun onAuthorizationSucceed(tokenResponse: TokenResponse?, user: UserPrivate?) {
-
+        lifecycleScope.launch {
+            save(dataStore,"accesstoken",tokenResponse?.accessToken!!)
+        }
     }
 
     override fun onRefreshAccessTokenStarted() {
@@ -99,5 +113,8 @@ abstract class BaseSpotifyActivity : ComponentActivity(), SpotifyAuthorizationCa
 
     override fun onRefreshAccessTokenSucceed(tokenResponse: TokenResponse?, user: UserPrivate?) {
 
+        lifecycleScope.launch {
+            save(dataStore,"accesstoken",tokenResponse?.accessToken!!)
+        }
     }
 }
