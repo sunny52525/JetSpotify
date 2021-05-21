@@ -10,10 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import com.shaun.spotonmusic.viewmodel.HomeScreenViewModel
 
 
 @Composable
-fun Library(){
+fun Library(viewModel: HomeScreenViewModel) {
     Column(
         Modifier
             .fillMaxSize()

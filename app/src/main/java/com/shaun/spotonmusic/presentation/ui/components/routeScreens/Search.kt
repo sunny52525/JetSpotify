@@ -10,10 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import com.shaun.spotonmusic.presentation.ui.navigation.Routes
+import com.shaun.spotonmusic.viewmodel.HomeScreenViewModel
 
 @Composable
-fun Search(){
+fun Search(viewModel: HomeScreenViewModel) {
     Column(
         Modifier
             .fillMaxSize()

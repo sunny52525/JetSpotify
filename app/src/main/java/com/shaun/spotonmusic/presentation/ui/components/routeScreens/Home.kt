@@ -1,7 +1,5 @@
 package com.shaun.spotonmusic.presentation.ui.components.routeScreens
 
-import android.content.Intent
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,8 +20,6 @@ import androidx.palette.graphics.Palette
 import com.shaun.spotonmusic.getBitmapFromURL
 import com.shaun.spotonmusic.getGreeting
 import com.shaun.spotonmusic.model.RecentlyPlayed
-import com.shaun.spotonmusic.presentation.ui.activity.HomeActivity
-import com.shaun.spotonmusic.presentation.ui.activity.SplashActivity
 import com.shaun.spotonmusic.presentation.ui.components.*
 import com.shaun.spotonmusic.toPlayListPager
 import com.shaun.spotonmusic.ui.theme.black
@@ -39,24 +35,9 @@ private const val TAG = "Home"
 
 @Composable
 fun Home(
-    viewModel: HomeScreenViewModel, context: HomeActivity
+    viewModel: HomeScreenViewModel
 ) {
 
-
-    viewModel.tokenExpired.observeForever {
-
-
-        if (it == true) {
-            viewModel.tokenExpired.postValue(false)
-            context.spotifyAuthClient.refreshAccessToken()
-            viewModel.getAccessToken()
-            Intent(context, SplashActivity::class.java).apply {
-                context.startActivity(this)
-                context.finish()
-            }
-
-        }
-    }
 
     val headerBackgroundColor = remember {
         mutableStateOf(listOf(blue, black))
@@ -135,9 +116,8 @@ fun Home(
                             .height(60.dp)
                             .fillMaxWidth()
                     )
-                    Greeting(onClick = { it ->
-                        viewModel.getAlbum(it)
-//                        Log.d("TAG", "Home: ${viewModel.albums.value?.name}")
+                    Greeting(onClick = {
+
                     })
                     RecentHeardBlock(recentlyPlayed)
                 }
@@ -213,6 +193,7 @@ fun Greeting(onClick: (String) -> Unit) {
     GreetingCard(title = getGreeting(), onSettingClicked = {
 
         onClick("2dIGnmEIy1WZIcZCFSj6i8")
+        onClick("tr")
 
 
     }, onHistoryClicked = {

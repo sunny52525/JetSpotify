@@ -1,22 +1,21 @@
 package com.shaun.spotonmusic.presentation.ui.components.screens
 
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.HiltViewModelFactory
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
-import com.shaun.spotonmusic.presentation.ui.activity.HomeActivity
 import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Home
 import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Library
 import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Search
@@ -27,11 +26,17 @@ import com.shaun.spotonmusic.viewmodel.HomeScreenViewModel
 
 @Composable
 fun HomeScreen(
-    context: HomeActivity,
-    viewModel: HomeScreenViewModel
 ) {
 
     val navController = rememberNavController()
+    val scaffoldState = rememberScaffoldState()
+
+    val homeViewModel: HomeScreenViewModel = viewModel()
+
+    homeViewModel.accessToken.observeForever {
+        Log.d("TAG", "HomeScreen: $it")
+    }
+    val accessToken: String by homeViewModel.accessToken.observeAsState("")
 
     val bottomNavItems = listOf(
         Routes.Home,
@@ -49,9 +54,12 @@ fun HomeScreen(
             BottomNavigationSpotOnMusic(navController = navController, items = bottomNavItems)
 
         },
+        scaffoldState = scaffoldState,
         content = {
+
+            Text(text = accessToken)
             HomeScreenNavigationConfiguration(
-                navController, context
+                navController, homeViewModel
             )
         }
 
@@ -74,15 +82,21 @@ fun BottomNavigationSpotOnMusic(
                 .background(black)
 
         ) {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentRoute = navBackStackEntry?.arguments?.getString(KEY_ROUTE)
+
             var dimension by remember {
                 mutableStateOf(arrayListOf(20, 20, 20))
             }
-            val currentRoute = currentRoute(navController)
+
             items.forEach {
                 BottomNavigationItem(
                     selected = currentRoute == it.route, onClick = {
 
-                        navController.navigate(it.route)
+                        navController.navigate(it.route) {
+                            popUpTo = navController.graph.startDestination
+                            launchSingleTop = true
+                        }
 
                         dimension.forEachIndexed { index, i ->
                             if (index == it.index)
@@ -121,7 +135,7 @@ fun BottomNavigationSpotOnMusic(
 
 @Composable
 fun HomeScreenNavigationConfiguration(
-    navHostController: NavHostController, context: HomeActivity
+    navHostController: NavHostController, viewModel: HomeScreenViewModel
 ) {
 
     NavHost(
@@ -133,27 +147,15 @@ fun HomeScreenNavigationConfiguration(
     ) {
 
         composable(Routes.Home.route) {
-            val factory = HiltViewModelFactory(LocalContext.current, it)
-            val viewModel: HomeScreenViewModel = viewModel("HomeScreenViewModel", factory)
-
-
-            Home(viewModel = viewModel, context = context)
+            Home(viewModel = viewModel)
         }
         composable(Routes.Search.route) {
-            Search()
+            Search(viewModel)
 
         }
         composable(Routes.Library.route) {
-            Library()
+            Library(viewModel)
 
         }
     }
 }
-
-
-@Composable
-private fun currentRoute(navController: NavController): String? {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    return navBackStackEntry?.arguments?.getString(KEY_ROUTE)
-}
-

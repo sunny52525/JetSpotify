@@ -3,16 +3,19 @@ package com.shaun.spotonmusic.viewmodel
 import androidx.compose.runtime.mutableStateOf
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shaun.spotonmusic.SpotOnApplication
 import com.shaun.spotonmusic.model.RecentlyPlayed
+import com.shaun.spotonmusic.presentation.ui.navigation.Routes
 import com.shaun.spotonmusic.read
 import com.shaun.spotonmusic.repository.HomeScreenRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kaaes.spotify.webapi.android.models.*
 import kotlinx.coroutines.launch
+import okhttp3.Route
 import retrofit2.Retrofit
 import javax.inject.Inject
 
@@ -24,7 +27,9 @@ class HomeScreenViewModel @Inject constructor(
     private val retrofit: Retrofit
 ) : ViewModel() {
 
-    var accessToken = mutableStateOf("")
+    private val _currentScreen = MutableLiveData<Routes>(Routes.Home)
+    val currentScreen: LiveData<Routes> = _currentScreen
+    var accessToken = MutableLiveData("")
 
     private lateinit var repo: HomeScreenRepository
     var albums = MutableLiveData<Album>()
@@ -47,7 +52,7 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     private fun setToken() {
-        repo = HomeScreenRepository(accessToken.value, retrofit)
+        repo = HomeScreenRepository(accessToken.value.toString(), retrofit)
         albums = repo.album
 
         tokenExpired = repo.tokenExpired
@@ -66,7 +71,7 @@ class HomeScreenViewModel @Inject constructor(
 
     }
 
-     fun getAccessToken() {
+    fun getAccessToken() {
 
         viewModelScope.launch {
             accessToken.value = read(dataStore, "accesstoken")
@@ -78,6 +83,10 @@ class HomeScreenViewModel @Inject constructor(
 
     fun getAlbum(albumId: String) {
         repo.getAlbum(albumID = albumId)
+    }
+
+    fun setCurrentScreen(routes: Routes) {
+        _currentScreen.value = routes
     }
 
 
