@@ -31,6 +31,7 @@ fun FavouriteArtistSongs(title: String, data: Pager<Album>?, image: String) {
                 Image(
                     painter = rememberGlidePainter(request = image),
                     contentDescription = null,
+
                     modifier = Modifier.size(32.dp)
                 )
             }
@@ -55,7 +56,10 @@ fun FavouriteArtistSongs(title: String, data: Pager<Album>?, image: String) {
             data?.items?.let {
                 it.forEachIndexed { index, its ->
                     item {
-                        CustomizedSuggestionCard(album = its,paddingValues = if (index == 0) 20 else 10)
+                        CustomizedSuggestionCard(
+                            album = its,
+                            paddingValues = if (index == 0) 20 else 10
+                        )
                     }
                 }
             }

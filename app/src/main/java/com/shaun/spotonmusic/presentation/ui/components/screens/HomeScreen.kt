@@ -42,7 +42,7 @@ fun HomeScreen(
             homeViewModel.getAccessToken()
         }
     }
-    val accessToken: String by homeViewModel.accessToken.observeAsState("")
+
     val currentScreen by homeViewModel.currentScreen.observeAsState()
 
     val bottomNavItems = listOf(
@@ -66,7 +66,6 @@ fun HomeScreen(
         scaffoldState = scaffoldState,
         content = {
 
-            Text(text = accessToken)
             HomeScreenNavigationConfiguration(
                 navController, homeViewModel
             )
@@ -92,9 +91,9 @@ fun BottomNavigationSpotOnMusic(
 
         ) {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val currentRoute = navBackStackEntry?.arguments?.getString(KEY_ROUTE)
+            val currentRoute = navBackStackEntry?.destination?.route
 
-            var dimension by remember {
+            val dimension by remember {
                 mutableStateOf(arrayListOf(20, 20, 20))
             }
 
@@ -103,7 +102,7 @@ fun BottomNavigationSpotOnMusic(
                     selected = currentRoute == it.route, onClick = {
 
                         navController.navigate(it.route) {
-                            popUpTo = navController.graph.startDestination
+
                             launchSingleTop = true
                         }
 
