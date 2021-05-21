@@ -3,10 +3,7 @@ package com.shaun.spotonmusic.presentation.ui.components
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -25,27 +22,36 @@ import kaaes.spotify.webapi.android.models.PlaylistsPager
 @Composable
 fun SuggestionsRow(title: String = "Throwback", playlistsPager: PlaylistsPager) {
 
-    Column(Modifier.padding(start = 20.dp, top = 30.dp)) {
+    Column(Modifier.padding(top = 30.dp)) {
 
 
         Text(
             text = title, textAlign = TextAlign.Left,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp),
             fontSize = 23.sp,
             color = Color.White
+
         )
         LazyRow {
 
 
             playlistsPager.playlists?.let {
 
-                it.items.forEach {
+                it.items.forEachIndexed { index, it ->
                     item {
 
-                        SuggestionCard(0, modifier = Modifier.clickable {
+                        SuggestionCard(
+                            0,
+                            modifier = Modifier.clickable {
 
-                        }, imageUrl = it.images[0].url, it.name)
+                            },
+                            imageUrl = it.images[0].url,
+                            it.name,
+                            paddingValues = if (index == 0) 20 else 10
+                        )
                     }
                 }
             }
@@ -74,12 +80,20 @@ fun NewReleasesRow(title: String = "Throwback", newReleases: NewReleases) {
 
             newReleases.albums?.items?.let {
 
-                it.forEach {
+
+                it.forEachIndexed { index, it ->
+
                     item {
 
-                        SuggestionCard(0, modifier = Modifier.clickable {
+                        SuggestionCard(
+                            0,
+                            modifier = Modifier.clickable {
 
-                        }, imageUrl = it.images[0].url, it.name)
+                            },
+                            imageUrl = it.images[0].url,
+                            it.name,
+                            paddingValues = if (index == 0) 20 else 10
+                        )
                     }
                 }
             }
@@ -96,11 +110,12 @@ fun SuggestionCard(
     modifier: Modifier,
     imageUrl: String,
     title: String,
-    size:Int=170
+    size: Int = 170,
+    paddingValues: Int
 ) {
 
 
-    Column(modifier.padding(end = 10.dp, bottom = 10.dp, top = 10.dp)) {
+    Column(modifier.padding(bottom = 10.dp, top = 10.dp, start = paddingValues.dp)) {
         Card(shape = RoundedCornerShape(cornerRadius.dp)) {
 
 

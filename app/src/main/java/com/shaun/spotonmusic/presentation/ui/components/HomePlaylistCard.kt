@@ -35,7 +35,7 @@ fun PlaylistRow(title: String = "Throwback", playlistsPager: Pager<PlaylistSimpl
 
             playlistsPager.let {
 
-                it.items?.forEach {
+                it.items?.forEachIndexed { index, it ->
                     item {
 
                         SuggestionCard(
@@ -44,7 +44,8 @@ fun PlaylistRow(title: String = "Throwback", playlistsPager: Pager<PlaylistSimpl
                             },
                             imageUrl = it.images[0].url,
                             title = it.name,
-                            size = 150
+                            size = 150,
+                            paddingValues = if (index == 0) 20 else 10
                         )
                     }
                 }

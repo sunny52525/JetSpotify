@@ -32,15 +32,21 @@ fun RecentlyPlayedRow(title: String, recentlyPlayed: RecentlyPlayed) {
 
 
             recentlyPlayed.items?.let {
-                it.forEach {
+                it.forEachIndexed { index, it ->
 
 
                     try {
                         item {
 
-                            SuggestionCard(0, modifier = Modifier.clickable {
+                            SuggestionCard(
+                                0,
+                                modifier = Modifier.clickable {
 
-                            }, imageUrl = it.track.album.images[0].url, it.track.name)
+                                },
+                                imageUrl = it.track.album.images[0].url,
+                                it.track.name,
+                                paddingValues = if (index == 0) 20 else 10
+                            )
                         }
                     } catch (e: Exception) {
                         Log.e("TAG", "RecentlyPlayedRow: No Item")

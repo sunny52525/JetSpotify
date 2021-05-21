@@ -42,25 +42,20 @@ fun HomeScreen(
 
         modifier = Modifier
             .fillMaxSize()
-            .background(black)
-            .border(1.dp, Color.Red) ,
+            .background(black),
 
 
         bottomBar = {
             BottomNavigationSpotOnMusic(navController = navController, items = bottomNavItems)
 
         },
-        topBar = {
-            Column(Modifier.width(0.dp)) {
-                
-            }
-
+        content = {
+            HomeScreenNavigationConfiguration(
+                navController, context
+            )
         }
-    ) {
-        HomeScreenNavigationConfiguration(
-            navController, context
-        )
-    }
+
+    )
 }
 
 
@@ -142,9 +137,7 @@ fun HomeScreenNavigationConfiguration(
             val viewModel: HomeScreenViewModel = viewModel("HomeScreenViewModel", factory)
 
 
-            Home(
-                viewModel, context
-            )
+            Home(viewModel = viewModel, context = context)
         }
         composable(Routes.Search.route) {
             Search()

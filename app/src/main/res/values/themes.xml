@@ -5,14 +5,16 @@
         <item name="colorPrimary">@android:color/transparent</item>
         <item name="colorPrimaryVariant">@color/spotifyGreen</item>
         <item name="colorOnPrimary">@color/white</item>
-                <item name="android:statusBarColor" tools:targetApi="l">@color/transparent</item>
         <!-- Secondary brand color. -->
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/transparent</item>
         <item name="android:windowTranslucentStatus">true</item>
-
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="android:windowContentTransitions">true</item>
         <!-- Status bar color. -->
         <!-- Customize your theme here. -->
     </style>
@@ -22,8 +24,10 @@
         <item name="android:windowDrawsSystemBarBackgrounds">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@android:color/black</item>
-
-        <item name="android:statusBarColor" tools:targetApi="l">@color/transparent</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="android:windowContentTransitions">true</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 

@@ -47,7 +47,9 @@ fun Home(
         FeaturedPlaylists()
     )
     val favouriteArtistSongs: Pager<Album> by viewModel.favouriteArtist.observeAsState(Pager<Album>())
-    val secondFavouriteArtistSongs: Pager<Album> by viewModel.secondFavouriteArtist.observeAsState(Pager<Album>())
+    val secondFavouriteArtistSongs: Pager<Album> by viewModel.secondFavouriteArtist.observeAsState(
+        Pager<Album>()
+    )
     val favouriteArtistImage: String by viewModel.favouriteArtistImage.observeAsState("")
     val secondFavouriteArtistImage: String by viewModel.secondFavouriteArtistImage.observeAsState("")
     val newReleases: NewReleases by viewModel.newReleases.observeAsState(NewReleases())
@@ -62,18 +64,25 @@ fun Home(
         Modifier
             .fillMaxSize()
             .background(Color.Black)
-            .padding(top = 50.dp),
+
     ) {
         val brush = Brush.linearGradient(
             colors = headerBackgroundColor,
-            start = Offset(0f, 0f), end = Offset(40f, 200f)
+            start = Offset(0f, 0f), end = Offset(50f, 250f)
         )
 
-        LazyColumn(Modifier.background(black)) {
+        LazyColumn(
+            Modifier
+                .background(black)
+        ) {
             item {
                 Column(modifier = Modifier.background(brush = brush)) {
+                    Spacer(
+                        modifier = Modifier
+                            .height(40.dp)
+                            .fillMaxWidth()
+                    )
                     Greeting(onClick = { it ->
-
                         viewModel.getAlbum(it)
                         Log.d("TAG", "Home: ${viewModel.albums.value?.name}")
                     })
