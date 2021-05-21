@@ -132,7 +132,7 @@ fun Home(
                 Column(modifier = Modifier.background(brush = brush)) {
                     Spacer(
                         modifier = Modifier
-                            .height(40.dp)
+                            .height(60.dp)
                             .fillMaxWidth()
                     )
                     Greeting(onClick = { it ->
