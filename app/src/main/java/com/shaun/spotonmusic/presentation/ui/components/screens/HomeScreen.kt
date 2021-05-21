@@ -2,12 +2,12 @@ package com.shaun.spotonmusic.presentation.ui.components.screens
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -42,9 +42,18 @@ fun HomeScreen(
 
         modifier = Modifier
             .fillMaxSize()
-            .background(black),
+            .background(black)
+            .border(1.dp, Color.Red) ,
+
+
         bottomBar = {
             BottomNavigationSpotOnMusic(navController = navController, items = bottomNavItems)
+
+        },
+        topBar = {
+            Column(Modifier.width(0.dp)) {
+                
+            }
 
         }
     ) {
@@ -62,7 +71,7 @@ fun BottomNavigationSpotOnMusic(
 ) {
     Surface(
         modifier = Modifier
-            .background(black)
+
     ) {
         BottomNavigation(
             modifier = Modifier

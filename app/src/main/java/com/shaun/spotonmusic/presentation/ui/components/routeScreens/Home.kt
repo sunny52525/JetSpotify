@@ -8,6 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.shaun.spotonmusic.getGreeting
@@ -15,6 +17,8 @@ import com.shaun.spotonmusic.model.RecentlyPlayed
 import com.shaun.spotonmusic.presentation.ui.activity.HomeActivity
 import com.shaun.spotonmusic.presentation.ui.components.*
 import com.shaun.spotonmusic.toPlayListPager
+import com.shaun.spotonmusic.ui.theme.black
+import com.shaun.spotonmusic.ui.theme.headerBackgroundColor
 import com.shaun.spotonmusic.viewmodel.HomeScreenViewModel
 import kaaes.spotify.webapi.android.models.*
 
@@ -43,14 +47,14 @@ fun Home(
         FeaturedPlaylists()
     )
     val favouriteArtistSongs: Pager<Album> by viewModel.favouriteArtist.observeAsState(Pager<Album>())
-    val secondFavouriteArtistSongs: Pager<Album> by viewModel.secondFavouriteArtist.observeAsState(
-        Pager<Album>()
-    )
+    val secondFavouriteArtistSongs: Pager<Album> by viewModel.secondFavouriteArtist.observeAsState(Pager<Album>())
     val favouriteArtistImage: String by viewModel.favouriteArtistImage.observeAsState("")
     val secondFavouriteArtistImage: String by viewModel.secondFavouriteArtistImage.observeAsState("")
     val newReleases: NewReleases by viewModel.newReleases.observeAsState(NewReleases())
     val myPlayList: Pager<PlaylistSimple> by viewModel.getMyPlayList.observeAsState(Pager<PlaylistSimple>())
     val recentlyPlayed: RecentlyPlayed by viewModel.recentlyPlayed.observeAsState(initial = RecentlyPlayed())
+
+
 
 
 
@@ -60,21 +64,27 @@ fun Home(
             .background(Color.Black)
             .padding(top = 50.dp),
     ) {
+        val brush = Brush.linearGradient(
+            colors = headerBackgroundColor,
+            start = Offset(0f, 0f), end = Offset(40f, 200f)
+        )
 
-
-        LazyColumn {
-
+        LazyColumn(Modifier.background(black)) {
             item {
+                Column(modifier = Modifier.background(brush = brush)) {
+                    Greeting(onClick = { it ->
 
-                Greeting(onClick = { it ->
+                        viewModel.getAlbum(it)
+                        Log.d("TAG", "Home: ${viewModel.albums.value?.name}")
+                    })
+                    RecentHeardBlock()
+                }
 
-                    viewModel.getAlbum(it)
-                    Log.d("TAG", "Home: ${viewModel.albums.value?.name}")
-                })
+
             }
-            item {
-                RecentHeardBlock()
-            }
+
+
+
 
 
             item {

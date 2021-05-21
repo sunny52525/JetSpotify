@@ -1,8 +1,12 @@
 package com.shaun.spotonmusic.presentation.ui.activity
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.annotation.MainThread
@@ -26,15 +30,17 @@ class HomeActivity : BaseSpotifyActivity() {
             signOut()
             return
         }
+
         setContent {
             SpotOnMusicTheme {
-
-                val viewModel:HomeScreenViewModel= viewModel()
+                val viewModel: HomeScreenViewModel = viewModel()
                 HomeScreen(
                     this,
                     viewModel
                 )
             }
+
+
         }
     }
 
