@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.shaun.spotonmusic.getGreeting
+import com.shaun.spotonmusic.model.RecentlyPlayed
 import com.shaun.spotonmusic.presentation.ui.activity.HomeActivity
 import com.shaun.spotonmusic.presentation.ui.components.*
 import com.shaun.spotonmusic.toPlayListPager
@@ -28,8 +29,13 @@ fun Home(
     viewModel.tokenExpired.observeForever {
 
         Log.d(TAG, "Home: $it")
-        if (it == true)
+        if (it == true) {
+            viewModel.tokenExpired.postValue(false)
+            context.spotifyAuthClient.refreshAccessToken()
+            viewModel.getAccessToken()
             context.recreate()
+
+        }
     }
     val playList: PlaylistsPager by viewModel.moodAlbum.observeAsState(PlaylistsPager())
     val party: PlaylistsPager by viewModel.partyAlbum.observeAsState(PlaylistsPager())
@@ -37,9 +43,16 @@ fun Home(
         FeaturedPlaylists()
     )
     val favouriteArtistSongs: Pager<Album> by viewModel.favouriteArtist.observeAsState(Pager<Album>())
+    val secondFavouriteArtistSongs: Pager<Album> by viewModel.secondFavouriteArtist.observeAsState(
+        Pager<Album>()
+    )
     val favouriteArtistImage: String by viewModel.favouriteArtistImage.observeAsState("")
+    val secondFavouriteArtistImage: String by viewModel.secondFavouriteArtistImage.observeAsState("")
     val newReleases: NewReleases by viewModel.newReleases.observeAsState(NewReleases())
     val myPlayList: Pager<PlaylistSimple> by viewModel.getMyPlayList.observeAsState(Pager<PlaylistSimple>())
+    val recentlyPlayed: RecentlyPlayed by viewModel.recentlyPlayed.observeAsState(initial = RecentlyPlayed())
+
+
 
     Column(
         Modifier
@@ -68,11 +81,27 @@ fun Home(
 
                 SuggestionsRow(playlistsPager = playList, title = "Mood")
             }
-
+            item {
+                FavouriteArtistSongs(
+                    title = "For the fans of",
+                    data = secondFavouriteArtistSongs,
+                    secondFavouriteArtistImage
+                )
+            }
+            item {
+                PlaylistRow(playlistsPager = myPlayList, title = "Your Playlists")
+            }
             item {
 
                 SuggestionsRow(playlistsPager = party, title = "Party")
             }
+
+            item {
+                RecentlyPlayedRow(title = "Recently Played", recentlyPlayed = recentlyPlayed)
+            }
+
+
+
 
             item {
 
@@ -93,9 +122,7 @@ fun Home(
             item {
                 NewReleasesRow(newReleases = newReleases, title = "New Releases")
             }
-            item { 
-                PlaylistRow(playlistsPager = myPlayList,title = "Your Playlists")
-            }
+
 
 
             item {

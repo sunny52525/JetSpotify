@@ -1,19 +1,23 @@
 package com.shaun.spotonmusic.repository
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
-import io.github.kaaes.spotify.webapi.retrofit.v2.SpotifyService
+import com.shaun.spotonmusic.model.RecentlyPlayed
+import com.shaun.spotonmusic.network.SpotifyAppService
 import kaaes.spotify.webapi.android.SpotifyApi
 import kaaes.spotify.webapi.android.models.*
-import kotlinx.coroutines.flow.MutableStateFlow
 import retrofit.Callback
 import retrofit.RetrofitError
 import retrofit.client.Response
+import retrofit2.Call
+import retrofit2.Retrofit
+import javax.inject.Inject
 
 
-class HomeScreenRepository(private val accessToken: String) {
+class HomeScreenRepository @Inject constructor(
+    private val accessToken: String,
+    private val retrofit: Retrofit
+) {
     private var api = SpotifyApi()
     private var spotify: kaaes.spotify.webapi.android.SpotifyService
     var tokenExpired = MutableLiveData<Boolean>()
@@ -27,6 +31,8 @@ class HomeScreenRepository(private val accessToken: String) {
     var album = MutableLiveData<Album>()
 
     val favouriteArtistUrl = MutableLiveData<String>()
+    val secondFavouriteArtistUrl = MutableLiveData<String>()
+
 
     init {
 
@@ -94,14 +100,29 @@ class HomeScreenRepository(private val accessToken: String) {
         return result
     }
 
-    fun getAlbumsFromFavouriteArtists(): MutableLiveData<Pager<Album>> {
+    fun getAlbumsFromFavouriteArtists(index: Int): MutableLiveData<Pager<Album>> {
 
         val result = MutableLiveData<Pager<Album>>()
         spotify.getTopArtists(object : Callback<Pager<Artist>> {
             override fun success(t: Pager<Artist>?, response: Response?) {
-                val artistId = t?.items?.get(0)?.id
-                val imageUrl = t?.items?.get(0)?.images?.get(0)?.url
-                favouriteArtistUrl.postValue(imageUrl)
+                val artistId = try {
+
+                    t?.items?.get(index = index)?.id
+                } catch (e: Exception) {
+                    "Error"
+                }
+
+                val imageUrl = try {
+                    t?.items?.get(index = index)?.images?.get(0)?.url
+                } catch (e: Exception) {
+                    "Error"
+                }
+                if (index == 0)
+                    favouriteArtistUrl.postValue(imageUrl)
+                else
+                    secondFavouriteArtistUrl.postValue(imageUrl)
+
+                Log.d(TAG, "success: $imageUrl")
 
                 Log.d(TAG, "artist: $artistId")
                 spotify.getArtistAlbums(artistId, map, object : Callback<Pager<Album>> {
@@ -169,9 +190,60 @@ class HomeScreenRepository(private val accessToken: String) {
         return result
     }
 
+
+    fun getRecentlyPlayed(): MutableLiveData<RecentlyPlayed> {
+
+        val result = MutableLiveData<RecentlyPlayed>()
+
+        val api = retrofit.create(SpotifyAppService::class.java)
+        val call = api.getRecentlyPlayed(10, "Authorization: Bearer $accessToken")
+
+        call.enqueue {
+
+            when (it) {
+                is Result.Success -> {
+
+
+                    Log.d(
+                        TAG,
+                        "getRecentlyPlayed: ${it.response.body()?.items?.get(0)?.track?.name}"
+                    )
+                    result.postValue(it.response.body())
+                }
+                is Result.Failure -> {
+                    Log.d(TAG, "getRecentlyPlayed: ${it.error}")
+                }
+            }
+        }
+
+
+        return result
+
+    }
+
+
     companion object {
         private const val TAG = "HomeScreenRepository"
     }
 
 
+}
+
+sealed class Result<T> {
+    data class Success<T>(val call: Call<T>, val response: retrofit2.Response<T>) : Result<T>()
+    data class Failure<T>(val call: Call<T>, val error: Throwable) : Result<T>()
+}
+
+
+inline fun <reified T> Call<T>.enqueue(crossinline result: (Result<T>) -> Unit) {
+    enqueue(object : retrofit2.Callback<T> {
+        override fun onResponse(call: Call<T>, response: retrofit2.Response<T>) {
+            result(Result.Success(call, response))
+        }
+
+        override fun onFailure(call: Call<T>, t: Throwable) {
+            result(Result.Failure(call = call, error = t))
+        }
+
+    })
 }

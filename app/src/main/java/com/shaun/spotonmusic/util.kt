@@ -7,6 +7,8 @@ import androidx.datastore.preferences.core.preferencesKey
 import kotlinx.coroutines.flow.first
 import android.widget.Toast
 import kaaes.spotify.webapi.android.models.*
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
 
@@ -28,7 +30,6 @@ fun FeaturedPlaylists.toPlayListPager(): PlaylistsPager {
     pager.playlists = this.playlists
     return pager
 }
-
 
 
 

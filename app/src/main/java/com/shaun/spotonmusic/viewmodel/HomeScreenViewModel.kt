@@ -7,18 +7,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shaun.spotonmusic.SpotOnApplication
+import com.shaun.spotonmusic.model.RecentlyPlayed
 import com.shaun.spotonmusic.read
 import com.shaun.spotonmusic.repository.HomeScreenRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kaaes.spotify.webapi.android.models.*
 import kotlinx.coroutines.launch
+import retrofit2.Retrofit
 import javax.inject.Inject
 
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     context: SpotOnApplication,
-    private val dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
+    private val retrofit: Retrofit
 ) : ViewModel() {
 
     var accessToken = mutableStateOf("")
@@ -31,9 +34,12 @@ class HomeScreenViewModel @Inject constructor(
     var featuredPlaylists = MutableLiveData<FeaturedPlaylists>()
     var favouriteArtist = MutableLiveData<Pager<Album>>()
     var favouriteArtistImage = MutableLiveData<String>()
+    var secondFavouriteArtistImage = MutableLiveData<String>()
     var tokenExpired = MutableLiveData<Boolean>()
     var newReleases = MutableLiveData<NewReleases>()
     var getMyPlayList = MutableLiveData<Pager<PlaylistSimple>>()
+    var recentlyPlayed = MutableLiveData<RecentlyPlayed>()
+    var secondFavouriteArtist = MutableLiveData<Pager<Album>>()
 
     init {
         getAccessToken()
@@ -41,23 +47,26 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     private fun setToken() {
-        repo = HomeScreenRepository(accessToken.value)
+        repo = HomeScreenRepository(accessToken.value, retrofit)
         albums = repo.album
 
         tokenExpired = repo.tokenExpired
 
+        favouriteArtist = repo.getAlbumsFromFavouriteArtists(0)
+        secondFavouriteArtist = repo.getAlbumsFromFavouriteArtists(2)
         favouriteArtistImage = repo.favouriteArtistUrl
+        secondFavouriteArtistImage = repo.secondFavouriteArtistUrl
         moodAlbum = repo.getCategoryPlaylist("mood")
         partyAlbum = repo.getCategoryPlaylist("party")
         featuredPlaylists = repo.getFeaturedPlaylist()
-        favouriteArtist = repo.getAlbumsFromFavouriteArtists()
         newReleases = repo.getNewReleases()
-        getMyPlayList=repo.getUserPlaylist()
+        getMyPlayList = repo.getUserPlaylist()
+        recentlyPlayed = repo.getRecentlyPlayed()
 
 
     }
 
-    private fun getAccessToken() {
+     fun getAccessToken() {
 
         viewModelScope.launch {
             accessToken.value = read(dataStore, "accesstoken")
