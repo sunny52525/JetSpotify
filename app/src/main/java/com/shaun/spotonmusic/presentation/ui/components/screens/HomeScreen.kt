@@ -16,6 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
+import com.shaun.spotonmusic.presentation.ui.activity.HomeActivity
 import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Home
 import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Library
 import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Search
@@ -26,6 +27,7 @@ import com.shaun.spotonmusic.viewmodel.HomeScreenViewModel
 
 @Composable
 fun HomeScreen(
+    context: HomeActivity
 ) {
 
     val navController = rememberNavController()
@@ -33,10 +35,15 @@ fun HomeScreen(
 
     val homeViewModel: HomeScreenViewModel = viewModel()
 
-    homeViewModel.accessToken.observeForever {
-        Log.d("TAG", "HomeScreen: $it")
+    homeViewModel.tokenExpired.observeForever {
+        if (it == true) {
+            context.spotifyAuthClient.refreshAccessToken()
+            homeViewModel.tokenExpired.value = false
+            homeViewModel.getAccessToken()
+        }
     }
     val accessToken: String by homeViewModel.accessToken.observeAsState("")
+    val currentScreen by homeViewModel.currentScreen.observeAsState()
 
     val bottomNavItems = listOf(
         Routes.Home,
@@ -51,7 +58,9 @@ fun HomeScreen(
 
 
         bottomBar = {
-            BottomNavigationSpotOnMusic(navController = navController, items = bottomNavItems)
+
+            if (currentScreen is Routes.Home)
+                BottomNavigationSpotOnMusic(navController = navController, items = bottomNavItems)
 
         },
         scaffoldState = scaffoldState,

@@ -32,7 +32,7 @@ class HomeActivity : BaseSpotifyActivity() {
             SpotOnMusicTheme {
 
                 HomeScreen(
-
+this
                 )
             }
 
