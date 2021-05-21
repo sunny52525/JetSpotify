@@ -18,13 +18,15 @@ import com.shaun.spotonmusic.model.RecentlyPlayed
 
 @Composable
 fun RecentlyPlayedRow(title: String, recentlyPlayed: RecentlyPlayed) {
-    Column(Modifier.padding(start = 20.dp, top = 30.dp)) {
+    Column(Modifier.padding(top = 30.dp)) {
 
 
         Text(
             text = title, textAlign = TextAlign.Left,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp),
             fontSize = 23.sp,
             color = Color.White
         )
@@ -40,9 +42,6 @@ fun RecentlyPlayedRow(title: String, recentlyPlayed: RecentlyPlayed) {
 
                             SuggestionCard(
                                 0,
-                                modifier = Modifier.clickable {
-
-                                },
                                 imageUrl = it.track.album.images[0].url,
                                 it.track.name,
                                 paddingValues = if (index == 0) 20 else 10

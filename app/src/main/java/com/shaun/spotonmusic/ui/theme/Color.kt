@@ -12,8 +12,8 @@ val spotifyGray = Color(0xFF212121)
 
 val blue = Color(0xFF4117b7)
 
-val headerBackgroundColor = listOf(
-    blue, black
-
-)
+//val headerBackgroundColor = listOf(
+//    blue, black
+//
+//)
 

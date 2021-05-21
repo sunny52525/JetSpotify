@@ -20,9 +20,13 @@ import kaaes.spotify.webapi.android.models.Pager
 
 @Composable
 fun FavouriteArtistSongs(title: String, data: Pager<Album>?, image: String) {
-    Column(Modifier.padding(start = 20.dp, top = 30.dp)) {
+    Column(Modifier.padding(top = 30.dp)) {
 
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp)
+        ) {
             Card(shape = RoundedCornerShape(50)) {
                 Image(
                     painter = rememberGlidePainter(request = image),
@@ -30,7 +34,7 @@ fun FavouriteArtistSongs(title: String, data: Pager<Album>?, image: String) {
                     modifier = Modifier.size(32.dp)
                 )
             }
-            Column(Modifier.padding(start = 10.dp)) {
+            Column() {
                 Text(text = title, fontSize = 12.sp)
                 if (data != null) {
                     data.items?.get(0)?.artists?.get(0)?.let {
@@ -49,9 +53,9 @@ fun FavouriteArtistSongs(title: String, data: Pager<Album>?, image: String) {
 
         LazyRow {
             data?.items?.let {
-                it.forEach {
+                it.forEachIndexed { index, its ->
                     item {
-                        CustomizedSuggestionCard(album = it)
+                        CustomizedSuggestionCard(album = its,paddingValues = if (index == 0) 20 else 10)
                     }
                 }
             }
@@ -63,22 +67,21 @@ fun FavouriteArtistSongs(title: String, data: Pager<Album>?, image: String) {
 }
 
 
-//@Preview
 @Composable
 fun CustomizedSuggestionCard(
     cornerRadius: Int = 0,
-    album: Album
+    album: Album,
+    paddingValues: Int
 ) {
 
 
-    Column(Modifier.padding(end = 10.dp, bottom = 10.dp, top = 10.dp)) {
+    Column(Modifier.padding(start = paddingValues.dp, bottom = 10.dp, top = 10.dp)) {
         Card(shape = RoundedCornerShape(cornerRadius.dp)) {
 
 
             Image(
                 painter = rememberGlidePainter(request = album.images[0].url),
                 contentDescription = "",
-
                 modifier =
                 Modifier
                     .size(170.dp)

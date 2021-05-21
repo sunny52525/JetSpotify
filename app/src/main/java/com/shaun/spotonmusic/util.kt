@@ -5,11 +5,21 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.preferencesKey
 import kotlinx.coroutines.flow.first
-import android.widget.Toast
 import kaaes.spotify.webapi.android.models.*
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
+import java.io.IOException
+
+import android.graphics.BitmapFactory
+
+import android.graphics.Bitmap
+import android.graphics.Color
+
+import java.io.InputStream
+
+import java.net.HttpURLConnection
+
+import java.net.URL
+import kotlin.collections.ArrayList
 
 
 suspend fun save(dataStore: DataStore<Preferences>, key: String, value: String) {
@@ -51,4 +61,21 @@ fun getGreeting(): String {
             "Good Night"
         }
     }
+}
+
+fun getBitmapFromURL(src: String?): Bitmap? {
+    return try {
+        val url = URL(src)
+        val connection = url.openConnection() as HttpURLConnection
+        connection.doInput = true
+        connection.connect()
+        val input = connection.inputStream
+        BitmapFactory.decodeStream(input)
+    } catch (e: IOException) {
+        e.printStackTrace()
+        null
+    }
+}
+fun getHexColor(color: ArrayList<Int>): Int {
+    return Color.rgb(color[0], color[1], color[2])
 }

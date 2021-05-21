@@ -20,13 +20,15 @@ import kaaes.spotify.webapi.android.models.PlaylistSimple
 @Composable
 fun PlaylistRow(title: String = "Throwback", playlistsPager: Pager<PlaylistSimple>) {
 
-    Column(Modifier.padding(start = 20.dp, top = 30.dp)) {
+    Column(Modifier.padding(top = 30.dp)) {
 
 
         Text(
             text = title, textAlign = TextAlign.Left,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp),
             fontSize = 23.sp,
             color = Color.White
         )
@@ -39,9 +41,6 @@ fun PlaylistRow(title: String = "Throwback", playlistsPager: Pager<PlaylistSimpl
                     item {
 
                         SuggestionCard(
-                            modifier = Modifier.clickable {
-
-                            },
                             imageUrl = it.images[0].url,
                             title = it.name,
                             size = 150,

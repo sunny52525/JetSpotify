@@ -34,6 +34,7 @@ data class SpotifyAlbum(
     val artist: Artist,
     val href: String,
     val id: String,
-    val images: ArrayList<Image>
+    val images: ArrayList<Image>,
+    val name:String
 
 )

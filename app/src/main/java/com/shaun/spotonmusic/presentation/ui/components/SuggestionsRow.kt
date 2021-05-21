@@ -3,7 +3,10 @@ package com.shaun.spotonmusic.presentation.ui.components
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -45,9 +48,6 @@ fun SuggestionsRow(title: String = "Throwback", playlistsPager: PlaylistsPager) 
 
                         SuggestionCard(
                             0,
-                            modifier = Modifier.clickable {
-
-                            },
                             imageUrl = it.images[0].url,
                             it.name,
                             paddingValues = if (index == 0) 20 else 10
@@ -65,13 +65,13 @@ fun SuggestionsRow(title: String = "Throwback", playlistsPager: PlaylistsPager) 
 fun NewReleasesRow(title: String = "Throwback", newReleases: NewReleases) {
 
     Log.d("TAG", "SuggestionsRow: ")
-    Column(Modifier.padding(start = 20.dp, top = 30.dp)) {
+    Column(Modifier.padding(top = 30.dp)) {
 
 
         Text(
             text = title, textAlign = TextAlign.Left,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(start = 20.dp),
             fontSize = 23.sp,
             color = Color.White
         )
@@ -87,9 +87,6 @@ fun NewReleasesRow(title: String = "Throwback", newReleases: NewReleases) {
 
                         SuggestionCard(
                             0,
-                            modifier = Modifier.clickable {
-
-                            },
                             imageUrl = it.images[0].url,
                             it.name,
                             paddingValues = if (index == 0) 20 else 10
@@ -107,7 +104,6 @@ fun NewReleasesRow(title: String = "Throwback", newReleases: NewReleases) {
 @Composable
 fun SuggestionCard(
     cornerRadius: Int = 0,
-    modifier: Modifier,
     imageUrl: String,
     title: String,
     size: Int = 170,
@@ -115,7 +111,12 @@ fun SuggestionCard(
 ) {
 
 
-    Column(modifier.padding(bottom = 10.dp, top = 10.dp, start = paddingValues.dp)) {
+    Column(
+        Modifier
+            .padding(bottom = 10.dp, top = 10.dp, start = paddingValues.dp)
+            .clickable {
+
+            }) {
         Card(shape = RoundedCornerShape(cornerRadius.dp)) {
 
 
