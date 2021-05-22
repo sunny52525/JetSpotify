@@ -7,6 +7,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.annotation.MainThread
+import androidx.compose.animation.ExperimentalAnimationApi
 import com.google.android.material.snackbar.Snackbar
 import com.shaun.spotonmusic.R
 import com.shaun.spotonmusic.presentation.ui.components.screens.HomeScreen
@@ -18,6 +19,7 @@ import net.openid.appauth.TokenResponse
 @AndroidEntryPoint
 class HomeActivity : BaseSpotifyActivity() {
 
+    @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

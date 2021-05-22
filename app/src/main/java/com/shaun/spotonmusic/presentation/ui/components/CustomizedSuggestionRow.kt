@@ -36,7 +36,7 @@ fun FavouriteArtistSongs(title: String, data: Pager<Album>?, image: String) {
                 )
             }
             Column() {
-                Text(text = title, fontSize = 12.sp)
+                Text(text = title, fontSize = 12.sp, modifier = Modifier.padding(start = 10.dp))
                 if (data != null) {
                     data.items?.get(0)?.artists?.get(0)?.let {
 
@@ -44,7 +44,8 @@ fun FavouriteArtistSongs(title: String, data: Pager<Album>?, image: String) {
                             text = it.name,
                             color = Color.White,
                             fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(start = 10.dp)
                         )
 
                     }
@@ -97,6 +98,7 @@ fun CustomizedSuggestionCard(
             color = Color.Gray,
             textAlign = TextAlign.Left,
             fontSize = 13.sp
+
         )
 
     }

@@ -1,7 +1,6 @@
 package com.shaun.spotonmusic.presentation.ui.components.screens
 
-import android.util.Log
-import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -25,6 +25,7 @@ import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.spotifyGray
 import com.shaun.spotonmusic.viewmodel.HomeScreenViewModel
 
+@ExperimentalAnimationApi
 @Composable
 fun HomeScreen(
     context: HomeActivity
@@ -45,11 +46,14 @@ fun HomeScreen(
 
     val currentScreen by homeViewModel.currentScreen.observeAsState()
 
+
     val bottomNavItems = listOf(
         Routes.Home,
         Routes.Search,
         Routes.Library
     )
+
+
     Scaffold(
 
         modifier = Modifier
@@ -141,6 +145,7 @@ fun BottomNavigationSpotOnMusic(
 }
 
 
+@ExperimentalAnimationApi
 @Composable
 fun HomeScreenNavigationConfiguration(
     navHostController: NavHostController, viewModel: HomeScreenViewModel
@@ -155,15 +160,44 @@ fun HomeScreenNavigationConfiguration(
     ) {
 
         composable(Routes.Home.route) {
-            Home(viewModel = viewModel)
+            EnterAnimation {
+                Home(viewModel = viewModel)
+            }
         }
         composable(Routes.Search.route) {
-            Search(viewModel)
+            EnterAnimation {
+
+                Search(viewModel)
+
+            }
 
         }
         composable(Routes.Library.route) {
-            Library(viewModel)
+            EnterAnimation {
+
+                Library(viewModel)
+
+            }
 
         }
     }
+}
+
+@ExperimentalAnimationApi
+@Composable
+fun EnterAnimation(content: @Composable () -> Unit) {
+
+
+    AnimatedVisibility(
+        visible = true,
+        enter = slideInVertically(
+            initialOffsetY = { -40 }
+        ) + expandVertically(
+            expandFrom = Alignment.Top
+        ) + fadeIn(initialAlpha = 0.3f),
+        exit = slideOutVertically() + shrinkVertically() + fadeOut(),
+        content = content,
+        initiallyVisible = false
+    )
+
 }

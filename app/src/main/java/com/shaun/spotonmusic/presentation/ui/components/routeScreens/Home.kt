@@ -1,5 +1,6 @@
 package com.shaun.spotonmusic.presentation.ui.components.routeScreens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
+import androidx.lifecycle.MutableLiveData
 import androidx.palette.graphics.Palette
 import com.shaun.spotonmusic.getBitmapFromURL
 import com.shaun.spotonmusic.getGreeting
@@ -26,12 +28,12 @@ import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.blue
 import com.shaun.spotonmusic.viewmodel.HomeScreenViewModel
 import kaaes.spotify.webapi.android.models.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import kotlin.math.log
 
 private const val TAG = "Home"
+
+val liveData = MutableLiveData<ArrayList<Playlist?>>()
 
 @Composable
 fun Home(
@@ -57,6 +59,17 @@ fun Home(
     val newReleases: NewReleases by viewModel.newReleases.observeAsState(NewReleases())
     val myPlayList: Pager<PlaylistSimple> by viewModel.getMyPlayList.observeAsState(Pager<PlaylistSimple>())
     val recentlyPlayed: RecentlyPlayed by viewModel.recentlyPlayed.observeAsState(initial = RecentlyPlayed())
+    val favouriteArtists: Pager<Artist> by viewModel.favouriteArtists.observeAsState(initial = Pager<Artist>())
+    val charts: ArrayList<Playlist?> by liveData.observeAsState(initial = ArrayList())
+
+
+
+
+    getPlaylist(viewModel)
+
+
+
+
 
 
     viewModel.recentlyPlayed.observeForever { it ->
@@ -67,7 +80,7 @@ fun Home(
 
                     if (myBitmap != null && !myBitmap.isRecycled) {
                         val palette: Palette = Palette.from(myBitmap).generate()
-                        val color = palette.vibrantSwatch?.rgb?.let { color ->
+                        val color = palette.dominantSwatch?.rgb?.let { color ->
                             arrayListOf(color.red, color.green, color.blue)
 
                         }
@@ -90,6 +103,7 @@ fun Home(
             }
         }
     }
+
 
 
 
@@ -122,12 +136,7 @@ fun Home(
                     RecentHeardBlock(recentlyPlayed)
                 }
 
-
             }
-
-
-
-
 
             item {
 
@@ -152,8 +161,9 @@ fun Home(
                 RecentlyPlayedRow(title = "Recently Played", recentlyPlayed = recentlyPlayed)
             }
 
-
-
+            item {
+                NewReleasesRow(newReleases = newReleases, title = "New Releases")
+            }
 
             item {
 
@@ -162,6 +172,9 @@ fun Home(
                     title = "Featured Playlists"
                 )
             }
+            item {
+                ChartsRow(title = "Charts", playlist = charts)
+            }
 
             item {
                 FavouriteArtistSongs(
@@ -169,11 +182,13 @@ fun Home(
                     data = favouriteArtistSongs,
                     favouriteArtistImage
                 )
+
             }
 
             item {
-                NewReleasesRow(newReleases = newReleases, title = "New Releases")
+                ArtistRow(title = "Your Favourites", artistsPager = favouriteArtists)
             }
+
 
 
 
@@ -195,6 +210,7 @@ fun Greeting(onClick: (String) -> Unit) {
         onClick("2dIGnmEIy1WZIcZCFSj6i8")
         onClick("tr")
 
+        Log.d(TAG, "Greeting: ${liveData.value?.get(0)?.description}")
 
     }, onHistoryClicked = {
 
@@ -203,5 +219,32 @@ fun Greeting(onClick: (String) -> Unit) {
     })
 }
 
+
+fun getPlaylist(viewModel: HomeScreenViewModel) {
+    CoroutineScope(Dispatchers.IO).launch {
+
+        val multipleIDs = listOf(
+            "37i9dQZEVXbMDoHDwVN2tF",
+            "37i9dQZEVXbLiRSasKsNU9",
+            "37i9dQZEVXbLZ52XmnySJg",
+            "37i9dQZF1DX0ieekvzt1Ic",
+            "37i9dQZF1DX0XUfTFmNBRM",
+        )
+
+        val responses = multipleIDs.map {
+            val res = viewModel.getAPlaylist(it)
+            it to res
+
+        }
+
+        withContext(Dispatchers.Main) {
+            val response = responses.map {
+                it.second.body()
+            }
+            liveData.postValue(response as ArrayList<Playlist?>?)
+        }
+
+    }
+}
 
 

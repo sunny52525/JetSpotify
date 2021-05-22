@@ -1,7 +1,5 @@
 package com.shaun.spotonmusic.presentation.ui.components
 
-import android.util.Log
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,15 +12,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.shaun.spotonmusic.model.RecentlyPlayed
+import kaaes.spotify.webapi.android.models.Playlist
+
 
 @Composable
-fun RecentlyPlayedRow(title: String?, recentlyPlayed: RecentlyPlayed?) {
+fun ChartsRow(title:String,playlist: ArrayList<Playlist?>){
     Column(Modifier.padding(top = 30.dp)) {
 
 
         Text(
-            text = title.toString(), textAlign = TextAlign.Left,
+            text = title, textAlign = TextAlign.Left,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .fillMaxWidth()
@@ -33,26 +32,23 @@ fun RecentlyPlayedRow(title: String?, recentlyPlayed: RecentlyPlayed?) {
         LazyRow {
 
 
-            recentlyPlayed?.items?.let {
+            playlist.let {
+
                 it.forEachIndexed { index, it ->
+                    item {
 
-
-                    try {
-                        item {
-
+                        it?.description?.let { it1 ->
                             SuggestionCard(
-                                0,
-                                imageUrl = it.track.album.images[0].url,
-                                it.track.name,
+                                imageUrl = it?.images[0].url,
+                                title = it1,
+                                size = 150,
                                 paddingValues = if (index == 0) 20 else 10
                             )
                         }
-                    } catch (e: Exception) {
-                        Log.e("TAG", "RecentlyPlayedRow: No Item")
                     }
                 }
             }
-        }
 
+        }
     }
 }

@@ -1,7 +1,5 @@
 package com.shaun.spotonmusic.presentation.ui.components
 
-import android.util.Log
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,45 +12,43 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.shaun.spotonmusic.model.RecentlyPlayed
+import kaaes.spotify.webapi.android.models.Artist
+import kaaes.spotify.webapi.android.models.Pager
+
 
 @Composable
-fun RecentlyPlayedRow(title: String?, recentlyPlayed: RecentlyPlayed?) {
+fun ArtistRow(title: String, artistsPager: Pager<Artist>) {
     Column(Modifier.padding(top = 30.dp)) {
 
 
         Text(
-            text = title.toString(), textAlign = TextAlign.Left,
+            text = title, textAlign = TextAlign.Left,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 20.dp),
             fontSize = 23.sp,
             color = Color.White
+
         )
         LazyRow {
 
 
-            recentlyPlayed?.items?.let {
-                it.forEachIndexed { index, it ->
+            artistsPager.items?.let {
 
+                it.forEachIndexed { index, artist ->
+                    item {
 
-                    try {
-                        item {
-
-                            SuggestionCard(
-                                0,
-                                imageUrl = it.track.album.images[0].url,
-                                it.track.name,
-                                paddingValues = if (index == 0) 20 else 10
-                            )
-                        }
-                    } catch (e: Exception) {
-                        Log.e("TAG", "RecentlyPlayedRow: No Item")
+                        SuggestionCard(
+                            85,
+                            imageUrl = artist.images[0].url,
+                            artist.name,
+                            paddingValues = if (index == 0) 20 else 10
+                        )
                     }
                 }
             }
-        }
 
+        }
     }
 }
