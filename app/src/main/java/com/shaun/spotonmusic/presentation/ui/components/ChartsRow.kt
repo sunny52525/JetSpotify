@@ -16,7 +16,7 @@ import kaaes.spotify.webapi.android.models.Playlist
 
 
 @Composable
-fun ChartsRow(title:String,playlist: ArrayList<Playlist?>){
+fun ChartsRow(title: String, playlist: List<Playlist?>) {
     Column(Modifier.padding(top = 30.dp)) {
 
 
@@ -32,14 +32,14 @@ fun ChartsRow(title:String,playlist: ArrayList<Playlist?>){
         LazyRow {
 
 
-            playlist.let {
+            playlist.let { playlist ->
 
-                it.forEachIndexed { index, it ->
+                playlist.forEachIndexed { index, it ->
                     item {
 
                         it?.description?.let { it1 ->
                             SuggestionCard(
-                                imageUrl = it?.images[0].url,
+                                imageUrl = it.images[0].url,
                                 title = it1,
                                 size = 150,
                                 paddingValues = if (index == 0) 20 else 10

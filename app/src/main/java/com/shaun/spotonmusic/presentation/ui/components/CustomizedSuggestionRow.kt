@@ -22,43 +22,14 @@ import kaaes.spotify.webapi.android.models.Pager
 fun FavouriteArtistSongs(title: String, data: Pager<Album>?, image: String) {
     Column(Modifier.padding(top = 30.dp)) {
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 20.dp)
-        ) {
-            Card(shape = RoundedCornerShape(50)) {
-                Image(
-                    painter = rememberGlidePainter(request = image),
-                    contentDescription = null,
-
-                    modifier = Modifier.size(32.dp)
-                )
-            }
-            Column() {
-                Text(text = title, fontSize = 12.sp, modifier = Modifier.padding(start = 10.dp))
-                if (data != null) {
-                    data.items?.get(0)?.artists?.get(0)?.let {
-
-                        Text(
-                            text = it.name,
-                            color = Color.White,
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(start = 10.dp)
-                        )
-
-                    }
-                }
-            }
-        }
+        CustomizedHeading(image, title, data?.items?.get(0)?.artists?.get(0)?.name)
 
         LazyRow {
             data?.items?.let {
                 it.forEachIndexed { index, its ->
                     item {
                         CustomizedSuggestionCard(
-                            album = its,
+                            album = Pair(its.images[0].url, its.name),
                             paddingValues = if (index == 0) 20 else 10
                         )
                     }
@@ -71,11 +42,48 @@ fun FavouriteArtistSongs(title: String, data: Pager<Album>?, image: String) {
     }
 }
 
+@Composable
+fun CustomizedHeading(
+    image: String,
+    title: String,
+    data: String?
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 20.dp)
+    ) {
+        Card(shape = RoundedCornerShape(50)) {
+            Image(
+                painter = rememberGlidePainter(request = image),
+                contentDescription = null,
+
+                modifier = Modifier.size(32.dp)
+            )
+        }
+        Column() {
+            Text(text = title, fontSize = 12.sp, modifier = Modifier.padding(start = 10.dp))
+            if (data != null) {
+
+
+                Text(
+                    text = data,
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(start = 10.dp)
+                )
+
+            }
+        }
+    }
+}
+
 
 @Composable
 fun CustomizedSuggestionCard(
     cornerRadius: Int = 0,
-    album: Album,
+    album: Pair<String, String>,
     paddingValues: Int
 ) {
 
@@ -85,7 +93,7 @@ fun CustomizedSuggestionCard(
 
 
             Image(
-                painter = rememberGlidePainter(request = album.images[0].url),
+                painter = rememberGlidePainter(request = album.first),
                 contentDescription = "",
                 modifier =
                 Modifier
@@ -94,7 +102,7 @@ fun CustomizedSuggestionCard(
             )
         }
         Text(
-            text = album.name,
+            text = album.second,
             color = Color.Gray,
             textAlign = TextAlign.Left,
             fontSize = 13.sp

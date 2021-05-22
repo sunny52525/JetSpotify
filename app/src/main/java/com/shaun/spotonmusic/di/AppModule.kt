@@ -16,7 +16,6 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
@@ -56,7 +55,6 @@ object AppModule {
     @Singleton
     fun spotifyService(): SpotifyAppService = Retrofit.Builder()
         .baseUrl(BASEURL).addConverterFactory(GsonConverterFactory.create(gson))
-        .client(client) .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .build().create(SpotifyAppService::class.java)
 
 }

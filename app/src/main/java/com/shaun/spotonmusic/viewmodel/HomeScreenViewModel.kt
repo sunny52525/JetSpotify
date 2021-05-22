@@ -13,11 +13,12 @@ import com.shaun.spotonmusic.presentation.ui.navigation.Routes
 import com.shaun.spotonmusic.read
 import com.shaun.spotonmusic.repository.HomeScreenRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.kaaes.spotify.webapi.retrofit.v2.SpotifyService
 import kaaes.spotify.webapi.android.models.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Response
-import retrofit2.Retrofit
 import javax.inject.Inject
 
 
@@ -48,7 +49,10 @@ class HomeScreenViewModel @Inject constructor(
     var secondFavouriteArtist = MutableLiveData<Pager<Album>>()
 
     var favouriteArtists = MutableLiveData<Pager<Artist>>()
+    var charts = MutableLiveData<List<Playlist?>>()
 
+    var firstFavouriteArtistRecommendations = MutableLiveData<Recommendations>()
+    var secondFavouriteArtistRecommendations = MutableLiveData<Recommendations>()
 
     init {
         getAccessToken()
@@ -59,8 +63,10 @@ class HomeScreenViewModel @Inject constructor(
         repo = HomeScreenRepositoryImpl(accessToken.value.toString(), retrofit)
         albums = repo.album
 
-        tokenExpired = repo.tokenExpired
 
+        getCharts()
+
+        tokenExpired = repo.tokenExpired
         favouriteArtist = repo.getAlbumsFromFavouriteArtists(0)
         secondFavouriteArtist = repo.getAlbumsFromFavouriteArtists(2)
         favouriteArtistImage = repo.favouriteArtistUrl
@@ -72,6 +78,8 @@ class HomeScreenViewModel @Inject constructor(
         getMyPlayList = repo.getUserPlaylist()
         recentlyPlayed = repo.getRecentlyPlayed()
         favouriteArtists = repo.favouriteArtists
+        firstFavouriteArtistRecommendations = repo.firstArtistRecommendations
+        secondFavouriteArtistRecommendations = repo.secondArtistRecommendations
 
 
     }
@@ -101,5 +109,34 @@ class HomeScreenViewModel @Inject constructor(
     fun getAPlaylist(id: String): Response<Playlist> {
         return repo.getPlayList(id)
     }
+
+
+    private fun getCharts() {
+        CoroutineScope(Dispatchers.IO).launch {
+
+            val multipleIDs = listOf(
+                "37i9dQZEVXbMDoHDwVN2tF",
+                "37i9dQZEVXbLiRSasKsNU9",
+                "37i9dQZEVXbLZ52XmnySJg",
+                "37i9dQZF1DX0ieekvzt1Ic",
+                "37i9dQZF1DX0XUfTFmNBRM",
+            )
+
+            val responses = multipleIDs.map {
+                val res = getAPlaylist(it)
+                it to res
+
+            }
+
+            withContext(Dispatchers.Main) {
+                val response = responses.map {
+                    it.second.body()
+                }
+                charts.postValue(response)
+            }
+
+        }
+    }
+
 
 }
