@@ -1,5 +1,6 @@
 package com.shaun.spotonmusic.viewmodel
 
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.LiveData
@@ -14,10 +15,7 @@ import com.shaun.spotonmusic.read
 import com.shaun.spotonmusic.repository.HomeScreenRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kaaes.spotify.webapi.android.models.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -112,29 +110,37 @@ class HomeScreenViewModel @Inject constructor(
 
 
     private fun getCharts() {
-        CoroutineScope(Dispatchers.IO).launch {
 
-            val multipleIDs = listOf(
+        GlobalScope.launch {
+
+            val chartsIDs = listOf(
                 "37i9dQZEVXbMDoHDwVN2tF",
                 "37i9dQZEVXbLiRSasKsNU9",
                 "37i9dQZEVXbLZ52XmnySJg",
                 "37i9dQZF1DX0ieekvzt1Ic",
-                "37i9dQZF1DX0XUfTFmNBRM",
+                "37i9dQZEVXbNG2KDcFcKOF",
+                "37i9dQZF1DXcBWIGoYBM5M",
+                "37i9dQZF1DWUa8ZRTfalHk",
+                "37i9dQZEVXbNG2KDcFcKOF"
             )
-
-            val responses = multipleIDs.map {
-                val res = getAPlaylist(it)
-                it to res
-
+            var responses= listOf<Response<Playlist>>()
+            try {
+                responses = chartsIDs.map {
+                    val res = getAPlaylist(it)
+                    res
+                }
+            } catch (e: Exception) {
+                Log.d("TAG", "getCharts: $e")
             }
 
             withContext(Dispatchers.Main) {
                 val response = responses.map {
-                    it.second.body()
+                    it.body()
                 }
                 charts.postValue(response)
-            }
 
+
+            }
         }
     }
 

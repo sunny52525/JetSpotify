@@ -1,9 +1,9 @@
 package com.shaun.spotonmusic.presentation.ui.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -18,9 +18,16 @@ import kaaes.spotify.webapi.android.models.PlaylistSimple
 
 
 @Composable
-fun PlaylistRow(title: String = "Throwback", playlistsPager: Pager<PlaylistSimple>) {
+fun PlaylistRow(
+    title: String = "Throwback",
+    playlistsPager: Pager<PlaylistSimple>?
+) {
+
+    if (playlistsPager?.items ==null)
+        return
 
     Column(Modifier.padding(top = 30.dp)) {
+
 
 
         Text(
@@ -32,12 +39,12 @@ fun PlaylistRow(title: String = "Throwback", playlistsPager: Pager<PlaylistSimpl
             fontSize = 23.sp,
             color = Color.White
         )
-        LazyRow {
+        LazyRow() {
 
 
             playlistsPager.let {
 
-                it.items?.forEachIndexed { index, it ->
+                it?.items?.forEachIndexed { index, it ->
                     item {
 
                         SuggestionCard(

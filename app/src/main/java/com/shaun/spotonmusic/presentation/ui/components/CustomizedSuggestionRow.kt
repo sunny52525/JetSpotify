@@ -20,6 +20,10 @@ import kaaes.spotify.webapi.android.models.Pager
 
 @Composable
 fun FavouriteArtistSongs(title: String, data: Pager<Album>?, image: String) {
+
+    if (data?.items == null || data.items.isEmpty() ||image.isBlank())
+        return
+
     Column(Modifier.padding(top = 30.dp)) {
 
         CustomizedHeading(image, title, data?.items?.get(0)?.artists?.get(0)?.name)
@@ -105,7 +109,8 @@ fun CustomizedSuggestionCard(
             text = album.second,
             color = Color.Gray,
             textAlign = TextAlign.Left,
-            fontSize = 13.sp
+            fontSize = 13.sp,
+            modifier = Modifier.width(170.dp)
 
         )
 

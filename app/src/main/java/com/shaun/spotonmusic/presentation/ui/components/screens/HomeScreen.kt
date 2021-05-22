@@ -7,8 +7,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -16,7 +19,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.*
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.shaun.spotonmusic.presentation.ui.activity.HomeActivity
 import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Home
 import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Library
@@ -151,7 +157,7 @@ fun BottomNavigationSpotOnMusic(
 fun HomeScreenNavigationConfiguration(
     navHostController: NavHostController, viewModel: HomeScreenViewModel
 ) {
-
+    val listState = rememberLazyListState()
     NavHost(
         navController = navHostController,
         startDestination = Routes.Home.route,
@@ -161,9 +167,9 @@ fun HomeScreenNavigationConfiguration(
     ) {
 
         composable(Routes.Home.route) {
-            val listState = rememberLazyListState()
+
             EnterAnimation {
-                Home(viewModel = viewModel,listState)
+                Home(viewModel, listState)
             }
         }
         composable(Routes.Search.route) {

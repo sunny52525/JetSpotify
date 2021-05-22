@@ -17,7 +17,11 @@ import kaaes.spotify.webapi.android.models.Pager
 
 
 @Composable
-fun ArtistRow(title: String, artistsPager: Pager<Artist>) {
+fun ArtistRow(title: String, artistsPager: Pager<Artist>?) {
+
+    if (artistsPager?.items == null)
+        return
+
     Column(Modifier.padding(top = 30.dp)) {
 
 

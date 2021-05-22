@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
@@ -20,7 +22,13 @@ import kaaes.spotify.webapi.android.models.NewReleases
 import kaaes.spotify.webapi.android.models.PlaylistsPager
 
 @Composable
-fun SuggestionsRow(title: String = "Throwback", playlistsPager: PlaylistsPager) {
+fun SuggestionsRow(
+    title: String, playlistsPager: PlaylistsPager?
+) {
+
+
+    if (playlistsPager?.playlists == null)
+        return
 
     Column(Modifier.padding(top = 30.dp)) {
 
@@ -35,7 +43,7 @@ fun SuggestionsRow(title: String = "Throwback", playlistsPager: PlaylistsPager) 
             color = Color.White
 
         )
-        LazyRow {
+        LazyRow() {
 
 
             playlistsPager.playlists?.let {

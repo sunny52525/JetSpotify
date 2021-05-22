@@ -28,11 +28,11 @@ object AppModule {
     val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
         .setLenient().create()
 
-    val interceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
-    }
-    val client = OkHttpClient.Builder().addInterceptor(interceptor)
-        .build()
+//    val interceptor = HttpLoggingInterceptor().apply {
+//        level = HttpLoggingInterceptor.Level.BODY
+//    }
+//    val client = OkHttpClient.Builder().addInterceptor(interceptor)
+//        .build()
 
 
     @Singleton

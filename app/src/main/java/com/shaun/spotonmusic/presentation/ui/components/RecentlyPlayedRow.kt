@@ -18,6 +18,9 @@ import com.shaun.spotonmusic.model.RecentlyPlayed
 
 @Composable
 fun RecentlyPlayedRow(title: String?, recentlyPlayed: RecentlyPlayed?) {
+
+    if (recentlyPlayed?.items == null)
+        return
     Column(Modifier.padding(top = 30.dp)) {
 
 
@@ -35,11 +38,8 @@ fun RecentlyPlayedRow(title: String?, recentlyPlayed: RecentlyPlayed?) {
 
             recentlyPlayed?.items?.let {
                 it.forEachIndexed { index, it ->
-
-
                     try {
                         item {
-
                             SuggestionCard(
                                 0,
                                 imageUrl = it.track.album.images[0].url,

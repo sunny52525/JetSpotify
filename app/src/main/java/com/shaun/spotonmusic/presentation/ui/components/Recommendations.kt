@@ -13,11 +13,15 @@ import kaaes.spotify.webapi.android.models.Recommendations
 @Composable
 fun RecommendationsRow(
     title: String,
-    recommendations: Recommendations,
+    recommendations: Recommendations?,
     image: String,
     artistName: Pager<Artist>,
     index: Int
 ) {
+
+    if (recommendations?.tracks == null)
+        return
+
     Column(Modifier.padding(top = 30.dp)) {
 
 

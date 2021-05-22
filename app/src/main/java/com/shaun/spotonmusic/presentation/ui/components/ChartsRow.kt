@@ -16,7 +16,10 @@ import kaaes.spotify.webapi.android.models.Playlist
 
 
 @Composable
-fun ChartsRow(title: String, playlist: List<Playlist?>) {
+fun ChartsRow(title: String, playlist: List<Playlist?>?) {
+
+    if (playlist==null || playlist.isEmpty())
+        return
     Column(Modifier.padding(top = 30.dp)) {
 
 

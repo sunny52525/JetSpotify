@@ -15,6 +15,8 @@ import com.shaun.spotonmusic.ui.theme.SpotOnMusicTheme
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kaaes.spotify.webapi.core.models.UserPrivate
 import net.openid.appauth.TokenResponse
+import android.view.Window
+
 
 @AndroidEntryPoint
 class HomeActivity : BaseSpotifyActivity() {
@@ -23,7 +25,12 @@ class HomeActivity : BaseSpotifyActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
+
         if (spotifyAuthClient.hasConfigurationChanged()) {
             Toast.makeText(this, "Configuration change detected", Toast.LENGTH_SHORT).show()
             signOut()
@@ -34,7 +41,7 @@ class HomeActivity : BaseSpotifyActivity() {
             SpotOnMusicTheme {
 
                 HomeScreen(
-this
+                    this
                 )
             }
 

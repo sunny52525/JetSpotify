@@ -139,8 +139,7 @@ fun Home(
             }
 
             item {
-
-                SuggestionsRow(playlistsPager = playList, title = "Mood")
+                SuggestionsRow(playlistsPager = playList, title = "Mood",)
             }
             item {
                 FavouriteArtistSongs(
@@ -151,11 +150,10 @@ fun Home(
             }
 
             item {
-                PlaylistRow(playlistsPager = myPlayList, title = "Your Playlists")
+                PlaylistRow("Your Playlists", myPlayList)
             }
             item {
-
-                SuggestionsRow(playlistsPager = party, title = "Party")
+                SuggestionsRow(playlistsPager = party, title = "Party" )
             }
 
             item {
@@ -177,8 +175,7 @@ fun Home(
 
                 SuggestionsRow(
                     playlistsPager = featuredPlaylists.toPlayListPager(),
-                    title = "Featured Playlists"
-                )
+                    title = "Featured Playlists")
             }
             item {
                 ChartsRow(title = "Charts", playlist = charts)
