@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -160,8 +161,9 @@ fun HomeScreenNavigationConfiguration(
     ) {
 
         composable(Routes.Home.route) {
+            val listState = rememberLazyListState()
             EnterAnimation {
-                Home(viewModel = viewModel)
+                Home(viewModel = viewModel,listState)
             }
         }
         composable(Routes.Search.route) {

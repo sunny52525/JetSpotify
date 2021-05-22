@@ -68,7 +68,9 @@ fun NewReleasesRow(title: String = "Throwback", newReleases: NewReleases) {
         Text(
             text = title, textAlign = TextAlign.Left,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.fillMaxWidth().padding(start = 20.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp),
             fontSize = 23.sp,
             color = Color.White
         )
@@ -130,8 +132,7 @@ fun SuggestionCard(
             color = Color.Gray,
             textAlign = TextAlign.Left,
             fontSize = 13.sp,
-            modifier = Modifier.width(size.dp),
-            maxLines = 2
+            modifier = Modifier.width(size.dp)
         )
 
     }

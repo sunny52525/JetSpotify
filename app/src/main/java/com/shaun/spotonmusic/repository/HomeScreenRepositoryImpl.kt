@@ -22,7 +22,7 @@ class HomeScreenRepositoryImpl @Inject constructor(
     var tokenExpired = MutableLiveData<Boolean>()
     var map = mapOf(
         "country" to "IN",
-        "limit" to 10,
+        "limit" to 7,
         "locale" to "IN",
         "type" to "artists",
         "market" to "IN"
@@ -297,11 +297,11 @@ class HomeScreenRepositoryImpl @Inject constructor(
         try {
 
             val recommendationMap = mapOf(
-                "limit" to 10,
+                "limit" to 7,
                 "market" to "IN",
                 "seed_artists" to artistId,
-                "seed_genres" to t!!.genres[0] +","+ t.genres[1],
-                "seed_tracks" to items!!.items[0].id +","+ items.items[0].id
+                "seed_genres" to t!!.genres[0] + "," + t.genres[1],
+                "seed_tracks" to items!!.items[0].id + "," + items.items[0].id
             )
 
             spotify.getRecommendations(recommendationMap, object : Callback<Recommendations> {

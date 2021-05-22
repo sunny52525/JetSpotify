@@ -3,6 +3,7 @@ package com.shaun.spotonmusic.presentation.ui.components.routeScreens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -36,7 +37,8 @@ private const val TAG = "Home"
 
 @Composable
 fun Home(
-    viewModel: HomeScreenViewModel
+    viewModel: HomeScreenViewModel,
+    listState: LazyListState
 ) {
 
 
@@ -118,7 +120,8 @@ fun Home(
 
         LazyColumn(
             Modifier
-                .background(black)
+                .background(black),
+            state = listState
         ) {
             item {
                 Column(modifier = Modifier.background(brush = brush)) {
@@ -146,6 +149,7 @@ fun Home(
                     secondFavouriteArtistImage
                 )
             }
+
             item {
                 PlaylistRow(playlistsPager = myPlayList, title = "Your Playlists")
             }
@@ -165,7 +169,7 @@ fun Home(
                     recommendations = firstFavouriteArtistRecommendations,
                     image = favouriteArtistImage,
                     artistName = favouriteArtists,
-                    index=0
+                    index = 0
                 )
             }
 
@@ -187,7 +191,7 @@ fun Home(
                     recommendations = secondFavouriteArtistRecommendations,
                     image = secondFavouriteArtistImage,
                     artistName = favouriteArtists,
-                    index=1
+                    index = 1
                 )
             }
 
