@@ -1,10 +1,8 @@
 package com.shaun.spotonmusic.model
 
-import android.os.Parcel
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import io.github.kaaes.spotify.webapi.core.models.RecentlyPlayedTrack
-import kaaes.spotify.webapi.android.models.*
+import kaaes.spotify.webapi.android.models.Artist
+import kaaes.spotify.webapi.android.models.Image
 
 data class RecentlyPlayed(
 

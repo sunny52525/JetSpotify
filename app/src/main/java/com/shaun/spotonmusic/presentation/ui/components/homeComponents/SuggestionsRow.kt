@@ -1,12 +1,10 @@
-package com.shaun.spotonmusic.presentation.ui.components
+package com.shaun.spotonmusic.presentation.ui.components.homeComponents
 
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
@@ -27,8 +25,6 @@ fun SuggestionsRow(
 ) {
 
 
-    if (playlistsPager?.playlists == null)
-        return
 
     Column(Modifier.padding(top = 30.dp)) {
 
@@ -46,15 +42,15 @@ fun SuggestionsRow(
         LazyRow() {
 
 
-            playlistsPager.playlists?.let {
+            playlistsPager?.playlists?.let {
 
-                it.items.forEachIndexed { index, it ->
+                it.items.forEachIndexed { index, item ->
                     item {
 
                         SuggestionCard(
                             0,
-                            imageUrl = it.images[0].url,
-                            it.name,
+                            imageUrl = item.images[0].url,
+                            item.name,
                             paddingValues = if (index == 0) 20 else 10
                         )
                     }
@@ -88,14 +84,14 @@ fun NewReleasesRow(title: String = "Throwback", newReleases: NewReleases) {
             newReleases.albums?.items?.let {
 
 
-                it.forEachIndexed { index, it ->
+                it.forEachIndexed { index, item ->
 
                     item {
 
                         SuggestionCard(
                             0,
-                            imageUrl = it.images[0].url,
-                            it.name,
+                            imageUrl = item.images[0].url,
+                            item.name,
                             paddingValues = if (index == 0) 20 else 10
                         )
                     }

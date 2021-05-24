@@ -1,4 +1,4 @@
-package com.shaun.spotonmusic.presentation.ui.components
+package com.shaun.spotonmusic.presentation.ui.components.homeComponents
 
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
@@ -21,7 +20,6 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.glide.rememberGlidePainter
 import com.shaun.spotonmusic.model.RecentlyPlayed
 import com.shaun.spotonmusic.ui.theme.spotifyGray
-import java.lang.Integer.min
 
 
 @Composable
@@ -70,7 +68,10 @@ fun RecentHeardCards(
 }
 
 @Composable
-fun RecentHeardBlock(recentlyPlayed: RecentlyPlayed) {
+fun RecentHeardBlock(recentlyPlayed: RecentlyPlayed?) {
+
+    if (recentlyPlayed?.items == null)
+        return
 
     val length = recentlyPlayed.items.size
 

@@ -1,5 +1,6 @@
-package com.shaun.spotonmusic.presentation.ui.components
+package com.shaun.spotonmusic.presentation.ui.components.homeComponents
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,19 +13,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kaaes.spotify.webapi.android.models.Playlist
-
+import com.shaun.spotonmusic.model.RecentlyPlayed
 
 @Composable
-fun ChartsRow(title: String, playlist: List<Playlist?>?) {
+fun RecentlyPlayedRow(title: String?, recentlyPlayed: RecentlyPlayed?) {
 
-    if (playlist==null || playlist.isEmpty())
-        return
+
     Column(Modifier.padding(top = 30.dp)) {
 
 
         Text(
-            text = title, textAlign = TextAlign.Left,
+            text = title.toString(), textAlign = TextAlign.Left,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .fillMaxWidth()
@@ -35,23 +34,23 @@ fun ChartsRow(title: String, playlist: List<Playlist?>?) {
         LazyRow {
 
 
-            playlist.let { playlist ->
-
-                playlist.forEachIndexed { index, it ->
-                    item {
-
-                        it?.description?.let { it1 ->
+            recentlyPlayed?.items.let {
+                it?.forEachIndexed { index, item ->
+                    try {
+                        item {
                             SuggestionCard(
-                                imageUrl = it.images[0].url,
-                                title = it1,
-                                size = 150,
+                                0,
+                                imageUrl = item.track.album.images[0].url,
+                                item.track.name,
                                 paddingValues = if (index == 0) 20 else 10
                             )
                         }
+                    } catch (e: Exception) {
+                        Log.e("TAG", "RecentlyPlayedRow: No Item")
                     }
                 }
             }
-
         }
+
     }
 }

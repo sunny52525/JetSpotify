@@ -294,14 +294,21 @@ class HomeScreenRepositoryImpl @Inject constructor(
         t: SeedsGenres?
     ) {
 
+        val indexToSeed = index.apply {
+            if (this == 1)
+                2 * 1
+
+
+        }
+        Log.d(TAG, "getRecommendations: $indexToSeed")
         try {
 
             val recommendationMap = mapOf(
                 "limit" to 7,
                 "market" to "IN",
                 "seed_artists" to artistId,
-                "seed_genres" to t!!.genres[0] + "," + t.genres[1],
-                "seed_tracks" to items!!.items[0].id + "," + items.items[0].id
+                "seed_genres" to t!!.genres[indexToSeed] + "," + t.genres[indexToSeed+1],
+                "seed_tracks" to items!!.items[indexToSeed].id + "," + items.items[indexToSeed+1].id
             )
 
             spotify.getRecommendations(recommendationMap, object : Callback<Recommendations> {
@@ -348,6 +355,28 @@ class HomeScreenRepositoryImpl @Inject constructor(
         })
         return result
     }
+
+
+    override fun getBrowse(): MutableLiveData<CategoriesPager> {
+
+        val result = MutableLiveData<CategoriesPager>()
+        spotify.getCategories(
+            mapOf("country" to "IN", "limit" to 50),
+            object : Callback<CategoriesPager> {
+                override fun success(t: CategoriesPager?, response: Response?) {
+
+                    result.postValue(t)
+                }
+
+                override fun failure(error: RetrofitError?) {
+
+                    Log.d(TAG, "failure: $error")
+                }
+
+            })
+        return result
+    }
+
 
     companion object {
         private const val TAG = "HomeScreenRepository"

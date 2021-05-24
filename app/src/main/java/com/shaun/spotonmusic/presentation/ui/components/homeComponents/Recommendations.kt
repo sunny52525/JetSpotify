@@ -1,4 +1,4 @@
-package com.shaun.spotonmusic.presentation.ui.components
+package com.shaun.spotonmusic.presentation.ui.components.homeComponents
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -19,9 +19,8 @@ fun RecommendationsRow(
     index: Int
 ) {
 
-    if (recommendations?.tracks == null)
+    if(recommendations?.tracks==null)
         return
-
     Column(Modifier.padding(top = 30.dp)) {
 
 

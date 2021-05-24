@@ -1,6 +1,5 @@
 package com.shaun.spotonmusic.network
 
-import android.database.Observable
 import com.shaun.spotonmusic.model.RecentlyPlayed
 import kaaes.spotify.webapi.android.models.Playlist
 import retrofit2.Call

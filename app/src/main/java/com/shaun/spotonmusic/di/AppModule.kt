@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.createDataStore
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.shaun.spotonmusic.BASEURL
 import com.shaun.spotonmusic.SpotOnApplication
@@ -13,8 +14,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -25,7 +24,7 @@ import javax.inject.Singleton
 object AppModule {
 
 
-    val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+    private val gson: Gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
         .setLenient().create()
 
 //    val interceptor = HttpLoggingInterceptor().apply {

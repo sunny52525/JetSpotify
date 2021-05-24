@@ -1,4 +1,4 @@
-package com.shaun.spotonmusic.presentation.ui.components
+package com.shaun.spotonmusic.presentation.ui.components.homeComponents
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -21,7 +21,8 @@ import kaaes.spotify.webapi.android.models.Pager
 @Composable
 fun FavouriteArtistSongs(title: String, data: Pager<Album>?, image: String) {
 
-    if (data?.items == null || data.items.isEmpty() ||image.isBlank())
+
+    if(data?.items==null || image.isNullOrEmpty())
         return
 
     Column(Modifier.padding(top = 30.dp)) {
@@ -65,7 +66,7 @@ fun CustomizedHeading(
                 modifier = Modifier.size(32.dp)
             )
         }
-        Column() {
+        Column {
             Text(text = title, fontSize = 12.sp, modifier = Modifier.padding(start = 10.dp))
             if (data != null) {
 

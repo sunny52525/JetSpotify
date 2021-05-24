@@ -1,4 +1,4 @@
-package com.shaun.spotonmusic.presentation.ui.components
+package com.shaun.spotonmusic.presentation.ui.components.homeComponents
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,11 +19,10 @@ import kaaes.spotify.webapi.android.models.Pager
 @Composable
 fun ArtistRow(title: String, artistsPager: Pager<Artist>?) {
 
-    if (artistsPager?.items == null)
+    if (artistsPager?.items==null ||artistsPager.items.isEmpty())
         return
 
     Column(Modifier.padding(top = 30.dp)) {
-
 
         Text(
             text = title, textAlign = TextAlign.Left,
@@ -38,7 +37,7 @@ fun ArtistRow(title: String, artistsPager: Pager<Artist>?) {
         LazyRow {
 
 
-            artistsPager.items?.let {
+            artistsPager?.items?.let {
 
                 it.forEachIndexed { index, artist ->
                     item {

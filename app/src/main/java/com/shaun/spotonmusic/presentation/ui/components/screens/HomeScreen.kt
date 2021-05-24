@@ -1,6 +1,8 @@
 package com.shaun.spotonmusic.presentation.ui.components.screens
 
+import android.os.Looper
 import androidx.compose.animation.*
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -13,6 +15,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -30,8 +33,9 @@ import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Search
 import com.shaun.spotonmusic.presentation.ui.navigation.Routes
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.spotifyGray
-import com.shaun.spotonmusic.viewmodel.HomeScreenViewModel
+import com.shaun.spotonmusic.viewmodel.SharedViewModel
 
+@ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 @Composable
 fun HomeScreen(
@@ -41,7 +45,7 @@ fun HomeScreen(
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
 
-    val homeViewModel: HomeScreenViewModel = viewModel()
+    val homeViewModel: SharedViewModel = viewModel()
 
     homeViewModel.tokenExpired.observeForever {
         if (it == true) {
@@ -78,7 +82,13 @@ fun HomeScreen(
         content = {
 
             HomeScreenNavigationConfiguration(
-                navController, homeViewModel
+                navController, homeViewModel,
+                tokenExpired = {
+                    context.spotifyAuthClient.refreshAccessToken()
+                    android.os.Handler(Looper.getMainLooper()).postDelayed({
+                        homeViewModel.getAccessToken()
+                    }, 1000)
+                }
             )
         }
 
@@ -117,7 +127,7 @@ fun BottomNavigationSpotOnMusic(
                             launchSingleTop = true
                         }
 
-                        dimension.forEachIndexed { index, i ->
+                        dimension.forEachIndexed { index, _ ->
                             if (index == it.index)
                                 dimension[index] = 21
                             else
@@ -152,10 +162,13 @@ fun BottomNavigationSpotOnMusic(
 }
 
 
+@OptIn(ExperimentalFoundationApi::class)
+@ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 @Composable
 fun HomeScreenNavigationConfiguration(
-    navHostController: NavHostController, viewModel: HomeScreenViewModel
+    navHostController: NavHostController, viewModel: SharedViewModel,
+    tokenExpired: () -> Unit
 ) {
     val listState = rememberLazyListState()
     NavHost(
@@ -169,7 +182,9 @@ fun HomeScreenNavigationConfiguration(
         composable(Routes.Home.route) {
 
             EnterAnimation {
-                Home(viewModel, listState)
+                Home(viewModel, listState, tokenExpired = {
+                    tokenExpired()
+                })
             }
         }
         composable(Routes.Search.route) {

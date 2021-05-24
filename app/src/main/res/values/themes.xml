@@ -12,11 +12,8 @@
         <item name="colorOnSecondary">@color/transparent</item>
         <item name="android:windowTranslucentStatus">true</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
         <item name="android:windowContentTransitions">true</item>
-        <!-- Status bar color. -->
-        <!-- Customize your theme here. -->
+
     </style>
 
     <style name="Theme.SpotOnMusic.NoActionBar">
@@ -24,11 +21,7 @@
         <item name="android:windowDrawsSystemBarBackgrounds">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@android:color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
-        <item name="android:windowContentTransitions">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
+
     </style>
 
     <style name="Theme.SpotOnMusic.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

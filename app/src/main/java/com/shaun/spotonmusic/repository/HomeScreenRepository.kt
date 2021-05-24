@@ -21,4 +21,6 @@ interface HomeScreenRepository {
     fun getPlaylistAsync(playlistId: String): MutableLiveData<Playlist>
     fun getGenre(index: Int, artistId: String?, items:  Pager<Track>?)
     fun getAlbumsOfArtist(artistId: String): MutableLiveData<Pager<Album>>
+
+    fun getBrowse(): MutableLiveData<CategoriesPager>
 }

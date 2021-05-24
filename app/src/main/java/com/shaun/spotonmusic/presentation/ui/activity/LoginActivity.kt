@@ -1,19 +1,12 @@
 package com.shaun.spotonmusic.presentation.ui.activity
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.MainThread
-import com.shaun.spotonmusic.AppConstants.AUTH_SCOPES
-import com.shaun.spotonmusic.AppConstants.CLIENT_ID
-import com.shaun.spotonmusic.AppConstants.REDIRECT_URL
-import com.shaun.spotonmusic.presentation.ui.components.LoginScreen
-import com.spotify.sdk.android.auth.AuthorizationRequest
-import com.spotify.sdk.android.auth.AuthorizationResponse
+import com.shaun.spotonmusic.presentation.ui.components.screens.LoginScreen
 import com.spotify.sdk.android.authentication.AuthenticationResponse
 import io.github.kaaes.spotify.webapi.core.models.UserPrivate
 import net.openid.appauth.TokenResponse
@@ -124,7 +117,7 @@ class LoginActivity : BaseSpotifyActivity() {
 
     @MainThread
     private fun showSnackBar(message: String) {
-        Toast.makeText(this, "$message", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
 

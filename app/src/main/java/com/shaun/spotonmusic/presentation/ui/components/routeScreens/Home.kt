@@ -21,11 +21,11 @@ import androidx.palette.graphics.Palette
 import com.shaun.spotonmusic.getBitmapFromURL
 import com.shaun.spotonmusic.getGreeting
 import com.shaun.spotonmusic.model.RecentlyPlayed
-import com.shaun.spotonmusic.presentation.ui.components.*
+import com.shaun.spotonmusic.presentation.ui.components.homeComponents.*
 import com.shaun.spotonmusic.toPlayListPager
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.blue
-import com.shaun.spotonmusic.viewmodel.HomeScreenViewModel
+import com.shaun.spotonmusic.viewmodel.SharedViewModel
 import kaaes.spotify.webapi.android.models.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -37,8 +37,9 @@ private const val TAG = "Home"
 
 @Composable
 fun Home(
-    viewModel: HomeScreenViewModel,
-    listState: LazyListState
+    viewModel: SharedViewModel,
+    listState: LazyListState,
+    tokenExpired: () -> Unit
 ) {
 
 
@@ -66,7 +67,7 @@ fun Home(
     val firstFavouriteArtistRecommendations: Recommendations by viewModel
         .firstFavouriteArtistRecommendations.observeAsState(initial = Recommendations())
     val secondFavouriteArtistRecommendations: Recommendations by viewModel
-        .firstFavouriteArtistRecommendations.observeAsState(initial = Recommendations())
+        .secondFavouriteArtistRecommendations.observeAsState(initial = Recommendations())
 
 
 
@@ -105,6 +106,12 @@ fun Home(
 
 
 
+    viewModel.tokenExpired.observeForever {
+        if (it == true) {
+            viewModel.tokenExpired.value = false
+            tokenExpired()
+        }
+    }
 
 
     Column(
@@ -139,7 +146,7 @@ fun Home(
             }
 
             item {
-                SuggestionsRow(playlistsPager = playList, title = "Mood",)
+                SuggestionsRow(playlistsPager = playList, title = "Mood")
             }
             item {
                 FavouriteArtistSongs(
@@ -153,7 +160,7 @@ fun Home(
                 PlaylistRow("Your Playlists", myPlayList)
             }
             item {
-                SuggestionsRow(playlistsPager = party, title = "Party" )
+                SuggestionsRow(playlistsPager = party, title = "Party")
             }
 
             item {
@@ -175,7 +182,8 @@ fun Home(
 
                 SuggestionsRow(
                     playlistsPager = featuredPlaylists.toPlayListPager(),
-                    title = "Featured Playlists")
+                    title = "Featured Playlists"
+                )
             }
             item {
                 ChartsRow(title = "Charts", playlist = charts)

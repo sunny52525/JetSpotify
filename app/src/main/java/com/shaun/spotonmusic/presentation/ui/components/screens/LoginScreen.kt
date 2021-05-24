@@ -1,4 +1,4 @@
-package com.shaun.spotonmusic.presentation.ui.components
+package com.shaun.spotonmusic.presentation.ui.components.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

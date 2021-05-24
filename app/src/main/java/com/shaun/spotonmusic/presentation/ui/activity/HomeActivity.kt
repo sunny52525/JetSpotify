@@ -3,11 +3,15 @@ package com.shaun.spotonmusic.presentation.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.annotation.MainThread
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.graphics.Color
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.material.snackbar.Snackbar
 import com.shaun.spotonmusic.R
 import com.shaun.spotonmusic.presentation.ui.components.screens.HomeScreen
@@ -15,21 +19,19 @@ import com.shaun.spotonmusic.ui.theme.SpotOnMusicTheme
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kaaes.spotify.webapi.core.models.UserPrivate
 import net.openid.appauth.TokenResponse
-import android.view.Window
 
 
 @AndroidEntryPoint
 class HomeActivity : BaseSpotifyActivity() {
 
+    @ExperimentalFoundationApi
+    @ExperimentalComposeUiApi
     @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
 
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        )
+
 
         if (spotifyAuthClient.hasConfigurationChanged()) {
             Toast.makeText(this, "Configuration change detected", Toast.LENGTH_SHORT).show()
@@ -39,7 +41,6 @@ class HomeActivity : BaseSpotifyActivity() {
 
         setContent {
             SpotOnMusicTheme {
-
                 HomeScreen(
                     this
                 )

@@ -1,27 +1,38 @@
 package com.shaun.spotonmusic.viewmodel
 
 import android.util.Log
+import androidx.compose.ui.graphics.Color
+import androidx.core.graphics.blue
+import androidx.core.graphics.green
+import androidx.core.graphics.red
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.palette.graphics.Palette
 import com.shaun.spotonmusic.SpotOnApplication
+import com.shaun.spotonmusic.getBitmapFromURL
 import com.shaun.spotonmusic.model.RecentlyPlayed
 import com.shaun.spotonmusic.network.SpotifyAppService
 import com.shaun.spotonmusic.presentation.ui.navigation.Routes
 import com.shaun.spotonmusic.read
 import com.shaun.spotonmusic.repository.HomeScreenRepositoryImpl
+import com.shaun.spotonmusic.ui.theme.black
+import com.shaun.spotonmusic.ui.theme.green
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kaaes.spotify.webapi.android.models.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 import javax.inject.Inject
 
 
 @HiltViewModel
-class HomeScreenViewModel @Inject constructor(
+class SharedViewModel @Inject constructor(
     context: SpotOnApplication,
     private val dataStore: DataStore<Preferences>,
     private val retrofit: SpotifyAppService
@@ -52,6 +63,11 @@ class HomeScreenViewModel @Inject constructor(
     var firstFavouriteArtistRecommendations = MutableLiveData<Recommendations>()
     var secondFavouriteArtistRecommendations = MutableLiveData<Recommendations>()
 
+    var categoriesPager = MutableLiveData<CategoriesPager>()
+
+    var searchGridColors=MutableLiveData<List<Color?>>()
+
+
     init {
         getAccessToken()
 
@@ -78,6 +94,9 @@ class HomeScreenViewModel @Inject constructor(
         favouriteArtists = repo.favouriteArtists
         firstFavouriteArtistRecommendations = repo.firstArtistRecommendations
         secondFavouriteArtistRecommendations = repo.secondArtistRecommendations
+        categoriesPager = repo.getBrowse()
+
+
 
 
     }
@@ -104,7 +123,7 @@ class HomeScreenViewModel @Inject constructor(
         return repo.getAlbumsOfArtist(artistId = artistId)
     }
 
-    fun getAPlaylist(id: String): Response<Playlist> {
+    private fun getAPlaylist(id: String): Response<Playlist> {
         return repo.getPlayList(id)
     }
 
@@ -123,7 +142,7 @@ class HomeScreenViewModel @Inject constructor(
                 "37i9dQZF1DWUa8ZRTfalHk",
                 "37i9dQZEVXbNG2KDcFcKOF"
             )
-            var responses= listOf<Response<Playlist>>()
+            var responses = listOf<Response<Playlist>>()
             try {
                 responses = chartsIDs.map {
                     val res = getAPlaylist(it)
@@ -145,4 +164,56 @@ class HomeScreenViewModel @Inject constructor(
     }
 
 
+    fun getColorFromSwatch(imageUrl: List<String>)  {
+
+        if (imageUrl.isEmpty()) {
+            searchGridColors.postValue(arrayListOf(black))
+        } else {
+            GlobalScope.launch {
+
+                val bitmapArray = imageUrl.map {
+                    getBitmapFromURL(it)
+                }
+
+                withContext(Dispatchers.Main) {
+
+                    val colorArray: List<Color?> = bitmapArray.map { bitmap ->
+                        if (bitmap != null && !bitmap.isRecycled) {
+                            val palette: Palette = Palette.from(bitmap).generate()
+                            val dominant = palette.dominantSwatch?.rgb?.let { color ->
+                                arrayListOf(color.red, color.green, color.blue)
+
+                            }
+                            val composeColor =
+                                dominant?.get(0)?.let { it1 ->
+                                    Color(
+                                        red = it1,
+                                        green = dominant[1],
+                                        blue = dominant[2]
+                                    )
+                                }
+
+                            Log.d(TAG, "getColorFromSwatch: $composeColor")
+                            composeColor
+
+                        } else {
+                            green
+                        }
+
+
+                    }
+                    searchGridColors.postValue(colorArray)
+
+
+
+                }
+            }
+        }
+
+
+    }
+
 }
+
+
+private const val TAG = "SharedViewModel"
