@@ -1,7 +1,7 @@
 package com.shaun.spotonmusic.repository
 
 import androidx.lifecycle.MutableLiveData
-import com.shaun.spotonmusic.model.RecentlyPlayed
+import com.shaun.spotonmusic.network.model.RecentlyPlayed
 import kaaes.spotify.webapi.android.models.*
 import retrofit2.Response
 

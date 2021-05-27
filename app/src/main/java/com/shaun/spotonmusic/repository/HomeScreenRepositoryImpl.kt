@@ -2,8 +2,8 @@ package com.shaun.spotonmusic.repository
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.shaun.spotonmusic.model.RecentlyPlayed
-import com.shaun.spotonmusic.network.SpotifyAppService
+import com.shaun.spotonmusic.network.model.RecentlyPlayed
+import com.shaun.spotonmusic.network.api.SpotifyAppService
 import kaaes.spotify.webapi.android.SpotifyApi
 import kaaes.spotify.webapi.android.models.*
 import retrofit.Callback

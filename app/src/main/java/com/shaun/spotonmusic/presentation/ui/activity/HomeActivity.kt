@@ -40,13 +40,15 @@ class HomeActivity : BaseSpotifyActivity() {
         }
 
         setContent {
-            SpotOnMusicTheme {
+            SpotOnMusicTheme(darkTheme = true) {
                 HomeScreen(
                     this
                 )
             }
 
         }
+
+
     }
 
     override fun onStart() {

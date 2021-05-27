@@ -8,7 +8,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.shaun.spotonmusic.BASEURL
 import com.shaun.spotonmusic.SpotOnApplication
-import com.shaun.spotonmusic.network.SpotifyAppService
+import com.shaun.spotonmusic.network.api.SpotifyAppService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

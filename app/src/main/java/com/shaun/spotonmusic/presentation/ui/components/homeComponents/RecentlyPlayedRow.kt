@@ -13,7 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.shaun.spotonmusic.model.RecentlyPlayed
+import com.shaun.spotonmusic.network.model.RecentlyPlayed
 
 @Composable
 fun RecentlyPlayedRow(title: String?, recentlyPlayed: RecentlyPlayed?) {

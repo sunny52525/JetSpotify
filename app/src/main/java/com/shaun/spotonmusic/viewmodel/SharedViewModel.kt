@@ -1,26 +1,18 @@
 package com.shaun.spotonmusic.viewmodel
 
 import android.util.Log
-import androidx.compose.ui.graphics.Color
-import androidx.core.graphics.blue
-import androidx.core.graphics.green
-import androidx.core.graphics.red
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.palette.graphics.Palette
 import com.shaun.spotonmusic.SpotOnApplication
-import com.shaun.spotonmusic.getBitmapFromURL
-import com.shaun.spotonmusic.model.RecentlyPlayed
-import com.shaun.spotonmusic.network.SpotifyAppService
+import com.shaun.spotonmusic.network.api.SpotifyAppService
+import com.shaun.spotonmusic.network.model.RecentlyPlayed
 import com.shaun.spotonmusic.presentation.ui.navigation.Routes
 import com.shaun.spotonmusic.read
 import com.shaun.spotonmusic.repository.HomeScreenRepositoryImpl
-import com.shaun.spotonmusic.ui.theme.black
-import com.shaun.spotonmusic.ui.theme.green
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kaaes.spotify.webapi.android.models.*
 import kotlinx.coroutines.Dispatchers
@@ -40,10 +32,10 @@ class SharedViewModel @Inject constructor(
 
     private val _currentScreen = MutableLiveData<Routes>(Routes.Home)
     val currentScreen: LiveData<Routes> = _currentScreen
-    var accessToken = MutableLiveData("")
+    private var accessToken = MutableLiveData("")
 
     private lateinit var repo: HomeScreenRepositoryImpl
-    var albums = MutableLiveData<Album>()
+    private var albums = MutableLiveData<Album>()
 
     var moodAlbum = MutableLiveData<PlaylistsPager>()
     var partyAlbum = MutableLiveData<PlaylistsPager>()
@@ -65,8 +57,6 @@ class SharedViewModel @Inject constructor(
 
     var categoriesPager = MutableLiveData<CategoriesPager>()
 
-    var searchGridColors=MutableLiveData<List<Color?>>()
-
 
     init {
         getAccessToken()
@@ -78,6 +68,7 @@ class SharedViewModel @Inject constructor(
         albums = repo.album
 
 
+        Log.d(TAG, "setToken: ${accessToken.value}")
         getCharts()
 
         tokenExpired = repo.tokenExpired
@@ -97,15 +88,15 @@ class SharedViewModel @Inject constructor(
         categoriesPager = repo.getBrowse()
 
 
-
-
     }
 
     fun getAccessToken() {
 
         viewModelScope.launch {
             accessToken.value = read(dataStore, "accesstoken")
-            setToken()
+            withContext(Dispatchers.Main) {
+                setToken()
+            }
 
 
         }
@@ -133,14 +124,14 @@ class SharedViewModel @Inject constructor(
         GlobalScope.launch {
 
             val chartsIDs = listOf(
-                "37i9dQZEVXbMDoHDwVN2tF",
-                "37i9dQZEVXbLiRSasKsNU9",
-                "37i9dQZEVXbLZ52XmnySJg",
-                "37i9dQZF1DX0ieekvzt1Ic",
-                "37i9dQZEVXbNG2KDcFcKOF",
-                "37i9dQZF1DXcBWIGoYBM5M",
-                "37i9dQZF1DWUa8ZRTfalHk",
-                "37i9dQZEVXbNG2KDcFcKOF"
+                "37i9dQZEVXbMDoHDwVN2tF", //top 50 global
+                "37i9dQZEVXbLiRSasKsNU9", //viral 50 global
+                "37i9dQZEVXbLZ52XmnySJg", //top 50 india
+                "37i9dQZF1DX0ieekvzt1Ic", //hot hits india
+                "37i9dQZEVXbNG2KDcFcKOF", //top songs global
+                "37i9dQZF1DXcBWIGoYBM5M", //today's top hit
+                "37i9dQZF1DWUa8ZRTfalHk", //pop rising
+                "37i9dQZEVXbNG2KDcFcKOF" //top songs global (weekly)
             )
             var responses = listOf<Response<Playlist>>()
             try {
@@ -164,56 +155,72 @@ class SharedViewModel @Inject constructor(
     }
 
 
-    fun getColorFromSwatch(imageUrl: List<String>)  {
+//    fun getColorFromSwatch(imageUrl: List<String>) {
+//
+//        if (imageUrl.isEmpty()) {
+//            searchGridColors.postValue(arrayListOf(black))
+//        } else {
+//            GlobalScope.launch {
+//
+//                val bitmapArray = imageUrl.map {
+//                    getBitmapFromURL(it)
+//                }
+//
+//                withContext(Dispatchers.Main) {
+//
+//                    val colorArray: List<Color?> = bitmapArray.map { bitmap ->
+//                        if (bitmap != null && !bitmap.isRecycled) {
+//                            val palette: Palette = Palette.from(bitmap).generate()
+//                            val dominant = palette.dominantSwatch?.rgb?.let { color ->
+//                                arrayListOf(color.red, color.green, color.blue)
+//
+//                            }
+//                            val composeColor: Color? =
+//                                dominant?.get(0)?.let { it1 ->
+//
+//
+//                                    Color(
+//                                        red = it1,
+//                                        green = dominant[1],
+//                                        blue = dominant[2],
+//                                    )
+//                                }
+//
+//                            composeColor
+//
+//                        } else {
+//                            green
+//                        }
+//
+//
+//                    }
+//
+//                    Log.d(TAG, "getColorFromSwatch: ${colorArray.toPrint()}")
+//                    searchGridColors.postValue(colorArray)
+//
+//
+//                }
+//            }
+//        }
+//
+//
+//    }
+//
+//}
 
-        if (imageUrl.isEmpty()) {
-            searchGridColors.postValue(arrayListOf(black))
-        } else {
-            GlobalScope.launch {
-
-                val bitmapArray = imageUrl.map {
-                    getBitmapFromURL(it)
-                }
-
-                withContext(Dispatchers.Main) {
-
-                    val colorArray: List<Color?> = bitmapArray.map { bitmap ->
-                        if (bitmap != null && !bitmap.isRecycled) {
-                            val palette: Palette = Palette.from(bitmap).generate()
-                            val dominant = palette.dominantSwatch?.rgb?.let { color ->
-                                arrayListOf(color.red, color.green, color.blue)
-
-                            }
-                            val composeColor =
-                                dominant?.get(0)?.let { it1 ->
-                                    Color(
-                                        red = it1,
-                                        green = dominant[1],
-                                        blue = dominant[2]
-                                    )
-                                }
-
-                            Log.d(TAG, "getColorFromSwatch: $composeColor")
-                            composeColor
-
-                        } else {
-                            green
-                        }
-
-
-                    }
-                    searchGridColors.postValue(colorArray)
-
-
-
-                }
-            }
-        }
-
-
-    }
-
+//
+//fun List<Color?>.toPrint(): String {
+//    val stringBuilder = StringBuilder()
+//    this.forEach {
+//        it?.let {
+//            val string = """
+//            Color(red=${it.red}f,blue=${it.blue}f,green=${it.green}f),
+//        """.trimIndent()
+//            stringBuilder.append(string)
+//        }
+//
+//    }
+//    return stringBuilder.toString()
 }
-
 
 private const val TAG = "SharedViewModel"

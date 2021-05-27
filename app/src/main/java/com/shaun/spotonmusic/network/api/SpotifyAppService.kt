@@ -1,6 +1,6 @@
-package com.shaun.spotonmusic.network
+package com.shaun.spotonmusic.network.api
 
-import com.shaun.spotonmusic.model.RecentlyPlayed
+import com.shaun.spotonmusic.network.model.RecentlyPlayed
 import kaaes.spotify.webapi.android.models.Playlist
 import retrofit2.Call
 import retrofit2.http.GET
@@ -16,7 +16,7 @@ interface SpotifyAppService {
     fun getRecentlyPlayed(@Query("q") limit: Int, @Header("Authorization") authorization: String)
             : Call<RecentlyPlayed>
 
-        @GET("/v1/playlists/{playlist_id}")
+    @GET("/v1/playlists/{playlist_id}")
     fun getAPlayList(
         @Path("playlist_id") playList_id: String,
         @Query("market") market: String = "IN",

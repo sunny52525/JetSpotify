@@ -1,6 +1,7 @@
 package com.shaun.spotonmusic.presentation.ui.components.screens
 
 import android.os.Looper
+import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -49,9 +50,11 @@ fun HomeScreen(
 
     homeViewModel.tokenExpired.observeForever {
         if (it == true) {
+            Toast.makeText(context, "Expired", Toast.LENGTH_SHORT).show()
             context.spotifyAuthClient.refreshAccessToken()
-            homeViewModel.tokenExpired.value = false
-            homeViewModel.getAccessToken()
+//
+//            context.startActivity(Intent(context, SplashActivity::class.java))
+//            context.finish()
         }
     }
 

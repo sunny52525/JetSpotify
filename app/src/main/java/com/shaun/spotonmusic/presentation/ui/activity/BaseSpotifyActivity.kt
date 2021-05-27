@@ -2,6 +2,7 @@ package com.shaun.spotonmusic.presentation.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.core.content.ContextCompat
 import androidx.datastore.core.DataStore
@@ -100,6 +101,7 @@ abstract class BaseSpotifyActivity : ComponentActivity(), SpotifyAuthorizationCa
     }
 
     override fun onAuthorizationSucceed(tokenResponse: TokenResponse?, user: UserPrivate?) {
+        Log.d(TAG, "onAuthorizationSucceed: ${tokenResponse?.accessToken}")
         lifecycleScope.launch {
             save(dataStore,"accesstoken",tokenResponse?.accessToken!!)
         }
@@ -111,8 +113,11 @@ abstract class BaseSpotifyActivity : ComponentActivity(), SpotifyAuthorizationCa
 
     override fun onRefreshAccessTokenSucceed(tokenResponse: TokenResponse?, user: UserPrivate?) {
 
+        Log.d(TAG, "onRefreshAccessTokenSucceed: ${tokenResponse?.accessToken}")
         lifecycleScope.launch {
             save(dataStore,"accesstoken",tokenResponse?.accessToken!!)
         }
     }
 }
+
+private const val TAG = "BaseSpotifyActivity"

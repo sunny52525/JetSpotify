@@ -2,6 +2,8 @@ package com.shaun.spotonmusic.presentation.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.setContent
@@ -94,9 +96,11 @@ class LoginActivity : BaseSpotifyActivity() {
         }
         Toast.makeText(this, "AccessTokenwo: " + tokenResponse!!.accessToken, Toast.LENGTH_SHORT)
             .show()
-        val intent = getTokenActivityIntent()
-        startActivity(intent)
-        finish()
+        Handler(Looper.getMainLooper()).postDelayed({
+            val intent = getTokenActivityIntent()
+            startActivity(intent)
+            finish()
+        }, 1000)
     }
 
     override fun onRefreshAccessTokenSucceed(tokenResponse: TokenResponse?, user: UserPrivate?) {

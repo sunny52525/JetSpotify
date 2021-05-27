@@ -18,7 +18,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.glide.rememberGlidePainter
-import com.shaun.spotonmusic.model.RecentlyPlayed
+import com.shaun.spotonmusic.network.model.RecentlyPlayed
+import com.shaun.spotonmusic.network.model.RecentlyPlayedItem
 import com.shaun.spotonmusic.ui.theme.spotifyGray
 
 
@@ -73,9 +74,13 @@ fun RecentHeardBlock(recentlyPlayed: RecentlyPlayed?) {
     if (recentlyPlayed?.items == null)
         return
 
-    val length = recentlyPlayed.items.size
+    val recentlyPlayedArray: List<RecentlyPlayedItem> = recentlyPlayed.items.distinctBy {
+        it.track.album.name
+    }
 
-    val name = recentlyPlayed.items.subList(0, 6.coerceAtMost(length)).map {
+    val length = recentlyPlayedArray.size
+
+    val name = recentlyPlayedArray.subList(0, 6.coerceAtMost(length)).map {
         if (it.track.album.name.length > 15) {
             Pair(it.track.album.name.substring(0, 14) + "...", it.track.album.images[0].url)
         } else {

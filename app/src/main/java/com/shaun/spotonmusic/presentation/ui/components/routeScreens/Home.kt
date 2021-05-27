@@ -20,7 +20,7 @@ import androidx.core.graphics.red
 import androidx.palette.graphics.Palette
 import com.shaun.spotonmusic.getBitmapFromURL
 import com.shaun.spotonmusic.getGreeting
-import com.shaun.spotonmusic.model.RecentlyPlayed
+import com.shaun.spotonmusic.network.model.RecentlyPlayed
 import com.shaun.spotonmusic.presentation.ui.components.homeComponents.*
 import com.shaun.spotonmusic.toPlayListPager
 import com.shaun.spotonmusic.ui.theme.black

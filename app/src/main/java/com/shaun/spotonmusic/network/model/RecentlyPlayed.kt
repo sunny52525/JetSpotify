@@ -1,4 +1,4 @@
-package com.shaun.spotonmusic.model
+package com.shaun.spotonmusic.network.model
 
 import com.google.gson.annotations.SerializedName
 import kaaes.spotify.webapi.android.models.Artist

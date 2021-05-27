@@ -4,7 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.ViewModel
 import com.shaun.spotonmusic.SpotOnApplication
-import com.shaun.spotonmusic.network.SpotifyAppService
+import com.shaun.spotonmusic.network.api.SpotifyAppService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
