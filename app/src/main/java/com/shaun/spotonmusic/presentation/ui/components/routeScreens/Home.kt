@@ -151,9 +151,10 @@ fun Home(
             item {
                 FavouriteArtistSongs(
                     title = "For the fans of",
-                    data = secondFavouriteArtistSongs,
-                    secondFavouriteArtistImage
+                    data = favouriteArtistSongs,
+                    favouriteArtistImage
                 )
+
             }
 
             item {
@@ -200,13 +201,13 @@ fun Home(
                 )
             }
 
+
             item {
                 FavouriteArtistSongs(
                     title = "For the fans of",
-                    data = favouriteArtistSongs,
-                    favouriteArtistImage
+                    data = secondFavouriteArtistSongs,
+                    secondFavouriteArtistImage
                 )
-
             }
 
             item {

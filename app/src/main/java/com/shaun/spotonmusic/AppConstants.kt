@@ -1,9 +1,9 @@
 package com.shaun.spotonmusic
 
 object AppConstants {
-     val REDIRECT_URL = "spotonmusic://callback"
-     val CLIENT_ID = "a4308528f35d4e27898de471f9ae8102"
-     val AUTH_SCOPES: Array<String?> = arrayOf(
+    const val REDIRECT_URL = "spotonmusic://callback"
+    const val CLIENT_ID = "a4308528f35d4e27898de471f9ae8102"
+    val AUTH_SCOPES: Array<String?> = arrayOf(
         "streaming",
         "user-read-recently-played",
         "user-top-read",
@@ -22,7 +22,12 @@ object AppConstants {
 
 
     )
+    const val BASEURL = "https://api.spotify.com"
+
+    val LIBRARYCHIPS = arrayOf("Playlists", "Albums", "Artists")
+
+
 }
-val BASEURL="https://api.spotify.com"
+
 
 

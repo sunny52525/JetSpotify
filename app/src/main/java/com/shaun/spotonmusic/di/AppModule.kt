@@ -6,7 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.createDataStore
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.shaun.spotonmusic.BASEURL
+import com.shaun.spotonmusic.AppConstants.BASEURL
 import com.shaun.spotonmusic.SpotOnApplication
 import com.shaun.spotonmusic.network.api.SpotifyAppService
 import dagger.Module

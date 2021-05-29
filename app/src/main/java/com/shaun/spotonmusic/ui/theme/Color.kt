@@ -6,6 +6,7 @@ val Teal200 = Color(0xFF03DAC5)
 
 val black = Color(0xFF191414)
 val green = Color(0xFF1DB954)
+val greenDark = Color(0xFF179B46)
 
 val spotifyGray = Color(0xFF212121)
 
@@ -63,9 +64,4 @@ val gridColors = arrayListOf(
     Color(red = 0.15686275f, blue = 0.34509805f, green = 0.2509804f)
 )
 
-
-//val headerBackgroundColor = listOf(
-//    blue, black
-//
-//)
-
+val spotifyDarkBlack=Color(0xFF121212)
