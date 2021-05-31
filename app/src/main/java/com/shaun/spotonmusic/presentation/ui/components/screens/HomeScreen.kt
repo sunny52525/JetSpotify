@@ -10,11 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -28,14 +25,18 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.shaun.spotonmusic.presentation.ui.activity.HomeActivity
+import com.shaun.spotonmusic.presentation.ui.components.libraryComponents.LibraryBottomSheet
 import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Home
 import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Library
 import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Search
 import com.shaun.spotonmusic.presentation.ui.navigation.Routes
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.spotifyGray
+import com.shaun.spotonmusic.viewmodel.LibraryViewModel
 import com.shaun.spotonmusic.viewmodel.SharedViewModel
+import kotlinx.coroutines.CoroutineScope
 
+@ExperimentalMaterialApi
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 @Composable
@@ -47,14 +48,20 @@ fun HomeScreen(
     val scaffoldState = rememberScaffoldState()
 
     val homeViewModel: SharedViewModel = viewModel()
+    val libraryViewModel: LibraryViewModel = viewModel()
+
+    libraryViewModel.tokenExpired.observeForever {
+        if (it == true) {
+            Toast.makeText(context, "Expired", Toast.LENGTH_SHORT).show()
+            context.spotifyAuthClient.refreshAccessToken()
+        }
+    }
+
 
     homeViewModel.tokenExpired.observeForever {
         if (it == true) {
             Toast.makeText(context, "Expired", Toast.LENGTH_SHORT).show()
             context.spotifyAuthClient.refreshAccessToken()
-//
-//            context.startActivity(Intent(context, SplashActivity::class.java))
-//            context.finish()
         }
     }
 
@@ -67,35 +74,54 @@ fun HomeScreen(
         Routes.Library
     )
 
-
-    Scaffold(
-
-        modifier = Modifier
-            .fillMaxSize()
-            .background(black),
-
-
-        bottomBar = {
-
-            if (currentScreen is Routes.Home)
-                BottomNavigationSpotOnMusic(navController = navController, items = bottomNavItems)
-
+    val state = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val scope = rememberCoroutineScope()
+    var currentSort by remember {
+        mutableStateOf("Recently Played")
+    }
+    ModalBottomSheetLayout(
+        sheetContent = {
+            LibraryBottomSheet(state, scope, currentSort, onSortItemClicked = {
+                currentSort = it
+            })
         },
-        scaffoldState = scaffoldState,
-        content = {
+        sheetState = state,
+        scrimColor = MaterialTheme.colors.onSurface.copy(alpha = 0.1f)
+    ) {
+        Scaffold(
 
-            HomeScreenNavigationConfiguration(
-                navController, homeViewModel,
-                tokenExpired = {
-                    context.spotifyAuthClient.refreshAccessToken()
-                    android.os.Handler(Looper.getMainLooper()).postDelayed({
-                        homeViewModel.getAccessToken()
-                    }, 1000)
-                }
-            )
-        }
+            modifier = Modifier
+                .fillMaxSize()
+                .background(black),
 
-    )
+
+            bottomBar = {
+
+                if (currentScreen is Routes.Home)
+                    BottomNavigationSpotOnMusic(
+                        navController = navController,
+                        items = bottomNavItems
+                    )
+
+            },
+            scaffoldState = scaffoldState,
+            content = {
+
+                HomeScreenNavigationConfiguration(
+                    navController, homeViewModel,
+                    tokenExpired = {
+                        context.spotifyAuthClient.refreshAccessToken()
+                        android.os.Handler(Looper.getMainLooper()).postDelayed({
+                            homeViewModel.getAccessToken()
+                        }, 1000)
+                    }, state,libraryViewModel,scope
+                )
+            }
+
+        )
+    }
+
+
 }
 
 
@@ -165,15 +191,21 @@ fun BottomNavigationSpotOnMusic(
 }
 
 
+@ExperimentalMaterialApi
 @OptIn(ExperimentalFoundationApi::class)
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 @Composable
 fun HomeScreenNavigationConfiguration(
     navHostController: NavHostController, viewModel: SharedViewModel,
-    tokenExpired: () -> Unit
-) {
+    tokenExpired: () -> Unit,
+    modalBottomSheetState: ModalBottomSheetState,
+    libraryViewModel: LibraryViewModel,
+    scope: CoroutineScope,
+
+    ) {
     val listState = rememberLazyListState()
+    val listStateLibrary = rememberLazyListState()
     NavHost(
         navController = navHostController,
         startDestination = Routes.Home.route,
@@ -199,11 +231,12 @@ fun HomeScreenNavigationConfiguration(
 
         }
         composable(Routes.Library.route) {
+
             EnterAnimation {
 
-                Library(viewModel)
-
+                Library(viewModel, modalBottomSheetState,libraryViewModel,scope,listStateLibrary)
             }
+
 
         }
     }

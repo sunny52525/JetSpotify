@@ -26,6 +26,8 @@ object AppConstants {
 
     val LIBRARYCHIPS = arrayOf("Playlists", "Albums", "Artists")
 
+    val SORT_ITEMS = arrayOf("Recently Played", "Recently Added", "Alphabetical", "Creator")
+
 
 }
 

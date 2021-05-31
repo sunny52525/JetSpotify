@@ -2,8 +2,7 @@ package com.shaun.spotonmusic.presentation.ui.components.libraryComponents
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.toggleable
@@ -25,7 +24,12 @@ import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
 @Composable
 fun LibraryChips() {
 
-    LazyRow(Modifier.padding(start = 20.dp)) {
+    LazyRow(
+        Modifier
+            .background(spotifyDarkBlack)
+            .fillMaxWidth()
+    ) {
+        item { Spacer(modifier = Modifier.width(20.dp)) }
         items(AppConstants.LIBRARYCHIPS) { item ->
             Chip(item)
         }

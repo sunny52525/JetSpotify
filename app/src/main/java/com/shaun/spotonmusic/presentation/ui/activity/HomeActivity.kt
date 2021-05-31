@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.annotation.MainThread
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.graphics.Color
@@ -24,6 +25,7 @@ import net.openid.appauth.TokenResponse
 @AndroidEntryPoint
 class HomeActivity : BaseSpotifyActivity() {
 
+    @ExperimentalMaterialApi
     @ExperimentalFoundationApi
     @ExperimentalComposeUiApi
     @ExperimentalAnimationApi
