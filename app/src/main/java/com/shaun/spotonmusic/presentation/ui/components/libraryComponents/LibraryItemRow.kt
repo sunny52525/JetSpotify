@@ -85,7 +85,7 @@ fun LibraryItemRow(
         item {
             SortRow(modalBottomSheetState, onChangeViewCLicked = {
                sortRowCLick()
-            })
+            },isGrid)
         }
 
         libraryItems.items.forEachIndexed { index, libraryItem ->

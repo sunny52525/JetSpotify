@@ -1,5 +1,6 @@
 package com.shaun.spotonmusic.presentation.ui.components.libraryComponents
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,7 +24,11 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterialApi
 
 @Composable
-fun SortRow(modalBottomSheetState: ModalBottomSheetState, onChangeViewCLicked: () -> Unit) {
+fun SortRow(
+    modalBottomSheetState: ModalBottomSheetState,
+    onChangeViewCLicked: () -> Unit,
+    isGrid: Boolean
+) {
     val coroutineScope = rememberCoroutineScope()
     Row(
         modifier = Modifier
@@ -52,13 +57,18 @@ fun SortRow(modalBottomSheetState: ModalBottomSheetState, onChangeViewCLicked: (
                 .fillMaxWidth()
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_grid),
+                painter = painterResource(
+                    id =
+                    if (isGrid) R.drawable.ic_list
+                    else R.drawable.ic_grid
+                ),
                 contentDescription = "",
                 modifier = Modifier
                     .size(15.dp)
                     .clickable {
                         onChangeViewCLicked()
-                    },
+                    }
+                    ,
                 colorFilter = ColorFilter.tint(Color.White)
             )
 
