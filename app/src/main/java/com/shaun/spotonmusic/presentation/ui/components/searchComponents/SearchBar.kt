@@ -2,6 +2,7 @@ package com.shaun.spotonmusic.presentation.ui.components.searchComponents
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.Text
@@ -21,10 +22,10 @@ import com.shaun.spotonmusic.R
 import com.shaun.spotonmusic.ui.theme.black
 
 @ExperimentalComposeUiApi
-@Preview
+
 @Composable
 fun SearchBar(
-    onSearch: (String) -> Unit = {}
+    onSearch: () -> Unit
 ) {
 
 
@@ -32,7 +33,9 @@ fun SearchBar(
         Modifier
             .padding( bottom = 10.dp)
             .fillMaxWidth()
-            .background(black)
+            .background(black).clickable {
+                onSearch()
+            }
     ) {
         Card(
             modifier = Modifier

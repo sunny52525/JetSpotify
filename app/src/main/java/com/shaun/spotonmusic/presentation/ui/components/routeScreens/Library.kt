@@ -53,11 +53,11 @@ fun Library(
         Header(userDetails)
 
         LibraryItemRow(
-            modalBottomSheetState,
-            libraryItems,
-            listStateLibrary,
-            scope,
-            isGrid,
+            modalBottomSheetState = modalBottomSheetState,
+            libraryItems = libraryItems,
+            listState = listStateLibrary,
+            scope = scope,
+            isGrid = isGrid,
             sortRowCLick = {
                 libraryViewModel.updateGrid()
             })

@@ -76,7 +76,7 @@ class HomeScreenRepositoryImpl @Inject constructor(
         spotify.getPlaylistsForCategory(category, map, object : Callback<PlaylistsPager> {
             override fun success(t: PlaylistsPager?, response: Response?) {
 
-                Log.d(TAG, "success: ${t!!.playlists.items[0].name}")
+//                Log.d(TAG, "success: ${t?.playlists?.items?.get(0)?.name}")
                 result.postValue(t)
             }
 

@@ -26,9 +26,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.shaun.spotonmusic.presentation.ui.activity.HomeActivity
 import com.shaun.spotonmusic.presentation.ui.components.libraryComponents.LibraryBottomSheet
+import com.shaun.spotonmusic.presentation.ui.components.routeScreens.AlbumDetail
 import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Home
 import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Library
 import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Search
+import com.shaun.spotonmusic.presentation.ui.navigation.BottomNavRoutes
 import com.shaun.spotonmusic.presentation.ui.navigation.Routes
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.spotifyGray
@@ -36,6 +38,7 @@ import com.shaun.spotonmusic.viewmodel.LibraryViewModel
 import com.shaun.spotonmusic.viewmodel.SharedViewModel
 import kotlinx.coroutines.CoroutineScope
 
+@ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
@@ -69,9 +72,9 @@ fun HomeScreen(
 
 
     val bottomNavItems = listOf(
-        Routes.Home,
-        Routes.Search,
-        Routes.Library
+        BottomNavRoutes.Home,
+        BottomNavRoutes.Search,
+        BottomNavRoutes.Library
     )
 
     val state = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
@@ -97,7 +100,7 @@ fun HomeScreen(
 
             bottomBar = {
 
-                if (currentScreen is Routes.Home)
+                if (currentScreen is BottomNavRoutes.Home)
                     BottomNavigationSpotOnMusic(
                         navController = navController,
                         items = bottomNavItems
@@ -108,13 +111,17 @@ fun HomeScreen(
             content = {
 
                 HomeScreenNavigationConfiguration(
-                    navController, homeViewModel,
+                    navHostController = navController,
+                    viewModel = homeViewModel,
                     tokenExpired = {
                         context.spotifyAuthClient.refreshAccessToken()
                         android.os.Handler(Looper.getMainLooper()).postDelayed({
                             homeViewModel.getAccessToken()
                         }, 1000)
-                    }, state,libraryViewModel,scope
+                    },
+                    modalBottomSheetState = state,
+                    libraryViewModel = libraryViewModel,
+                    scope = scope
                 )
             }
 
@@ -128,7 +135,7 @@ fun HomeScreen(
 @Composable
 fun BottomNavigationSpotOnMusic(
     navController: NavController,
-    items: List<Routes>
+    items: List<BottomNavRoutes>
 ) {
     Surface(
         modifier = Modifier
@@ -192,7 +199,7 @@ fun BottomNavigationSpotOnMusic(
 
 
 @ExperimentalMaterialApi
-@OptIn(ExperimentalFoundationApi::class)
+@ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 @Composable
@@ -208,36 +215,52 @@ fun HomeScreenNavigationConfiguration(
     val listStateLibrary = rememberLazyListState()
     NavHost(
         navController = navHostController,
-        startDestination = Routes.Home.route,
+        startDestination = BottomNavRoutes.Home.route,
+//        startDestination = Routes.AlbumDetail.route,
         modifier = Modifier.background(
             black
         )
     ) {
 
-        composable(Routes.Home.route) {
+        composable(BottomNavRoutes.Home.route) {
 
             EnterAnimation {
-                Home(viewModel, listState, tokenExpired = {
+                Home(viewModel = viewModel, listState = listState, tokenExpired = {
                     tokenExpired()
                 })
             }
         }
-        composable(Routes.Search.route) {
+        composable(BottomNavRoutes.Search.route) {
             EnterAnimation {
 
-                Search(viewModel)
+                Search(viewModel, onSearchClicked = {
+
+                    navHostController.navigate(Routes.AlbumDetail.route + "/idisthis")
+                })
 
             }
 
         }
-        composable(Routes.Library.route) {
+        composable(BottomNavRoutes.Library.route) {
 
             EnterAnimation {
 
-                Library(viewModel, modalBottomSheetState,libraryViewModel,scope,listStateLibrary)
+                Library(
+                    viewModel = viewModel,
+                    modalBottomSheetState = modalBottomSheetState,
+                    libraryViewModel = libraryViewModel,
+                    scope = scope,
+                    listStateLibrary = listStateLibrary
+                )
             }
 
 
+        }
+        composable(Routes.AlbumDetail.route + "/{id}") {
+            EnterAnimation {
+                AlbumDetail(it.arguments?.getString("id"))
+
+            }
         }
     }
 }

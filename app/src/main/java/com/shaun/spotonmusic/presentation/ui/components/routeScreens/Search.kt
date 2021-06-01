@@ -26,7 +26,7 @@ private const val TAG = "Search"
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @Composable
-fun Search(sharedViewModel: SharedViewModel) {
+fun Search(sharedViewModel: SharedViewModel,onSearchClicked:()->Unit) {
 
     val categories: CategoriesPager by sharedViewModel.categoriesPager.observeAsState(
         CategoriesPager()
@@ -46,7 +46,9 @@ fun Search(sharedViewModel: SharedViewModel) {
         }
         stickyHeader {
             Spacer(modifier = Modifier.height(10.dp))
-            SearchBar()
+            SearchBar(onSearch = {
+                onSearchClicked()
+            })
         }
 
 

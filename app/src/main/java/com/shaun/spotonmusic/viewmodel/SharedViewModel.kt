@@ -10,7 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.shaun.spotonmusic.SpotOnApplication
 import com.shaun.spotonmusic.network.api.SpotifyAppService
 import com.shaun.spotonmusic.network.model.RecentlyPlayed
-import com.shaun.spotonmusic.presentation.ui.navigation.Routes
+import com.shaun.spotonmusic.presentation.ui.navigation.BottomNavRoutes
 import com.shaun.spotonmusic.read
 import com.shaun.spotonmusic.repository.HomeScreenRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,8 +30,8 @@ class SharedViewModel @Inject constructor(
     private val retrofit: SpotifyAppService
 ) : ViewModel() {
 
-    private val _currentScreen = MutableLiveData<Routes>(Routes.Home)
-    val currentScreen: LiveData<Routes> = _currentScreen
+    private val _currentScreen = MutableLiveData<BottomNavRoutes>(BottomNavRoutes.Home)
+    val currentScreen: LiveData<BottomNavRoutes> = _currentScreen
     private var accessToken = MutableLiveData("")
 
     private lateinit var repo: HomeScreenRepositoryImpl
@@ -106,7 +106,7 @@ class SharedViewModel @Inject constructor(
         repo.getAlbum(albumID = albumId)
     }
 
-    fun setCurrentScreen(routes: Routes) {
+    fun setCurrentScreen(routes: BottomNavRoutes) {
         _currentScreen.value = routes
     }
 

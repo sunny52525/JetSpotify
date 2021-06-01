@@ -61,6 +61,7 @@ fun LibraryItemRow(
     }
 
 
+
     LazyColumn(
         state = listState, modifier = Modifier
             .fillMaxHeight()
@@ -92,10 +93,10 @@ fun LibraryItemRow(
             item {
                 if (isGrid)
                     Item(
-                        libraryItem.title,
-                        libraryItem.type,
-                        libraryItem.owner,
-                        if (libraryItem.imageUrl.isEmpty()) "" else libraryItem.imageUrl[0].url
+                        title = libraryItem.title,
+                        type = libraryItem.type,
+                        owner = libraryItem.owner,
+                        imageUrl = if (libraryItem.imageUrl.isEmpty()) "" else libraryItem.imageUrl[0].url
                     )
             }
 
