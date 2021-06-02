@@ -13,6 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.shaun.spotonmusic.presentation.ui.components.libraryComponents.Chip
 import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
+import kaaes.spotify.webapi.android.models.Pager
+import kaaes.spotify.webapi.android.models.TrackSimple
 
 val items =
     arrayListOf(
@@ -52,7 +54,7 @@ val items =
 
 @ExperimentalFoundationApi
 @Composable
-fun SongList(scrollState: LazyListState, surfaceGradient: List<Color>) {
+fun SongList(scrollState: LazyListState, surfaceGradient: List<Color>, tracks: Pager<TrackSimple>) {
     LazyColumn(state = scrollState) {
         item {
 
