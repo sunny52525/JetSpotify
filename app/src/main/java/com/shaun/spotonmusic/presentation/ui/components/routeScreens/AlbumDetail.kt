@@ -39,10 +39,11 @@ fun AlbumDetail(id: String? = "Test") {
         val scrollState = rememberLazyListState()
         BoxTopSection(album = "Help", listState = scrollState)
         TopSectionOverlay(scrollState = scrollState)
-        SongList(scrollState = scrollState, surfaceGradient = arrayListOf(black, blue, green),
+        SongList(
+            scrollState = scrollState, surfaceGradient = arrayListOf(black, blue, green),
 
             currentAlbum.tracks
-            )
+        )
         AnimatedToolBar(
             album = "Help",
             scrollState = scrollState,

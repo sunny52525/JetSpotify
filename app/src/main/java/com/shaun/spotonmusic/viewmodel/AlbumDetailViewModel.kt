@@ -1,27 +1,21 @@
 package com.shaun.spotonmusic.viewmodel
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.shaun.spotonmusic.SpotOnApplication
-import com.shaun.spotonmusic.read
+import com.shaun.spotonmusic.di.DatastoreManager
 import com.shaun.spotonmusic.repository.AlbumDetailRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kaaes.spotify.webapi.android.models.Album
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
 @HiltViewModel
 class AlbumDetailViewModel @Inject constructor(
     context: SpotOnApplication,
-    private val dataStore: DataStore<Preferences>
+    private val datastoreManager: DatastoreManager
 ) : ViewModel() {
-    private var accessToken = MutableLiveData("")
+    private var accessToken = datastoreManager.accessToken
 
     private lateinit var repository: AlbumDetailRepositoryImpl
 
@@ -35,19 +29,16 @@ class AlbumDetailViewModel @Inject constructor(
 
     private fun setToken() {
 
-        repository = AlbumDetailRepositoryImpl(accessToken = accessToken.value.toString())
+        repository = AlbumDetailRepositoryImpl(accessToken = accessToken.toString())
 
 
     }
 
     private fun getAccessToken() {
-        viewModelScope.launch {
-            accessToken.value = read(dataStore, "accesstoken")
-            withContext(Dispatchers.Main) {
-                setToken()
-            }
+        val value = datastoreManager.accessToken
 
-        }
+//        accessToken.postValue(value)
+        setToken()
     }
 
     fun getAlbum(id: String): MutableLiveData<Album> {

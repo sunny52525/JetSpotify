@@ -1,17 +1,14 @@
 package com.shaun.spotonmusic.viewmodel
 
 import android.util.Log
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.shaun.spotonmusic.SpotOnApplication
+import com.shaun.spotonmusic.di.DatastoreManager
 import com.shaun.spotonmusic.network.api.SpotifyAppService
 import com.shaun.spotonmusic.network.model.RecentlyPlayed
 import com.shaun.spotonmusic.presentation.ui.navigation.BottomNavRoutes
-import com.shaun.spotonmusic.read
 import com.shaun.spotonmusic.repository.HomeScreenRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kaaes.spotify.webapi.android.models.*
@@ -26,14 +23,14 @@ import javax.inject.Inject
 @HiltViewModel
 class SharedViewModel @Inject constructor(
     context: SpotOnApplication,
-    private val dataStore: DataStore<Preferences>,
-    private val retrofit: SpotifyAppService
+    private val retrofit: SpotifyAppService,
+
+    private val datastoreManager: DatastoreManager
 ) : ViewModel() {
 
     private val _currentScreen = MutableLiveData<BottomNavRoutes>(BottomNavRoutes.Home)
     val currentScreen: LiveData<BottomNavRoutes> = _currentScreen
-    private var accessToken = MutableLiveData("")
-
+    private var accessToken =datastoreManager.accessToken
     private lateinit var repo: HomeScreenRepositoryImpl
     private var albums = MutableLiveData<Album>()
 
@@ -64,11 +61,11 @@ class SharedViewModel @Inject constructor(
     }
 
     private fun setToken() {
-        repo = HomeScreenRepositoryImpl(accessToken.value.toString(), retrofit)
+        repo = HomeScreenRepositoryImpl(accessToken.toString(), retrofit)
         albums = repo.album
 
 
-        Log.d(TAG, "setToken: ${accessToken.value}")
+        Log.d(TAG, "setToken: $accessToken")
         getCharts()
 
         tokenExpired = repo.tokenExpired
@@ -92,14 +89,11 @@ class SharedViewModel @Inject constructor(
 
     fun getAccessToken() {
 
-        viewModelScope.launch {
-            accessToken.value = read(dataStore, "accesstoken")
-            withContext(Dispatchers.Main) {
-                setToken()
-            }
-
-
-        }
+//        val value = datastoreManager.accessToken
+//
+//        Log.d(TAG, "getAccessToken: $value")
+//        accessToken.postValue(value)
+        setToken()
     }
 
     fun getAlbum(albumId: String) {

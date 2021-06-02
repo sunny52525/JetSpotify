@@ -1,39 +1,31 @@
 package com.shaun.spotonmusic
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.preferencesKey
-import kotlinx.coroutines.flow.first
 import kaaes.spotify.webapi.android.models.*
-import java.util.*
+import kotlinx.coroutines.flow.first
 import java.io.IOException
-
-import android.graphics.BitmapFactory
-
-import android.graphics.Bitmap
-import android.graphics.Color
-
-import java.io.InputStream
-
 import java.net.HttpURLConnection
-
 import java.net.URL
-import kotlin.collections.ArrayList
+import java.util.*
 
-
-suspend fun save(dataStore: DataStore<Preferences>, key: String, value: String) {
-    val dataStoreKey = preferencesKey<String>(key)
-    dataStore.edit { settings ->
-        settings[dataStoreKey] = value
-    }
-}
-
-suspend fun read(dataStore: DataStore<Preferences>, key: String): String {
-    val dataStoreKey = preferencesKey<String>(key)
-    val preferences = dataStore.data.first()
-    return preferences[dataStoreKey].toString()
-}
+//
+//suspend fun save(dataStore: DataStore<Preferences>, key: String, value: String) {
+//    val dataStoreKey = preferencesKey<String>(key)
+//    dataStore.edit { settings ->
+//        settings[dataStoreKey] = value
+//    }
+//}
+//
+//suspend fun read(dataStore: DataStore<Preferences>, key: String): String {
+//    val dataStoreKey = preferencesKey<String>(key)
+//    val preferences = dataStore.data.first()
+//    return preferences[dataStoreKey].toString()
+//}
 
 fun FeaturedPlaylists.toPlayListPager(): PlaylistsPager {
     val pager = PlaylistsPager()

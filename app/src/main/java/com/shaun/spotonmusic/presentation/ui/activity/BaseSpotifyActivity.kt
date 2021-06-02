@@ -7,7 +7,6 @@ import androidx.activity.ComponentActivity
 import androidx.core.content.ContextCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.createDataStore
 import androidx.lifecycle.lifecycleScope
 import com.pghaz.spotify.webapi.auth.SpotifyAuthorizationCallback
 import com.pghaz.spotify.webapi.auth.SpotifyAuthorizationClient
@@ -15,16 +14,20 @@ import com.shaun.spotonmusic.AppConstants.AUTH_SCOPES
 import com.shaun.spotonmusic.AppConstants.CLIENT_ID
 import com.shaun.spotonmusic.AppConstants.REDIRECT_URL
 import com.shaun.spotonmusic.R
-import com.shaun.spotonmusic.save
+import com.shaun.spotonmusic.di.DatastoreManager
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.kaaes.spotify.webapi.core.models.UserPrivate
 import kotlinx.coroutines.launch
 import net.openid.appauth.TokenResponse
 
+@AndroidEntryPoint
 abstract class BaseSpotifyActivity : ComponentActivity(), SpotifyAuthorizationCallback.Authorize,
     SpotifyAuthorizationCallback.RefreshToken {
 
 
+    lateinit var dataStoreManager: DatastoreManager
     private lateinit var dataStore: DataStore<Preferences>
+
     companion object {
         const val EXTRA_USING_PENDING_INTENT = "EXTRA_USING_PENDING_INTENT"
     }
@@ -34,7 +37,9 @@ abstract class BaseSpotifyActivity : ComponentActivity(), SpotifyAuthorizationCa
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        dataStore = createDataStore(name = "accesstoken")
+        dataStoreManager = DatastoreManager(
+            this
+        )
 
         spotifyAuthClient = SpotifyAuthorizationClient.Builder(
             CLIENT_ID,
@@ -103,7 +108,7 @@ abstract class BaseSpotifyActivity : ComponentActivity(), SpotifyAuthorizationCa
     override fun onAuthorizationSucceed(tokenResponse: TokenResponse?, user: UserPrivate?) {
         Log.d(TAG, "onAuthorizationSucceed: ${tokenResponse?.accessToken}")
         lifecycleScope.launch {
-            save(dataStore,"accesstoken",tokenResponse?.accessToken!!)
+            dataStoreManager.setAccessToken(accessToken = tokenResponse?.accessToken!!)
         }
     }
 
@@ -115,7 +120,8 @@ abstract class BaseSpotifyActivity : ComponentActivity(), SpotifyAuthorizationCa
 
         Log.d(TAG, "onRefreshAccessTokenSucceed: ${tokenResponse?.accessToken}")
         lifecycleScope.launch {
-            save(dataStore,"accesstoken",tokenResponse?.accessToken!!)
+//            save(dataStore, "accesstoken", tokenResponse?.accessToken!!)
+            dataStoreManager.setAccessToken(accessToken = tokenResponse?.accessToken!!)
         }
     }
 }

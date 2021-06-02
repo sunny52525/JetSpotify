@@ -119,7 +119,7 @@ dependencies {
 
     implementation 'com.github.kaaes:spotify-web-api-android:0.4.1'
 
-    implementation "androidx.datastore:datastore-preferences:1.0.0-alpha04"
+    implementation "androidx.datastore:datastore-preferences:1.0.0-beta01"
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
 

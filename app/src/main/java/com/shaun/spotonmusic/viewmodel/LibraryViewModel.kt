@@ -9,13 +9,15 @@ import androidx.lifecycle.viewModelScope
 import com.shaun.spotonmusic.SpotOnApplication
 import com.shaun.spotonmusic.database.model.LibraryItem
 import com.shaun.spotonmusic.database.model.LibraryModel
+import com.shaun.spotonmusic.di.DatastoreManager
 import com.shaun.spotonmusic.network.api.SpotifyAppService
-import com.shaun.spotonmusic.read
 import com.shaun.spotonmusic.repository.LibraryRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kaaes.spotify.webapi.android.models.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -24,11 +26,12 @@ import javax.inject.Inject
 @HiltViewModel
 class LibraryViewModel @Inject constructor(
     context: SpotOnApplication,
-    private val dataStore: DataStore<Preferences>,
-    private val retrofit: SpotifyAppService
+    private val retrofit: SpotifyAppService,
+
+    private val datastoreManager: DatastoreManager
 ) : ViewModel() {
 
-    private var accessToken = MutableLiveData("")
+    private var accessToken = datastoreManager.accessToken
     private lateinit var repo: LibraryRepositoryImpl
     var tokenExpired = MutableLiveData<Boolean>()
 
@@ -38,12 +41,9 @@ class LibraryViewModel @Inject constructor(
 
     var libraryItemsList = MutableLiveData<LibraryModel>()
 
-    var userDetails= MutableLiveData<UserPrivate>()
+    var userDetails = MutableLiveData<UserPrivate>()
 
-    var isGrid=MutableLiveData<Boolean>()
-
-
-
+    var isGrid = MutableLiveData<Boolean>()
 
 
     init {
@@ -53,22 +53,19 @@ class LibraryViewModel @Inject constructor(
     }
 
     private fun setToken() {
-        repo = LibraryRepositoryImpl(accessToken.value.toString(), retrofit)
+        repo = LibraryRepositoryImpl(accessToken.toString(), retrofit)
 
-        userDetails=repo.getUserDetails()
+        userDetails = repo.getUserDetails()
         getLibraryItems()
     }
 
     private fun getAccessToken() {
-        viewModelScope.launch {
-            accessToken.value = read(dataStore, "accesstoken")
-            withContext(Dispatchers.Main) {
-                setToken()
-            }
+        val value = datastoreManager.accessToken
 
-        }
+        Log.d(TAG, "getAccessToken: $value")
+//        accessToken.postValue(value)
+        setToken()
     }
-
 
 
     private fun getLibraryItems() {
@@ -144,9 +141,10 @@ class LibraryViewModel @Inject constructor(
     }
 
 
-    fun updateGrid(){
+    fun updateGrid() {
         isGrid.postValue(!isGrid.value!!)
     }
+
     companion object {
         private const val TAG = "LibraryViewModel"
     }

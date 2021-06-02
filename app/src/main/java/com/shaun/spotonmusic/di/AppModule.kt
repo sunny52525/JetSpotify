@@ -1,9 +1,6 @@
 package com.shaun.spotonmusic.di
 
 import android.content.Context
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.createDataStore
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.shaun.spotonmusic.AppConstants.BASEURL
@@ -34,24 +31,19 @@ object AppModule {
 //        .build()
 
 
-    @Singleton
+//    @Singleton
     @Provides
     fun provideApplication(@ApplicationContext app: Context): SpotOnApplication {
         return app as SpotOnApplication
     }
-//    @Singleton
+//
 //    @Provides
-//    fun provideRepository():HomeScreenRepository{
-//        return  HomeScreenRepository()
-//    }
+//
+//    fun dataStoreManager(@ApplicationContext appContext: Context): DatastoreManager =
+//        DatastoreManager(appContext)
 
     @Provides
-    @Singleton
-    fun providePreferencesDataStore(@ApplicationContext appContext: Context): DataStore<Preferences> =
-        appContext.createDataStore("accesstoken")
-
-    @Provides
-    @Singleton
+//    @Singleton
     fun spotifyService(): SpotifyAppService = Retrofit.Builder()
         .baseUrl(BASEURL).addConverterFactory(GsonConverterFactory.create(gson))
         .build().create(SpotifyAppService::class.java)
