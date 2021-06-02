@@ -23,6 +23,8 @@ import com.google.accompanist.glide.rememberGlidePainter
 import kaaes.spotify.webapi.android.models.NewReleases
 import kaaes.spotify.webapi.android.models.PlaylistsPager
 
+private const val TAG = "SuggestionsRow"
+
 
 @Composable
 fun SuggestionsRow(
@@ -30,6 +32,11 @@ fun SuggestionsRow(
 ) {
 
 
+    playlistsPager?.playlists?.let {
+        it.items.forEach {
+            Log.d(TAG, "SuggestionsRow: ${it.name} + $title")
+        }
+    }
     Column(Modifier.padding(top = 30.dp)) {
 
 

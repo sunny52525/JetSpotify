@@ -8,8 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.shaun.spotonmusic.presentation.ui.components.albumComponents.AnimatedToolBar
 import com.shaun.spotonmusic.presentation.ui.components.albumComponents.BoxTopSection
 import com.shaun.spotonmusic.presentation.ui.components.albumComponents.SongList
@@ -21,13 +19,13 @@ import com.shaun.spotonmusic.viewmodel.AlbumDetailViewModel
 import kaaes.spotify.webapi.android.models.Album
 
 @ExperimentalFoundationApi
-@Preview
+
 @Composable
-fun AlbumDetail(id: String? = "Test") {
 
-    val viewModel: AlbumDetailViewModel = viewModel()
+fun AlbumDetail(id: String? = "Test", albumDetailViewModel: AlbumDetailViewModel) {
 
-    val currentAlbum: Album by viewModel.getAlbum(id.toString()).observeAsState(initial = Album())
+    val currentAlbum: Album
+            by albumDetailViewModel.getAlbum(id.toString()).observeAsState(initial = Album())
 
     Box(
         modifier = Modifier

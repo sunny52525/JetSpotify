@@ -34,6 +34,7 @@ import com.shaun.spotonmusic.presentation.ui.navigation.BottomNavRoutes
 import com.shaun.spotonmusic.presentation.ui.navigation.Routes
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.spotifyGray
+import com.shaun.spotonmusic.viewmodel.AlbumDetailViewModel
 import com.shaun.spotonmusic.viewmodel.LibraryViewModel
 import com.shaun.spotonmusic.viewmodel.SharedViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -52,6 +53,7 @@ fun HomeScreen(
 
     val homeViewModel: SharedViewModel = viewModel()
     val libraryViewModel: LibraryViewModel = viewModel()
+    val albumDetailViewModel: AlbumDetailViewModel = viewModel()
 
     libraryViewModel.tokenExpired.observeForever {
         if (it == true) {
@@ -121,7 +123,8 @@ fun HomeScreen(
                     },
                     modalBottomSheetState = state,
                     libraryViewModel = libraryViewModel,
-                    scope = scope
+                    scope = scope,
+                    albumDetailViewModel = albumDetailViewModel
                 )
             }
 
@@ -209,6 +212,7 @@ fun HomeScreenNavigationConfiguration(
     modalBottomSheetState: ModalBottomSheetState,
     libraryViewModel: LibraryViewModel,
     scope: CoroutineScope,
+    albumDetailViewModel: AlbumDetailViewModel,
 
     ) {
     val listState = rememberLazyListState()
@@ -227,7 +231,10 @@ fun HomeScreenNavigationConfiguration(
             EnterAnimation {
                 Home(viewModel = viewModel, listState = listState, tokenExpired = {
                     tokenExpired()
-                })
+                }, onAlbumClicked = {
+                    navHostController.navigate(Routes.AlbumDetail.route + "/$it")
+                }
+                )
             }
         }
         composable(BottomNavRoutes.Search.route) {
@@ -235,7 +242,6 @@ fun HomeScreenNavigationConfiguration(
 
                 Search(viewModel, onSearchClicked = {
 
-                    navHostController.navigate(Routes.AlbumDetail.route + "/idisthis")
                 })
 
             }
@@ -258,7 +264,10 @@ fun HomeScreenNavigationConfiguration(
         }
         composable(Routes.AlbumDetail.route + "/{id}") {
             EnterAnimation {
-                AlbumDetail(it.arguments?.getString("id"))
+                AlbumDetail(
+                    it.arguments?.getString("id"),
+                    albumDetailViewModel
+                )
 
             }
         }

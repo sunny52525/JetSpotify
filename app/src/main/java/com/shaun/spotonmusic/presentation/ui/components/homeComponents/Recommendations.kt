@@ -19,7 +19,7 @@ fun RecommendationsRow(
     index: Int
 ) {
 
-    if(recommendations?.tracks==null)
+    if (recommendations?.tracks == null)
         return
     Column(Modifier.padding(top = 30.dp)) {
 
@@ -32,8 +32,9 @@ fun RecommendationsRow(
                     item {
                         CustomizedSuggestionCard(
                             album = Pair(its.album.images[0].url, its.album.name),
-                            paddingValues = if (index == 0) 20 else 10
-                        )
+                            paddingValues = if (index == 0) 20 else 10, onCardClick = {
+
+                            })
                     }
                 }
             }

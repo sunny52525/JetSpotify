@@ -54,7 +54,11 @@ val items =
 
 @ExperimentalFoundationApi
 @Composable
-fun SongList(scrollState: LazyListState, surfaceGradient: List<Color>, tracks: Pager<TrackSimple>) {
+fun SongList(
+    scrollState: LazyListState,
+    surfaceGradient: List<Color>,
+    tracks: Pager<TrackSimple?>?
+) {
     LazyColumn(state = scrollState) {
         item {
 
@@ -74,8 +78,12 @@ fun SongList(scrollState: LazyListState, surfaceGradient: List<Color>, tracks: P
                 Chip()
             }
         }
-        items(items) {
-            SpotifySongListItem(album = it)
+        tracks?.let { tracksPager ->
+            items(tracksPager.items) {
+                if (it != null) {
+                    SpotifySongListItem(album = it.name)
+                }
+            }
         }
         item {
 

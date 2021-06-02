@@ -1,6 +1,8 @@
 package com.shaun.spotonmusic.presentation.ui.components.homeComponents
 
+import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,24 +20,36 @@ import kaaes.spotify.webapi.android.models.Album
 import kaaes.spotify.webapi.android.models.Pager
 
 
+private const val TAG = "CustomizedSuggestionRow"
+
 @Composable
-fun FavouriteArtistSongs(title: String, data: Pager<Album>?, image: String) {
+fun FavouriteArtistSongs(
+    title: String, data: Pager<Album>?, image: String,
+    albumClicked: (String) -> Unit
+) {
 
 
-    if(data?.items==null || image.isNullOrEmpty())
+    if (data?.items == null || image.isNullOrEmpty())
         return
 
+
+    data.items.forEach {
+        Log.d(TAG, "FavouriteArtistSongs: ${it.id}")
+    }
     Column(Modifier.padding(top = 30.dp)) {
 
-        CustomizedHeading(image, title, data?.items?.get(0)?.artists?.get(0)?.name)
+        CustomizedHeading(image, title, data.items?.get(0)?.artists?.get(0)?.name)
 
         LazyRow {
-            data?.items?.let {
+            data.items?.let {
                 it.forEachIndexed { index, its ->
                     item {
                         CustomizedSuggestionCard(
                             album = Pair(its.images[0].url, its.name),
-                            paddingValues = if (index == 0) 20 else 10
+                            paddingValues = if (index == 0) 20 else 10,
+                            onCardClick = {
+                                albumClicked(its.id)
+                            }
                         )
                     }
                 }
@@ -89,11 +103,17 @@ fun CustomizedHeading(
 fun CustomizedSuggestionCard(
     cornerRadius: Int = 0,
     album: Pair<String, String>,
-    paddingValues: Int
+    paddingValues: Int,
+    onCardClick: () -> Unit
 ) {
 
 
-    Column(Modifier.padding(start = paddingValues.dp, bottom = 10.dp, top = 10.dp)) {
+    Column(
+        Modifier
+            .padding(start = paddingValues.dp, bottom = 10.dp, top = 10.dp)
+            .clickable {
+                onCardClick()
+            }) {
         Card(shape = RoundedCornerShape(cornerRadius.dp)) {
 
 

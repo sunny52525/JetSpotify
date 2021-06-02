@@ -27,7 +27,6 @@ import javax.inject.Inject
 class LibraryViewModel @Inject constructor(
     context: SpotOnApplication,
     private val retrofit: SpotifyAppService,
-
     private val datastoreManager: DatastoreManager
 ) : ViewModel() {
 
@@ -60,10 +59,8 @@ class LibraryViewModel @Inject constructor(
     }
 
     private fun getAccessToken() {
-        val value = datastoreManager.accessToken
 
-        Log.d(TAG, "getAccessToken: $value")
-//        accessToken.postValue(value)
+    //        accessToken.postValue(value)
         setToken()
     }
 

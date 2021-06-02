@@ -25,4 +25,11 @@ interface SpotifyAppService {
             : Call<Playlist>
 
 
+
+//    @GET("/v1/browse/categories/{category_id}/playlists")
+//    fun getCategoryPlaylist(
+//        @Path("category_id ") category_id:String,
+//
+//    )
+
 }

@@ -1,5 +1,6 @@
 package com.shaun.spotonmusic.presentation.ui.components.routeScreens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -39,7 +40,8 @@ private const val TAG = "Home"
 fun Home(
     viewModel: SharedViewModel,
     listState: LazyListState,
-    tokenExpired: () -> Unit
+    tokenExpired: () -> Unit,
+    onAlbumClicked: (String) -> Unit
 ) {
 
 
@@ -152,7 +154,10 @@ fun Home(
                 FavouriteArtistSongs(
                     title = "For the fans of",
                     data = favouriteArtistSongs,
-                    favouriteArtistImage
+                    favouriteArtistImage, albumClicked = {
+                        Log.d(TAG, "Home:Lana    ")
+                        onAlbumClicked(it)
+                    }
                 )
 
             }
@@ -206,7 +211,10 @@ fun Home(
                 FavouriteArtistSongs(
                     title = "For the fans of",
                     data = secondFavouriteArtistSongs,
-                    secondFavouriteArtistImage
+                    secondFavouriteArtistImage,
+                    albumClicked = {
+                        onAlbumClicked(it)
+                    }
                 )
             }
 

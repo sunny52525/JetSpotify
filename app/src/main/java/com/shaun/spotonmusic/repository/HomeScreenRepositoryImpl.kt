@@ -2,8 +2,8 @@ package com.shaun.spotonmusic.repository
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.shaun.spotonmusic.network.model.RecentlyPlayed
 import com.shaun.spotonmusic.network.api.SpotifyAppService
+import com.shaun.spotonmusic.network.model.RecentlyPlayed
 import kaaes.spotify.webapi.android.SpotifyApi
 import kaaes.spotify.webapi.android.models.*
 import retrofit.Callback
@@ -25,7 +25,7 @@ class HomeScreenRepositoryImpl @Inject constructor(
         "limit" to 7,
         "locale" to "IN",
         "type" to "artists",
-        "market" to "IN"
+        "market" to "IN "
     )
     var album = MutableLiveData<Album>()
 
@@ -52,7 +52,7 @@ class HomeScreenRepositoryImpl @Inject constructor(
         Log.d(TAG, "getRecommendations: $accessToken")
 
         spotify.getAlbum(albumID, object : Callback<Album> {
-            override fun success(t: Album?, response: retrofit.client.Response?) {
+            override fun success(t: Album?, response: Response?) {
                 Log.d(TAG, "onResponse: ${response?.body}")
                 Log.d(TAG, "success: ${t!!.artists[0].name}")
 
@@ -73,10 +73,13 @@ class HomeScreenRepositoryImpl @Inject constructor(
     override fun getCategoryPlaylist(category: String): MutableLiveData<PlaylistsPager> {
 
         val result = MutableLiveData<PlaylistsPager>()
-        spotify.getPlaylistsForCategory(category, map, object : Callback<PlaylistsPager> {
+        spotify.getPlaylistsForCategory(category, mapOf(), object : Callback<PlaylistsPager> {
             override fun success(t: PlaylistsPager?, response: Response?) {
 
-//                Log.d(TAG, "success: ${t?.playlists?.items?.get(0)?.name}")
+                val v = t?.playlists?.items?.size
+
+                Log.d(TAG, "success: $response")
+                Log.d(TAG, "success: Playlist $v")
                 result.postValue(t)
             }
 
@@ -113,6 +116,7 @@ class HomeScreenRepositoryImpl @Inject constructor(
             override fun success(t: Pager<Artist>?, response: Response?) {
 
                 favouriteArtists.postValue(t)
+
                 val artistId = try {
 
                     t?.items?.get(index = index)?.id
@@ -120,23 +124,33 @@ class HomeScreenRepositoryImpl @Inject constructor(
                     "Error"
                 }
 
-                val imageUrl = try {
-                    t?.items?.get(index = index)?.images?.get(0)?.url
+                val firstImageUrl = try {
+
+                    t?.items?.forEach {
+                        Log.d(TAG, "success: ${it.name}")
+                        Log.d(TAG, "success: ${it.images[0].url}")
+                    }
+                    t?.items?.get(index = 0)?.images?.get(0)?.url
+                } catch (e: Exception) {
+                    "Error"
+                }
+                val secondImageUrl = try {
+                    t?.items?.get(index = 1)?.images?.get(0)?.url
                 } catch (e: Exception) {
                     "Error"
                 }
 
                 if (index == 0)
-                    favouriteArtistUrl.postValue(imageUrl)
+                    favouriteArtistUrl.postValue(firstImageUrl)
                 else
-                    secondFavouriteArtistUrl.postValue(imageUrl)
+                    secondFavouriteArtistUrl.postValue(secondImageUrl)
 
 
                 getTopTracks(index, artistId)
-                Log.d(TAG, "success: $imageUrl")
+                Log.d(TAG, "success: $firstImageUrl")
 
                 Log.d(TAG, "artist: $artistId")
-                spotify.getArtistAlbums(artistId, map, object : Callback<Pager<Album>> {
+                spotify.getArtistAlbums(artistId, object : Callback<Pager<Album>> {
                     override fun success(t: Pager<Album>?, response: Response?) {
                         Log.d(TAG, "artist: ${t?.items?.get(0)?.name}")
                         result.postValue(t)
@@ -221,7 +235,7 @@ class HomeScreenRepositoryImpl @Inject constructor(
 
         val result = MutableLiveData<RecentlyPlayed>()
 
-        val call = retrofit.getRecentlyPlayed(10, "Authorization: Bearer $accessToken")
+        val call = retrofit.getRecentlyPlayed(50, "Authorization: Bearer $accessToken")
 
         call.enqueue {
 
@@ -307,8 +321,8 @@ class HomeScreenRepositoryImpl @Inject constructor(
                 "limit" to 7,
                 "market" to "IN",
                 "seed_artists" to artistId,
-                "seed_genres" to t!!.genres[indexToSeed] + "," + t.genres[indexToSeed+1],
-                "seed_tracks" to items!!.items[indexToSeed].id + "," + items.items[indexToSeed+1].id
+                "seed_genres" to t!!.genres[indexToSeed] + "," + t.genres[indexToSeed + 1],
+                "seed_tracks" to items!!.items[indexToSeed].id + "," + items.items[indexToSeed + 1].id
             )
 
             spotify.getRecommendations(recommendationMap, object : Callback<Recommendations> {
