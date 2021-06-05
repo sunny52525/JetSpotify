@@ -1,4 +1,4 @@
-package com.shaun.spotonmusic
+package com.shaun.spotonmusic.utils
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -13,25 +13,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
 
-//
-//suspend fun save(dataStore: DataStore<Preferences>, key: String, value: String) {
-//    val dataStoreKey = preferencesKey<String>(key)
-//    dataStore.edit { settings ->
-//        settings[dataStoreKey] = value
-//    }
-//}
-//
-//suspend fun read(dataStore: DataStore<Preferences>, key: String): String {
-//    val dataStoreKey = preferencesKey<String>(key)
-//    val preferences = dataStore.data.first()
-//    return preferences[dataStoreKey].toString()
-//}
-
-fun FeaturedPlaylists.toPlayListPager(): PlaylistsPager {
-    val pager = PlaylistsPager()
-    pager.playlists = this.playlists
-    return pager
-}
 
 
 
@@ -53,6 +34,32 @@ fun getGreeting(): String {
             "Good Night"
         }
     }
+}
+
+
+
+fun getImageUrl(list: List<Image>, demand: Int): String {
+
+
+    when (list.size) {
+        3 -> {
+            if (demand == 0)
+                return list[2].url
+            if (demand == 1)
+                return list[1].url
+            return list[0].url
+        }
+        2 -> {
+            return if (demand == 2)
+                list[0].url
+            else list[1].url
+        }
+        1 -> {
+            return list[0].url
+        }
+        else -> return ""
+    }
+
 }
 
 fun getBitmapFromURL(src: String?): Bitmap? {

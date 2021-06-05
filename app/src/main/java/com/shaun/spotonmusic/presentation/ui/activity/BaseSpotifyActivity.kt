@@ -10,9 +10,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.lifecycleScope
 import com.pghaz.spotify.webapi.auth.SpotifyAuthorizationCallback
 import com.pghaz.spotify.webapi.auth.SpotifyAuthorizationClient
-import com.shaun.spotonmusic.AppConstants.AUTH_SCOPES
-import com.shaun.spotonmusic.AppConstants.CLIENT_ID
-import com.shaun.spotonmusic.AppConstants.REDIRECT_URL
+import com.shaun.spotonmusic.utils.AppConstants.AUTH_SCOPES
+import com.shaun.spotonmusic.utils.AppConstants.CLIENT_ID
+import com.shaun.spotonmusic.utils.AppConstants.REDIRECT_URL
 import com.shaun.spotonmusic.R
 import com.shaun.spotonmusic.di.DatastoreManager
 import dagger.hilt.android.AndroidEntryPoint

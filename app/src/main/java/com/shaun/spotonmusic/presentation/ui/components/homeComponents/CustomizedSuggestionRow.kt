@@ -29,7 +29,8 @@ fun FavouriteArtistSongs(
 ) {
 
 
-    if (data?.items == null || image.isNullOrEmpty())
+
+    if (data?.items == null || image.isEmpty())
         return
 
 

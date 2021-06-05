@@ -1,4 +1,4 @@
-package com.shaun.spotonmusic
+package com.shaun.spotonmusic.utils
 
 object AppConstants {
     const val REDIRECT_URL = "spotonmusic://callback"
@@ -19,7 +19,6 @@ object AppConstants {
         "user-follow-read",
         "user-library-modify",
         "user-library-read"
-
 
     )
     const val BASEURL = "https://api.spotify.com"

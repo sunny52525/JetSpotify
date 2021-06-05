@@ -47,7 +47,7 @@ class SharedViewModel @Inject constructor(
     var secondFavouriteArtist = MutableLiveData<Pager<Album>>()
 
     var favouriteArtists = MutableLiveData<Pager<Artist>>()
-    var charts = MutableLiveData<List<Playlist?>>()
+    var charts = MutableLiveData<List<Playlist>>()
 
     var firstFavouriteArtistRecommendations = MutableLiveData<Recommendations>()
     var secondFavouriteArtistRecommendations = MutableLiveData<Recommendations>()
@@ -139,7 +139,7 @@ class SharedViewModel @Inject constructor(
 
             withContext(Dispatchers.Main) {
                 val response = responses.map {
-                    it.body()
+                    it.body()!!
                 }
                 charts.postValue(response)
 

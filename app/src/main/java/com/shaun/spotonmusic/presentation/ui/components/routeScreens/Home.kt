@@ -19,13 +19,13 @@ import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import androidx.palette.graphics.Palette
-import com.shaun.spotonmusic.getBitmapFromURL
-import com.shaun.spotonmusic.getGreeting
 import com.shaun.spotonmusic.network.model.RecentlyPlayed
 import com.shaun.spotonmusic.presentation.ui.components.homeComponents.*
-import com.shaun.spotonmusic.toPlayListPager
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.blue
+import com.shaun.spotonmusic.utils.TypeConverters.Companion.toSuggestionModel
+import com.shaun.spotonmusic.utils.getBitmapFromURL
+import com.shaun.spotonmusic.utils.getGreeting
 import com.shaun.spotonmusic.viewmodel.SharedViewModel
 import kaaes.spotify.webapi.android.models.*
 import kotlinx.coroutines.Dispatchers
@@ -64,7 +64,7 @@ fun Home(
     val myPlayList: Pager<PlaylistSimple> by viewModel.getMyPlayList.observeAsState(Pager<PlaylistSimple>())
     val recentlyPlayed: RecentlyPlayed by viewModel.recentlyPlayed.observeAsState(initial = RecentlyPlayed())
     val favouriteArtists: Pager<Artist> by viewModel.favouriteArtists.observeAsState(initial = Pager<Artist>())
-    val charts: List<Playlist?> by viewModel.charts.observeAsState(initial = ArrayList())
+    val charts: List<Playlist> by viewModel.charts.observeAsState(initial = ArrayList())
 
     val firstFavouriteArtistRecommendations: Recommendations by viewModel
         .firstFavouriteArtistRecommendations.observeAsState(initial = Recommendations())
@@ -148,7 +148,7 @@ fun Home(
             }
 
             item {
-                SuggestionsRow(playlistsPager = playList, title = "Mood")
+                SuggestionsRow(data = playList.toSuggestionModel(), title = "Mood")
             }
             item {
                 FavouriteArtistSongs(
@@ -163,14 +163,14 @@ fun Home(
             }
 
             item {
-                PlaylistRow("Your Playlists", myPlayList)
+                SuggestionsRow("Your Playlists", myPlayList.toSuggestionModel())
             }
             item {
-                SuggestionsRow(playlistsPager = party, title = "Party")
+                SuggestionsRow(data = party.toSuggestionModel(), title = "Party")
             }
 
             item {
-                RecentlyPlayedRow(title = "Recently Played", recentlyPlayed = recentlyPlayed)
+                SuggestionsRow(title = "Recently Played", data = recentlyPlayed.toSuggestionModel())
             }
 
 
@@ -187,12 +187,12 @@ fun Home(
             item {
 
                 SuggestionsRow(
-                    playlistsPager = featuredPlaylists.toPlayListPager(),
+                    data = featuredPlaylists.toSuggestionModel(),
                     title = "Featured Playlists"
                 )
             }
             item {
-                ChartsRow(title = "Charts", playlist = charts)
+                SuggestionsRow(title = "Charts", data = charts.toSuggestionModel(),size = 150)
             }
 
 
@@ -219,12 +219,12 @@ fun Home(
             }
 
             item {
-                ArtistRow(title = "Your Favourites", artistsPager = favouriteArtists)
+                SuggestionsRow(title = "Your Favourites", data = favouriteArtists.toSuggestionModel())
             }
 
 
             item {
-                NewReleasesRow(newReleases = newReleases, title = "New Releases")
+                SuggestionsRow(data = newReleases.toSuggestionModel(), title = "New Releases")
             }
 
 

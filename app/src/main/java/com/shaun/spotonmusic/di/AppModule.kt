@@ -3,7 +3,7 @@ package com.shaun.spotonmusic.di
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.shaun.spotonmusic.AppConstants.BASEURL
+import com.shaun.spotonmusic.utils.AppConstants.BASEURL
 import com.shaun.spotonmusic.SpotOnApplication
 import com.shaun.spotonmusic.network.api.SpotifyAppService
 import dagger.Module
@@ -13,7 +13,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Singleton
 
 
 @Module

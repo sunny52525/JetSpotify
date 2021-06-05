@@ -23,7 +23,7 @@ import androidx.core.graphics.red
 import androidx.lifecycle.MutableLiveData
 import androidx.palette.graphics.Palette
 import com.google.accompanist.glide.rememberGlidePainter
-import com.shaun.spotonmusic.getBitmapFromURL
+import com.shaun.spotonmusic.utils.getBitmapFromURL
 import com.shaun.spotonmusic.ui.theme.green
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

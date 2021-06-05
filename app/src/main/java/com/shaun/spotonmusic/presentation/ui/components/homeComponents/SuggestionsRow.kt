@@ -1,6 +1,5 @@
 package com.shaun.spotonmusic.presentation.ui.components.homeComponents
 
-import android.util.Log
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.updateTransition
@@ -20,23 +19,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.glide.rememberGlidePainter
-import kaaes.spotify.webapi.android.models.NewReleases
-import kaaes.spotify.webapi.android.models.PlaylistsPager
+import com.shaun.spotonmusic.database.model.SuggestionModel
+import com.shaun.spotonmusic.utils.getImageUrl
 
 private const val TAG = "SuggestionsRow"
 
 
 @Composable
 fun SuggestionsRow(
-    title: String, playlistsPager: PlaylistsPager?
+    title: String, data: List<SuggestionModel>?,
+    size: Int = 170,
 ) {
 
 
-    playlistsPager?.playlists?.let {
-        it.items.forEach {
-            Log.d(TAG, "SuggestionsRow: ${it.name} + $title")
-        }
-    }
     Column(Modifier.padding(top = 30.dp)) {
 
 
@@ -53,57 +48,17 @@ fun SuggestionsRow(
         LazyRow() {
 
 
-            playlistsPager?.playlists?.let {
-
-                it.items.forEachIndexed { index, item ->
-                    item {
-
-                        SuggestionCard(
-                            0,
-                            imageUrl = item.images[0].url,
-                            item.name,
-                            paddingValues = if (index == 0) 20 else 10
-                        )
-                    }
-                }
-            }
-
-        }
-    }
-}
-
-
-@Composable
-fun NewReleasesRow(title: String = "Throwback", newReleases: NewReleases) {
-
-    Log.d("TAG", "SuggestionsRow: ")
-    Column(Modifier.padding(top = 30.dp)) {
-
-
-        Text(
-            text = title, textAlign = TextAlign.Left,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 20.dp),
-            fontSize = 23.sp,
-            color = Color.White
-        )
-        LazyRow {
-
-
-            newReleases.albums?.items?.let {
-
+            data?.let {
 
                 it.forEachIndexed { index, item ->
-
                     item {
 
                         SuggestionCard(
                             0,
-                            imageUrl = item.images[0].url,
-                            item.name,
-                            paddingValues = if (index == 0) 20 else 10
+                            imageUrl = getImageUrl(item.imageUrls, 1),
+                            item.title,
+                            paddingValues = if (index == 0) 20 else 10,
+                            size = size
                         )
                     }
                 }
@@ -112,6 +67,7 @@ fun NewReleasesRow(title: String = "Throwback", newReleases: NewReleases) {
         }
     }
 }
+
 
 
 enum class ComponentState { Pressed, Released }
@@ -123,7 +79,7 @@ fun SuggestionCard(
     cornerRadius: Int = 0,
     imageUrl: String,
     title: String,
-    size: Int = 170,
+    size: Int,
     paddingValues: Int
 ) {
 

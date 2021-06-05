@@ -27,7 +27,7 @@ fun RecommendationsRow(
         CustomizedHeading(image, title, artistName.items?.get(index = index)?.name)
 
         LazyRow {
-            recommendations?.tracks?.let {
+            recommendations.tracks?.let {
                 it.forEachIndexed { index, its ->
                     item {
                         CustomizedSuggestionCard(

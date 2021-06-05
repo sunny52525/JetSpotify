@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.glide.rememberGlidePainter
 import com.shaun.spotonmusic.R
 import com.shaun.spotonmusic.database.model.LibraryModel
-import kaaes.spotify.webapi.android.models.Image
+import com.shaun.spotonmusic.utils.getImageUrl
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlin.coroutines.CoroutineContext
@@ -259,30 +259,6 @@ fun SingleGrid(title: String, type: String, owner: String, imageUrl: String) {
     Spacer(modifier = Modifier.height(4.dp))
 }
 
-
-fun getImageUrl(list: MutableList<Image>, demand: Int): String {
-
-
-    when (list.size) {
-        3 -> {
-            if (demand == 0)
-                return list[2].url
-            if (demand == 1)
-                return list[1].url
-            return list[0].url
-        }
-        2 -> {
-            return if (demand == 2)
-                list[0].url
-            else list[1].url
-        }
-        1 -> {
-            return list[0].url
-        }
-        else -> return ""
-    }
-
-}
 
 fun launchHelper(
     coroutineScope: CoroutineScope,

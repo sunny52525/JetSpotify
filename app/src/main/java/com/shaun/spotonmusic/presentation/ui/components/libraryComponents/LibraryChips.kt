@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.shaun.spotonmusic.AppConstants
+import com.shaun.spotonmusic.utils.AppConstants
 import com.shaun.spotonmusic.ui.theme.green
 import com.shaun.spotonmusic.ui.theme.greenDark
 import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
