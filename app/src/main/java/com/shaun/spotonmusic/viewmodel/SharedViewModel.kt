@@ -13,7 +13,6 @@ import com.shaun.spotonmusic.repository.HomeScreenRepositoryImpl
 import com.shaun.spotonmusic.utils.TypeConverters.Companion.toSpotOnMusicModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kaaes.spotify.webapi.android.models.Album
-import kaaes.spotify.webapi.android.models.Artist
 import kaaes.spotify.webapi.android.models.Pager
 import kaaes.spotify.webapi.android.models.Playlist
 import kotlinx.coroutines.Dispatchers
@@ -28,8 +27,8 @@ import javax.inject.Inject
 class SharedViewModel @Inject constructor(
     context: SpotOnApplication,
     private val retrofit: SpotifyAppService,
-
-    private val datastoreManager: DatastoreManager
+    private val datastoreManager: DatastoreManager,
+    private val hasInternetConnection: Boolean
 ) : ViewModel() {
 
     private val _currentScreen = MutableLiveData<BottomNavRoutes>(BottomNavRoutes.Home)
@@ -119,6 +118,9 @@ class SharedViewModel @Inject constructor(
 
 
     private fun getCharts() {
+
+
+        Log.d(TAG, "getCharts: $hasInternetConnection")
 
         GlobalScope.launch {
 

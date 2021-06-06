@@ -1,11 +1,8 @@
 package com.shaun.spotonmusic.viewmodel
 
 import android.util.Log
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.shaun.spotonmusic.SpotOnApplication
 import com.shaun.spotonmusic.database.model.LibraryItem
 import com.shaun.spotonmusic.database.model.LibraryModel
@@ -16,8 +13,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kaaes.spotify.webapi.android.models.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -27,7 +22,8 @@ import javax.inject.Inject
 class LibraryViewModel @Inject constructor(
     context: SpotOnApplication,
     private val retrofit: SpotifyAppService,
-    private val datastoreManager: DatastoreManager
+    private val datastoreManager: DatastoreManager,
+    private val hasInternetConnection: Boolean
 ) : ViewModel() {
 
     private var accessToken = datastoreManager.accessToken
@@ -60,24 +56,33 @@ class LibraryViewModel @Inject constructor(
 
     private fun getAccessToken() {
 
-    //        accessToken.postValue(value)
+        //        accessToken.postValue(value)
         setToken()
     }
 
 
     private fun getLibraryItems() {
-        GlobalScope.launch {
-            val savedPlaylist = repo.getSavedPlaylistSynchronously()
-            val followedArtist = repo.getFollowedArtistsSynchronously()
-            val savedAlbums = repo.getSavedAlbumSynchronously()
-            withContext(Dispatchers.Main) {
-                Log.d(TAG, "getLibraryItems: ${savedPlaylist.items[0].name}")
-                Log.d(TAG, "getLibraryItems: ${followedArtist.artists.items[0].name}")
-                Log.d(TAG, "getLibraryItems: ${savedAlbums.items[0].album.name}")
 
+
+        GlobalScope.launch {
+            var savedPlaylist: Pager<PlaylistSimple> = Pager()
+            var followedArtist = ArtistsCursorPager()
+            var savedAlbums: Pager<SavedAlbum> = Pager()
+
+            try {
+                savedPlaylist = repo.getSavedPlaylistSynchronously()
+                followedArtist = repo.getFollowedArtistsSynchronously()
+                savedAlbums = repo.getSavedAlbumSynchronously()
+
+            } catch (e: Exception) {
+
+                Log.d(TAG, "getLibraryItems: $e")
+
+            }
+            withContext(Dispatchers.Main) {
 
                 val libraryList = arrayListOf<LibraryItem>()
-                savedPlaylist.items.forEach {
+                savedPlaylist?.items?.forEach {
 
                     val libraryItem = LibraryItem(
                         title = it.name,
@@ -93,7 +98,7 @@ class LibraryViewModel @Inject constructor(
                     libraryList.add(libraryItem)
                 }
 
-                followedArtist.artists.items.forEach {
+                followedArtist?.artists?.items?.forEach {
 
                     val libraryItem = LibraryItem(
                         title = it.name,
@@ -111,7 +116,7 @@ class LibraryViewModel @Inject constructor(
                 }
 
 
-                savedAlbums.items.forEach { it ->
+                savedAlbums?.items?.forEach { it ->
                     val libraryItem = LibraryItem(
                         title = it.album.name,
                         typeID = "album",
