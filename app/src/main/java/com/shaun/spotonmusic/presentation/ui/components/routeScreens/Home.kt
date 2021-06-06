@@ -41,8 +41,12 @@ fun Home(
     viewModel: SharedViewModel,
     listState: LazyListState,
     tokenExpired: () -> Unit,
-    onAlbumClicked: (String) -> Unit
-) {
+    onAlbumClicked: (String) -> Unit = {},
+    onPlayListClicked: (String) -> Unit = {},
+    onUserPlayListClicked: (String) -> Unit = {},
+    onArtistClicked: (String) -> Unit = {},
+
+    ) {
 
 
     val headerBackgroundColor = remember {
@@ -148,14 +152,19 @@ fun Home(
             }
 
             item {
-                SuggestionsRow(data = playList.toSuggestionModel(), title = "Mood")
+                SuggestionsRow(
+                    data = playList.toSuggestionModel(),
+                    title = "Mood",
+                    onCardClicked = {
+                        onPlayListClicked(it)
+                    })
             }
             item {
                 FavouriteArtistSongs(
                     title = "For the fans of",
                     data = favouriteArtistSongs,
                     favouriteArtistImage, albumClicked = {
-                        Log.d(TAG, "Home:Lana    ")
+                        Log.d(TAG, "Home:Lana ")
                         onAlbumClicked(it)
                     }
                 )
@@ -163,14 +172,23 @@ fun Home(
             }
 
             item {
-                SuggestionsRow("Your Playlists", myPlayList.toSuggestionModel())
+                SuggestionsRow("Your Playlists", myPlayList.toSuggestionModel(), onCardClicked = {
+                    onUserPlayListClicked(it)
+                })
             }
             item {
-                SuggestionsRow(data = party.toSuggestionModel(), title = "Party")
+                SuggestionsRow(data = party.toSuggestionModel(), title = "Party", onCardClicked = {
+                    onPlayListClicked(it)
+                })
             }
 
             item {
-                SuggestionsRow(title = "Recently Played", data = recentlyPlayed.toSuggestionModel())
+                SuggestionsRow(
+                    title = "Recently Played",
+                    data = recentlyPlayed.toSuggestionModel(),
+                    onCardClicked = {
+                        onAlbumClicked(it)
+                    })
             }
 
 
@@ -188,11 +206,20 @@ fun Home(
 
                 SuggestionsRow(
                     data = featuredPlaylists.toSuggestionModel(),
-                    title = "Featured Playlists"
+                    title = "Featured Playlists",
+                    onCardClicked = {
+                        onPlayListClicked(it)
+                    }
                 )
             }
             item {
-                SuggestionsRow(title = "Charts", data = charts.toSuggestionModel(),size = 150)
+                SuggestionsRow(
+                    title = "Charts",
+                    data = charts.toSuggestionModel(),
+                    size = 150,
+                    onCardClicked = {
+                        onPlayListClicked(it)
+                    })
             }
 
 
@@ -219,12 +246,22 @@ fun Home(
             }
 
             item {
-                SuggestionsRow(title = "Your Favourites", data = favouriteArtists.toSuggestionModel())
+                SuggestionsRow(
+                    title = "Your Favourites",
+                    data = favouriteArtists.toSuggestionModel(),
+                    onCardClicked = {
+                        onArtistClicked(it)
+                    })
             }
 
 
             item {
-                SuggestionsRow(data = newReleases.toSuggestionModel(), title = "New Releases")
+                SuggestionsRow(
+                    data = newReleases.toSuggestionModel(),
+                    title = "New Releases",
+                    onCardClicked = {
+                        onAlbumClicked(it)
+                    })
             }
 
 

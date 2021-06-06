@@ -4,6 +4,7 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -29,6 +30,7 @@ private const val TAG = "SuggestionsRow"
 fun SuggestionsRow(
     title: String, data: List<SuggestionModel>?,
     size: Int = 170,
+    onCardClicked: (String) -> Unit
 ) {
 
 
@@ -58,7 +60,10 @@ fun SuggestionsRow(
                             imageUrl = getImageUrl(item.imageUrls, 1),
                             item.title,
                             paddingValues = if (index == 0) 20 else 10,
-                            size = size
+                            size = size,
+                            onCardClicked = {
+                                onCardClicked(item.id)
+                            }
                         )
                     }
                 }
@@ -80,7 +85,8 @@ fun SuggestionCard(
     imageUrl: String,
     title: String,
     size: Int,
-    paddingValues: Int
+    paddingValues: Int,
+    onCardClicked:()->Unit
 ) {
 
     var toState: ComponentState by remember { mutableStateOf(ComponentState.Released) }
@@ -137,6 +143,8 @@ fun SuggestionCard(
                     .graphicsLayer {
                         scaleX = scalex;
                         scaleY = scaley
+                    }.clickable {
+                        onCardClicked()
                     }
 
             )

@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.shaun.spotonmusic.presentation.ui.components.libraryComponents.Chip
 import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
 import kaaes.spotify.webapi.android.models.Pager
-import kaaes.spotify.webapi.android.models.TrackSimple
+import kaaes.spotify.webapi.android.models.PlaylistTrack
 
 val items =
     arrayListOf(
@@ -57,7 +57,7 @@ val items =
 fun SongList(
     scrollState: LazyListState,
     surfaceGradient: List<Color>,
-    tracks: Pager<TrackSimple?>?
+    tracks: Pager<PlaylistTrack?>?
 ) {
     LazyColumn(state = scrollState) {
         item {
@@ -79,9 +79,9 @@ fun SongList(
             }
         }
         tracks?.let { tracksPager ->
-            items(tracksPager.items) {
+            items(tracksPager?.items) {
                 if (it != null) {
-                    SpotifySongListItem(album = it.name)
+                    SpotifySongListItem(it.track.name)
                 }
             }
         }

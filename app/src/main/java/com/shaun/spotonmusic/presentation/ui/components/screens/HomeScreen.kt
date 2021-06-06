@@ -26,7 +26,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.shaun.spotonmusic.presentation.ui.activity.HomeActivity
 import com.shaun.spotonmusic.presentation.ui.components.libraryComponents.LibraryBottomSheet
-import com.shaun.spotonmusic.presentation.ui.components.routeScreens.AlbumDetail
+import com.shaun.spotonmusic.presentation.ui.components.routeScreens.PlaylistDetail
 import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Home
 import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Library
 import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Search
@@ -34,7 +34,7 @@ import com.shaun.spotonmusic.presentation.ui.navigation.BottomNavRoutes
 import com.shaun.spotonmusic.presentation.ui.navigation.Routes
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.spotifyGray
-import com.shaun.spotonmusic.viewmodel.AlbumDetailViewModel
+import com.shaun.spotonmusic.viewmodel.MusicDetail
 import com.shaun.spotonmusic.viewmodel.LibraryViewModel
 import com.shaun.spotonmusic.viewmodel.SharedViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -53,7 +53,7 @@ fun HomeScreen(
 
     val homeViewModel: SharedViewModel = viewModel()
     val libraryViewModel: LibraryViewModel = viewModel()
-    val albumDetailViewModel: AlbumDetailViewModel = viewModel()
+    val musicDetail: MusicDetail = viewModel()
 
     libraryViewModel.tokenExpired.observeForever {
         if (it == true) {
@@ -124,7 +124,7 @@ fun HomeScreen(
                     modalBottomSheetState = state,
                     libraryViewModel = libraryViewModel,
                     scope = scope,
-                    albumDetailViewModel = albumDetailViewModel
+                    musicDetail = musicDetail
                 )
             }
 
@@ -212,7 +212,7 @@ fun HomeScreenNavigationConfiguration(
     modalBottomSheetState: ModalBottomSheetState,
     libraryViewModel: LibraryViewModel,
     scope: CoroutineScope,
-    albumDetailViewModel: AlbumDetailViewModel,
+    musicDetail: MusicDetail,
 
     ) {
     val listState = rememberLazyListState()
@@ -231,7 +231,7 @@ fun HomeScreenNavigationConfiguration(
             EnterAnimation {
                 Home(viewModel = viewModel, listState = listState, tokenExpired = {
                     tokenExpired()
-                }, onAlbumClicked = {
+                }, onPlayListClicked = {
                     navHostController.navigate(Routes.AlbumDetail.route + "/$it")
                 }
                 )
@@ -264,9 +264,9 @@ fun HomeScreenNavigationConfiguration(
         }
         composable(Routes.AlbumDetail.route + "/{id}") {
             EnterAnimation {
-                AlbumDetail(
+                PlaylistDetail(
                     it.arguments?.getString("id"),
-                    albumDetailViewModel
+                    musicDetail
                 )
 
             }

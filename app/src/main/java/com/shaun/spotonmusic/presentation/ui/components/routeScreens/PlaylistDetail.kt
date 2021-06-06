@@ -15,17 +15,17 @@ import com.shaun.spotonmusic.presentation.ui.components.albumComponents.TopSecti
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.blue
 import com.shaun.spotonmusic.ui.theme.green
-import com.shaun.spotonmusic.viewmodel.AlbumDetailViewModel
-import kaaes.spotify.webapi.android.models.Album
+import com.shaun.spotonmusic.viewmodel.MusicDetail
+import kaaes.spotify.webapi.android.models.Playlist
 
 @ExperimentalFoundationApi
 
 @Composable
 
-fun AlbumDetail(id: String? = "Test", albumDetailViewModel: AlbumDetailViewModel) {
+fun PlaylistDetail(id: String? = "Test", musicDetail: MusicDetail) {
 
-    val currentAlbum: Album
-            by albumDetailViewModel.getAlbum(id.toString()).observeAsState(initial = Album())
+    val currentAlbum: Playlist
+            by musicDetail.getPlaylist(id.toString()).observeAsState(initial = Playlist())
 
     Box(
         modifier = Modifier

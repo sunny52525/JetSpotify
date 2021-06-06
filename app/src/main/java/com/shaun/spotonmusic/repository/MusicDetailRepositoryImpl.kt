@@ -2,15 +2,19 @@ package com.shaun.spotonmusic.repository
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.shaun.spotonmusic.network.api.RetrofitEnqueue.Companion.Result
+import com.shaun.spotonmusic.network.api.RetrofitEnqueue.Companion.enqueue
+import com.shaun.spotonmusic.network.api.SpotifyAppService
 import kaaes.spotify.webapi.android.SpotifyApi
 import kaaes.spotify.webapi.android.models.Album
+import kaaes.spotify.webapi.android.models.Playlist
 import retrofit.Callback
 import retrofit.RetrofitError
 import javax.inject.Inject
 
-class AlbumDetailRepositoryImpl @Inject constructor(
+class MusicDetailRepositoryImpl @Inject constructor(
     private val accessToken: String,
-//    private val retrofit: SpotifyAppService
+    private val retrofit: SpotifyAppService
 ) {
     private var api = SpotifyApi()
     private var spotify: kaaes.spotify.webapi.android.SpotifyService
@@ -35,6 +39,26 @@ class AlbumDetailRepositoryImpl @Inject constructor(
 
         })
         return result
+    }
+
+    fun getPlaylistAsync(playlistId: String): MutableLiveData<Playlist> {
+
+        val result = MutableLiveData<Playlist>()
+
+        retrofit.getAPlayList(playList_id = playlistId, "IN", "Authorization: Bearer $accessToken")
+            .enqueue {
+                when (it) {
+                    is Result.Success -> {
+                        result.postValue(it.response.body())
+                    }
+                    is Result.Failure -> {
+                        Log.d(TAG, "getRecentlyPlayed: ${it.error}")
+                    }
+                }
+            }
+
+        return result
+
     }
 
 

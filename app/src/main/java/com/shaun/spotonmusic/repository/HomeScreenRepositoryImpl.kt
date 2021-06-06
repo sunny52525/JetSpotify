@@ -2,6 +2,8 @@ package com.shaun.spotonmusic.repository
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.shaun.spotonmusic.network.api.RetrofitEnqueue.Companion.Result
+import com.shaun.spotonmusic.network.api.RetrofitEnqueue.Companion.enqueue
 import com.shaun.spotonmusic.network.api.SpotifyAppService
 import com.shaun.spotonmusic.network.model.RecentlyPlayed
 import kaaes.spotify.webapi.android.SpotifyApi
@@ -9,9 +11,7 @@ import kaaes.spotify.webapi.android.models.*
 import retrofit.Callback
 import retrofit.RetrofitError
 import retrofit.client.Response
-import retrofit2.Call
 import javax.inject.Inject
-
 
 class HomeScreenRepositoryImpl @Inject constructor(
     private val accessToken: String,
@@ -237,7 +237,7 @@ class HomeScreenRepositoryImpl @Inject constructor(
 
         val call = retrofit.getRecentlyPlayed(50, "Authorization: Bearer $accessToken")
 
-        call.enqueue {
+        call.enqueue{
 
             when (it) {
                 is Result.Success -> {
@@ -394,26 +394,6 @@ class HomeScreenRepositoryImpl @Inject constructor(
 
     companion object {
         private const val TAG = "HomeScreenRepository"
-    }
-
-
-    sealed class Result<T> {
-        data class Success<T>(val call: Call<T>, val response: retrofit2.Response<T>) : Result<T>()
-        data class Failure<T>(val call: Call<T>, val error: Throwable) : Result<T>()
-    }
-
-
-    private inline fun <reified T> Call<T>.enqueue(crossinline result: (Result<T>) -> Unit) {
-        enqueue(object : retrofit2.Callback<T> {
-            override fun onResponse(call: Call<T>, response: retrofit2.Response<T>) {
-                result(Result.Success(call, response))
-            }
-
-            override fun onFailure(call: Call<T>, t: Throwable) {
-                result(Result.Failure(call = call, error = t))
-            }
-
-        })
     }
 
 }

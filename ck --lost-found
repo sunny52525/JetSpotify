@@ -1,0 +1,185 @@
+[33mcommit 1d15e5d1cfddda33579857ffe2fd620d21503bd9[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Sat Jun 5 13:58:21 2021 +0530
+
+    refactored
+
+[33mcommit c8995ce9eb22394dd687a6f80386c42f4babb318[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Wed Jun 2 19:26:39 2021 +0530
+
+    squashed little bugs
+
+[33mcommit 01344cbe1b3a6c654cf1bb370a32466b552406ec[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Wed Jun 2 15:53:13 2021 +0530
+
+    datastore version bump
+
+[33mcommit aa7b1d85bcecebc4269010db12c28979c93caac2[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Wed Jun 2 15:02:09 2021 +0530
+
+    album detail viewmodel
+
+[33mcommit f950a2b18b634ba9360e7b818c7d063065c6ce9a[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Tue Jun 1 19:08:20 2021 +0530
+
+    album detail barebones setup with animations
+
+[33mcommit ec85f22ad80fc792381b6dccf33b89611c3d29ab[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Mon May 31 13:15:38 2021 +0530
+
+    animations,library view model
+
+[33mcommit ef7a5279bdb8125a2a414c98b39105592f56f09b[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Mon May 31 13:11:26 2021 +0530
+
+    animations,library view model
+
+[33mcommit 64d65a4890e1ed032b9d76652ffbc2792fe3fe66[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Sat May 29 18:45:15 2021 +0530
+
+    basic library layout
+
+[33mcommit fc10c22af872aa4c19f53b05245a2979423eef37[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Fri May 28 02:58:47 2021 +0530
+
+    little optimization in search screen
+
+[33mcommit 4c1b5e807437ff824afc7eb7ec852206f81c7a08[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Mon May 24 12:31:35 2021 +0530
+
+    search route ui
+
+[33mcommit 8b4e4219b7e80119c023b5064db5fa26baf15eca[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Sat May 22 23:55:10 2021 +0530
+
+    added null checks in rows
+
+[33mcommit bc099f19431c24320d855fe3b9db056864dc3e79[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Sat May 22 17:45:23 2021 +0530
+
+    home screen complete
+
+[33mcommit 23c98dd430660d93630ec0390079ed073ede3a64[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Sat May 22 16:52:00 2021 +0530
+
+    home recommendations complete
+
+[33mcommit dce0ad9e0d7234ee34a57bf4d278d8866867c862[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Sat May 22 13:54:44 2021 +0530
+
+    charts
+
+[33mcommit 3bb58a2f129a9da1546ef0d41d1d12a83f1b9636[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Fri May 21 21:43:08 2021 +0530
+
+    version bump of compose
+
+[33mcommit 7c61c58665165712ae4e2199c3533c5ba488ca09[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Fri May 21 21:33:39 2021 +0530
+
+    little changes
+
+[33mcommit 604478d39c8b93e8fc2fb73b37c09d568847c2c4[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Fri May 21 21:21:45 2021 +0530
+
+    data persistencce accross nav
+
+[33mcommit f57a1a56dcb80e5cf9a2cb328a245b72635430b5[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Fri May 21 19:51:21 2021 +0530
+
+    homescreen ui
+
+[33mcommit d5756b2b652fb013da57b60db0ee6f83922e1f38[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Fri May 21 19:49:49 2021 +0530
+
+    homescreen ui
+
+[33mcommit 713186bf97621b817c5c71d73837d4c948f815e3[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Fri May 21 16:05:54 2021 +0530
+
+    ui fixed
+
+[33mcommit 2ebfd7b300806558f7fcae5218ab0f2399b51e15[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Fri May 21 14:48:34 2021 +0530
+
+    gradient
+
+[33mcommit 54852ffa6da8889ee24d2f6f71ea24cf3a5e0a07[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Fri May 21 13:39:41 2021 +0530
+
+    recently played
+
+[33mcommit 08f8e25053f749a6d358a01e0268fe27c90b549b[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Fri May 21 01:40:29 2021 +0530
+
+    till play;ist
+
+[33mcommit 951d66bc270d727bfb7f85ee31434d6eaab2b699[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Thu May 20 20:21:10 2021 +0530
+
+    viewmodel working
+
+[33mcommit d470c25c3a930fabcf710f3d5aeffd4a687f3b02[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Thu May 20 20:00:46 2021 +0530
+
+    viewmodel workin
+
+[33mcommit 7dd73cd9f4cc9d71bf285365c138d895134e2c61[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Tue May 18 15:44:41 2021 +0530
+
+    home layout
+
+[33mcommit 36032b7e1b2d8b676f746cd789f4e37f8504359d[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Mon May 17 14:01:55 2021 +0530
+
+    routes setup
+
+[33mcommit 21dd53156fb4cd62c59cedbc7326bb5aace09b6a[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Mon May 17 12:21:27 2021 +0530
+
+    icon
+
+[33mcommit 9b82a42d730e2340fed28b15ecaffb379c746b1f[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Mon May 17 03:08:36 2021 +0530
+
+    code cleanup
+
+[33mcommit 42f2013020942be206f9bf1be066b8d4dcc478e6[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Mon May 17 03:01:06 2021 +0530
+
+    basic fow
+
+[33mcommit 7cec2213bb0e76db7d42e9b59cfeec0aa76a0a0e[m
+Author: Sunny <30768018+sunny52525@users.noreply.github.com>
+Date:   Mon May 17 02:32:59 2021 +0530
+
+    spotify token
