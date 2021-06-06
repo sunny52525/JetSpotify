@@ -1,6 +1,7 @@
 package com.shaun.spotonmusic.repository
 
 import androidx.lifecycle.MutableLiveData
+import com.shaun.spotonmusic.database.model.SpotOnMusicModel
 import com.shaun.spotonmusic.network.model.RecentlyPlayed
 import kaaes.spotify.webapi.android.models.*
 import retrofit2.Response
@@ -8,19 +9,19 @@ import retrofit2.Response
 interface HomeScreenRepository {
 
     fun getAlbum(albumID: String)
-    fun getCategoryPlaylist(category: String): MutableLiveData<PlaylistsPager>
-    fun getFeaturedPlaylist(): MutableLiveData<FeaturedPlaylists>
+    fun getCategoryPlaylist(category: String): MutableLiveData<List<SpotOnMusicModel>>
+    fun getFeaturedPlaylist(): MutableLiveData<List<SpotOnMusicModel>>
 
     fun getAlbumsFromFavouriteArtists(index: Int): MutableLiveData<Pager<Album>>
 
-    fun getNewReleases(): MutableLiveData<NewReleases>
-    fun getUserPlaylist(): MutableLiveData<Pager<PlaylistSimple>>
+    fun getNewReleases(): MutableLiveData<List<SpotOnMusicModel>>
+    fun getUserPlaylist(): MutableLiveData<List<SpotOnMusicModel>>
 
-    fun getRecentlyPlayed(): MutableLiveData<RecentlyPlayed>
+    fun getRecentlyPlayed(): MutableLiveData<List<SpotOnMusicModel>>
     fun getPlayList(playlistId: String): Response<Playlist>
     fun getPlaylistAsync(playlistId: String): MutableLiveData<Playlist>
     fun getGenre(index: Int, artistId: String?, items:  Pager<Track>?)
-    fun getAlbumsOfArtist(artistId: String): MutableLiveData<Pager<Album>>
+    fun getAlbumsOfArtist(artistId: String): MutableLiveData<List<SpotOnMusicModel>>
 
-    fun getBrowse(): MutableLiveData<CategoriesPager>
+    fun getBrowse(): MutableLiveData<List<SpotOnMusicModel>>
 }

@@ -2,10 +2,12 @@ package com.shaun.spotonmusic.repository
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.shaun.spotonmusic.database.model.SpotOnMusicModel
 import com.shaun.spotonmusic.network.api.RetrofitEnqueue.Companion.Result
 import com.shaun.spotonmusic.network.api.RetrofitEnqueue.Companion.enqueue
 import com.shaun.spotonmusic.network.api.SpotifyAppService
-import com.shaun.spotonmusic.network.model.RecentlyPlayed
+import com.shaun.spotonmusic.utils.TypeConverters.Companion.toListString
+import com.shaun.spotonmusic.utils.TypeConverters.Companion.toSpotOnMusicModel
 import kaaes.spotify.webapi.android.SpotifyApi
 import kaaes.spotify.webapi.android.models.*
 import retrofit.Callback
@@ -32,13 +34,13 @@ class HomeScreenRepositoryImpl @Inject constructor(
     val favouriteArtistUrl = MutableLiveData<String>()
     val secondFavouriteArtistUrl = MutableLiveData<String>()
 
-    val favouriteArtists = MutableLiveData<Pager<Artist>>()
+    val favouriteArtists = MutableLiveData<List<SpotOnMusicModel>>()
 
-    val topTracks = MutableLiveData<Pager<Track>>()
-    val seedsGenres = MutableLiveData<SeedsGenres>()
+    val topTracks = MutableLiveData<List<SpotOnMusicModel>>()
+    val seedsGenres = MutableLiveData<List<String>>()
 
-    val firstArtistRecommendations = MutableLiveData<Recommendations>()
-    val secondArtistRecommendations = MutableLiveData<Recommendations>()
+    val firstArtistRecommendations = MutableLiveData<List<SpotOnMusicModel>>()
+    val secondArtistRecommendations = MutableLiveData<List<SpotOnMusicModel>>()
 
     init {
 
@@ -70,9 +72,9 @@ class HomeScreenRepositoryImpl @Inject constructor(
     }
 
 
-    override fun getCategoryPlaylist(category: String): MutableLiveData<PlaylistsPager> {
+    override fun getCategoryPlaylist(category: String): MutableLiveData<List<SpotOnMusicModel>> {
 
-        val result = MutableLiveData<PlaylistsPager>()
+        val result = MutableLiveData<List<SpotOnMusicModel>>()
         spotify.getPlaylistsForCategory(category, mapOf(), object : Callback<PlaylistsPager> {
             override fun success(t: PlaylistsPager?, response: Response?) {
 
@@ -80,7 +82,7 @@ class HomeScreenRepositoryImpl @Inject constructor(
 
                 Log.d(TAG, "success: $response")
                 Log.d(TAG, "success: Playlist $v")
-                result.postValue(t)
+                result.postValue(t?.toSpotOnMusicModel())
             }
 
             override fun failure(error: RetrofitError?) {
@@ -93,11 +95,11 @@ class HomeScreenRepositoryImpl @Inject constructor(
     }
 
 
-    override fun getFeaturedPlaylist(): MutableLiveData<FeaturedPlaylists> {
-        val result = MutableLiveData<FeaturedPlaylists>()
+    override fun getFeaturedPlaylist(): MutableLiveData<List<SpotOnMusicModel>> {
+        val result = MutableLiveData<List<SpotOnMusicModel>>()
         spotify.getFeaturedPlaylists(map, object : Callback<FeaturedPlaylists> {
             override fun success(t: FeaturedPlaylists?, response: Response?) {
-                result.postValue(t)
+                result.postValue(t?.toSpotOnMusicModel())
 
             }
 
@@ -111,11 +113,11 @@ class HomeScreenRepositoryImpl @Inject constructor(
 
     override fun getAlbumsFromFavouriteArtists(index: Int): MutableLiveData<Pager<Album>> {
 
-        val result = MutableLiveData<Pager<Album>>()
+        val result = MutableLiveData< Pager<Album>>()
         spotify.getTopArtists(mapOf("limit" to 10), object : Callback<Pager<Artist>> {
             override fun success(t: Pager<Artist>?, response: Response?) {
 
-                favouriteArtists.postValue(t)
+                favouriteArtists.postValue(t?.toSpotOnMusicModel())
 
                 val artistId = try {
 
@@ -180,7 +182,7 @@ class HomeScreenRepositoryImpl @Inject constructor(
     private fun getTopTracks(index: Int, artistId: String?) {
         spotify.getTopTracks(mapOf("limit" to 10), object : Callback<Pager<Track>> {
             override fun success(t: Pager<Track>?, response: Response?) {
-                topTracks.postValue(t)
+                topTracks.postValue(t?.toSpotOnMusicModel())
                 Log.d(TAG, "success: Top tracks ${t?.items?.get(0)?.album?.name}")
                 getGenre(index, artistId, t)
             }
@@ -192,12 +194,12 @@ class HomeScreenRepositoryImpl @Inject constructor(
         })
     }
 
-    override fun getNewReleases(): MutableLiveData<NewReleases> {
+    override fun getNewReleases(): MutableLiveData<List<SpotOnMusicModel>> {
 
-        val result = MutableLiveData<NewReleases>()
+        val result = MutableLiveData<List<SpotOnMusicModel>>()
         spotify.getNewReleases(mapOf("country" to "IN"), object : Callback<NewReleases> {
             override fun success(t: NewReleases?, response: Response?) {
-                result.postValue(t)
+                result.postValue(t?.toSpotOnMusicModel())
             }
 
             override fun failure(error: RetrofitError?) {
@@ -211,9 +213,9 @@ class HomeScreenRepositoryImpl @Inject constructor(
     }
 
 
-    override fun getUserPlaylist(): MutableLiveData<Pager<PlaylistSimple>> {
+    override fun getUserPlaylist(): MutableLiveData<List<SpotOnMusicModel>> {
 
-        val result = MutableLiveData<Pager<PlaylistSimple>>()
+        val result = MutableLiveData<List<SpotOnMusicModel>>()
 
         spotify.getMyPlaylists(mapOf("limit" to 10), object : Callback<Pager<PlaylistSimple>> {
 
@@ -223,7 +225,7 @@ class HomeScreenRepositoryImpl @Inject constructor(
             }
 
             override fun success(t: Pager<PlaylistSimple>?, response: Response?) {
-                result.postValue(t)
+                result.postValue(t?.toSpotOnMusicModel())
             }
 
         })
@@ -231,9 +233,9 @@ class HomeScreenRepositoryImpl @Inject constructor(
     }
 
 
-    override fun getRecentlyPlayed(): MutableLiveData<RecentlyPlayed> {
+    override fun getRecentlyPlayed(): MutableLiveData<List<SpotOnMusicModel>> {
 
-        val result = MutableLiveData<RecentlyPlayed>()
+        val result = MutableLiveData<List<SpotOnMusicModel>>()
 
         val call = retrofit.getRecentlyPlayed(50, "Authorization: Bearer $accessToken")
 
@@ -241,7 +243,7 @@ class HomeScreenRepositoryImpl @Inject constructor(
 
             when (it) {
                 is Result.Success -> {
-                    result.postValue(it.response.body())
+                    result.postValue(it.response.body()?.toSpotOnMusicModel())
                 }
                 is Result.Failure -> {
                     Log.d(TAG, "getRecentlyPlayed: ${it.error}")
@@ -288,7 +290,7 @@ class HomeScreenRepositoryImpl @Inject constructor(
 
         spotify.getSeedsGenres(object : Callback<SeedsGenres> {
             override fun success(t: SeedsGenres?, response: Response?) {
-                seedsGenres.postValue(t)
+                seedsGenres.postValue(t?.toListString())
                 Log.d(TAG, "success: generes ${t?.genres}")
                 getRecommendations(index, artistId, items, t)
             }
@@ -331,9 +333,9 @@ class HomeScreenRepositoryImpl @Inject constructor(
                     Log.d(TAG, "success rec ${t?.tracks?.get(0)?.album?.name}")
 
                     if (index == 0) {
-                        firstArtistRecommendations.postValue(t)
+                        firstArtistRecommendations.postValue(t?.toSpotOnMusicModel())
                     } else {
-                        secondArtistRecommendations.postValue(t)
+                        secondArtistRecommendations.postValue(t?.toSpotOnMusicModel())
                     }
                 }
 
@@ -352,12 +354,12 @@ class HomeScreenRepositoryImpl @Inject constructor(
     }
 
 
-    override fun getAlbumsOfArtist(artistId: String): MutableLiveData<Pager<Album>> {
-        val result = MutableLiveData<Pager<Album>>()
+    override fun getAlbumsOfArtist(artistId: String): MutableLiveData<List<SpotOnMusicModel>> {
+        val result = MutableLiveData<List<SpotOnMusicModel>>()
         spotify.getArtistAlbums(artistId, map, object : Callback<Pager<Album>> {
             override fun success(t: Pager<Album>?, response: Response?) {
                 Log.d(TAG, "artist: ${t?.items?.get(0)?.name}")
-                result.postValue(t)
+                result.postValue(t?.toSpotOnMusicModel())
             }
 
             override fun failure(error: RetrofitError?) {
@@ -371,15 +373,15 @@ class HomeScreenRepositoryImpl @Inject constructor(
     }
 
 
-    override fun getBrowse(): MutableLiveData<CategoriesPager> {
+    override fun getBrowse(): MutableLiveData<List<SpotOnMusicModel>> {
 
-        val result = MutableLiveData<CategoriesPager>()
+        val result = MutableLiveData<List<SpotOnMusicModel>>()
         spotify.getCategories(
             mapOf("country" to "IN", "limit" to 50),
             object : Callback<CategoriesPager> {
                 override fun success(t: CategoriesPager?, response: Response?) {
 
-                    result.postValue(t)
+                    result.postValue(t?.toSpotOnMusicModel())
                 }
 
                 override fun failure(error: RetrofitError?) {

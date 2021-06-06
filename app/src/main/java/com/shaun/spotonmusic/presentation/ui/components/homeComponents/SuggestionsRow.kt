@@ -20,7 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.glide.rememberGlidePainter
-import com.shaun.spotonmusic.database.model.SuggestionModel
+import com.shaun.spotonmusic.database.model.SpotOnMusicModel
 import com.shaun.spotonmusic.utils.getImageUrl
 
 private const val TAG = "SuggestionsRow"
@@ -28,7 +28,7 @@ private const val TAG = "SuggestionsRow"
 
 @Composable
 fun SuggestionsRow(
-    title: String, data: List<SuggestionModel>?,
+    title: String, data: List<SpotOnMusicModel>,
     size: Int = 170,
     onCardClicked: (String) -> Unit
 ) {
@@ -50,7 +50,7 @@ fun SuggestionsRow(
         LazyRow() {
 
 
-            data?.let {
+            data.let {
 
                 it.forEachIndexed { index, item ->
                     item {
@@ -74,7 +74,6 @@ fun SuggestionsRow(
 }
 
 
-
 enum class ComponentState { Pressed, Released }
 
 
@@ -86,7 +85,7 @@ fun SuggestionCard(
     title: String,
     size: Int,
     paddingValues: Int,
-    onCardClicked:()->Unit
+    onCardClicked: () -> Unit
 ) {
 
     var toState: ComponentState by remember { mutableStateOf(ComponentState.Released) }
@@ -115,17 +114,24 @@ fun SuggestionCard(
             .width(size.dp)
 
 
+
+
     ) {
         Box(
 
             modifier = Modifier
                 .size((size * scalex).dp)
+
                 .pointerInput(Unit) {
                     detectTapGestures(
                         onPress = {
                             toState = ComponentState.Pressed
+
                             tryAwaitRelease()
                             toState = ComponentState.Released
+                        },
+                        onTap = {
+                            onCardClicked()
                         }
                     )
 
@@ -143,8 +149,6 @@ fun SuggestionCard(
                     .graphicsLayer {
                         scaleX = scalex;
                         scaleY = scaley
-                    }.clickable {
-                        onCardClicked()
                     }
 
             )

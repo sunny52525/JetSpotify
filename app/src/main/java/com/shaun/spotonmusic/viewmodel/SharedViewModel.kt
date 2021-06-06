@@ -5,13 +5,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.shaun.spotonmusic.SpotOnApplication
+import com.shaun.spotonmusic.database.model.SpotOnMusicModel
 import com.shaun.spotonmusic.di.DatastoreManager
 import com.shaun.spotonmusic.network.api.SpotifyAppService
-import com.shaun.spotonmusic.network.model.RecentlyPlayed
 import com.shaun.spotonmusic.presentation.ui.navigation.BottomNavRoutes
 import com.shaun.spotonmusic.repository.HomeScreenRepositoryImpl
+import com.shaun.spotonmusic.utils.TypeConverters.Companion.toSpotOnMusicModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kaaes.spotify.webapi.android.models.*
+import kaaes.spotify.webapi.android.models.Album
+import kaaes.spotify.webapi.android.models.Artist
+import kaaes.spotify.webapi.android.models.Pager
+import kaaes.spotify.webapi.android.models.Playlist
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -30,29 +34,30 @@ class SharedViewModel @Inject constructor(
 
     private val _currentScreen = MutableLiveData<BottomNavRoutes>(BottomNavRoutes.Home)
     val currentScreen: LiveData<BottomNavRoutes> = _currentScreen
-    private var accessToken =datastoreManager.accessToken
+    private var accessToken = datastoreManager.accessToken
     private lateinit var repo: HomeScreenRepositoryImpl
     private var albums = MutableLiveData<Album>()
 
-    var moodAlbum = MutableLiveData<PlaylistsPager>()
-    var partyAlbum = MutableLiveData<PlaylistsPager>()
-    var featuredPlaylists = MutableLiveData<FeaturedPlaylists>()
+    var moodAlbum = MutableLiveData<List<SpotOnMusicModel>>()
+    var partyAlbum = MutableLiveData<List<SpotOnMusicModel>>()
+    var featuredPlaylists = MutableLiveData<List<SpotOnMusicModel>>()
     var favouriteArtist = MutableLiveData<Pager<Album>>()
     var favouriteArtistImage = MutableLiveData<String>()
     var secondFavouriteArtistImage = MutableLiveData<String>()
     var tokenExpired = MutableLiveData<Boolean>()
-    var newReleases = MutableLiveData<NewReleases>()
-    var getMyPlayList = MutableLiveData<Pager<PlaylistSimple>>()
-    var recentlyPlayed = MutableLiveData<RecentlyPlayed>()
+    var newReleases = MutableLiveData<List<SpotOnMusicModel>>()
+    var getMyPlayList = MutableLiveData<List<SpotOnMusicModel>>()
+    var recentlyPlayed = MutableLiveData<List<SpotOnMusicModel>>()
     var secondFavouriteArtist = MutableLiveData<Pager<Album>>()
 
-    var favouriteArtists = MutableLiveData<Pager<Artist>>()
-    var charts = MutableLiveData<List<Playlist>>()
+    var favouriteArtists =
+        MutableLiveData<List<SpotOnMusicModel>>()
+    var charts = MutableLiveData<List<SpotOnMusicModel>>()
 
-    var firstFavouriteArtistRecommendations = MutableLiveData<Recommendations>()
-    var secondFavouriteArtistRecommendations = MutableLiveData<Recommendations>()
+    var firstFavouriteArtistRecommendations = MutableLiveData<List<SpotOnMusicModel>>()
+    var secondFavouriteArtistRecommendations = MutableLiveData<List<SpotOnMusicModel>>()
 
-    var categoriesPager = MutableLiveData<CategoriesPager>()
+    var categoriesPager = MutableLiveData<List<SpotOnMusicModel>>()
 
 
     init {
@@ -104,7 +109,7 @@ class SharedViewModel @Inject constructor(
         _currentScreen.value = routes
     }
 
-    fun getArtistAlbums(artistId: String): MutableLiveData<Pager<Album>> {
+    fun getArtistAlbums(artistId: String): MutableLiveData<List<SpotOnMusicModel>> {
         return repo.getAlbumsOfArtist(artistId = artistId)
     }
 
@@ -141,7 +146,7 @@ class SharedViewModel @Inject constructor(
                 val response = responses.map {
                     it.body()!!
                 }
-                charts.postValue(response)
+                charts.postValue(response.toSpotOnMusicModel())
 
 
             }

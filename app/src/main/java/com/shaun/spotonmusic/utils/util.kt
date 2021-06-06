@@ -38,24 +38,24 @@ fun getGreeting(): String {
 
 
 
-fun getImageUrl(list: List<Image>, demand: Int): String {
+fun getImageUrl(list: List<String>, demand: Int): String {
 
 
     when (list.size) {
         3 -> {
             if (demand == 0)
-                return list[2].url
+                return list[2]
             if (demand == 1)
-                return list[1].url
-            return list[0].url
+                return list[1]
+            return list[0]
         }
         2 -> {
             return if (demand == 2)
-                list[0].url
-            else list[1].url
+                list[0]
+            else list[1]
         }
         1 -> {
-            return list[0].url
+            return list[0]
         }
         else -> return ""
     }

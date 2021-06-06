@@ -13,23 +13,23 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.shaun.spotonmusic.database.model.SpotOnMusicModel
 import com.shaun.spotonmusic.presentation.ui.components.searchComponents.SearchBar
 import com.shaun.spotonmusic.presentation.ui.components.searchComponents.SearchGrid
 import com.shaun.spotonmusic.presentation.ui.components.searchComponents.SearchHeading
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.gridColors
 import com.shaun.spotonmusic.viewmodel.SharedViewModel
-import kaaes.spotify.webapi.android.models.CategoriesPager
 
 private const val TAG = "Search"
 
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @Composable
-fun Search(sharedViewModel: SharedViewModel,onSearchClicked:()->Unit) {
+fun Search(sharedViewModel: SharedViewModel, onSearchClicked: () -> Unit) {
 
-    val categories: CategoriesPager by sharedViewModel.categoriesPager.observeAsState(
-        CategoriesPager()
+    val categories: List<SpotOnMusicModel> by sharedViewModel.categoriesPager.observeAsState(
+        listOf()
     )
 
 
@@ -52,7 +52,7 @@ fun Search(sharedViewModel: SharedViewModel,onSearchClicked:()->Unit) {
         }
 
 
-        categories.categories?.items?.let {
+        categories.let {
 
             if (gridColors?.size!! > 2)
                 for (i in 0..it.size step (2)) {
@@ -62,9 +62,9 @@ fun Search(sharedViewModel: SharedViewModel,onSearchClicked:()->Unit) {
 
                         SearchGrid(
                             albumId = Pair(it[i].id, it[i + 1].id),
-                            imageUrl = Pair(it[i].icons[0].url, it[i + 1].icons[0].url),
-                            title = Pair(it[i].name, it[i + 1].name),
-                            color = Pair(gridColors[i], gridColors?.get(i + 1))
+                            imageUrl = Pair(it[i].imageUrls[0], it[i + 1].imageUrls[0]),
+                            title = Pair(it[i].title, it[i + 1].title),
+                            color = Pair(gridColors[i], gridColors[i + 1])
                         )
                     }
                 }

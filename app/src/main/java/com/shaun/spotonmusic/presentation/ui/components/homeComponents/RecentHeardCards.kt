@@ -18,9 +18,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.glide.rememberGlidePainter
-import com.shaun.spotonmusic.network.model.RecentlyPlayed
-import com.shaun.spotonmusic.network.model.RecentlyPlayedItem
+import com.shaun.spotonmusic.database.model.SpotOnMusicModel
 import com.shaun.spotonmusic.ui.theme.spotifyGray
+import com.shaun.spotonmusic.utils.getImageUrl
 
 
 @Composable
@@ -69,22 +69,22 @@ fun RecentHeardCards(
 }
 
 @Composable
-fun RecentHeardBlock(recentlyPlayed: RecentlyPlayed?) {
+fun RecentHeardBlock(recentlyPlayed: List<SpotOnMusicModel>) {
 
-    if (recentlyPlayed?.items == null)
+    if (recentlyPlayed.isEmpty())
         return
 
-    val recentlyPlayedArray: List<RecentlyPlayedItem> = recentlyPlayed.items.distinctBy {
-        it.track.album.name
+    val recentlyPlayedArray: List<SpotOnMusicModel> = recentlyPlayed.distinctBy {
+        it.title
     }
 
     val length = recentlyPlayedArray.size
 
     val name = recentlyPlayedArray.subList(0, 6.coerceAtMost(length)).map {
-        if (it.track.album.name.length > 15) {
-            Pair(it.track.album.name.substring(0, 14) + "...", it.track.album.images[0].url)
+        if (it.title.length > 15) {
+            Pair(it.title.substring(0, 14) + "...", getImageUrl(it.imageUrls,1))
         } else {
-            Pair(it.track.album.name, it.track.album.images[0].url)
+            Pair(it.title, getImageUrl(it.imageUrls,1))
         }
     }
 

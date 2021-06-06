@@ -19,15 +19,15 @@ import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import androidx.palette.graphics.Palette
-import com.shaun.spotonmusic.network.model.RecentlyPlayed
+import com.shaun.spotonmusic.database.model.SpotOnMusicModel
 import com.shaun.spotonmusic.presentation.ui.components.homeComponents.*
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.blue
-import com.shaun.spotonmusic.utils.TypeConverters.Companion.toSuggestionModel
 import com.shaun.spotonmusic.utils.getBitmapFromURL
 import com.shaun.spotonmusic.utils.getGreeting
 import com.shaun.spotonmusic.viewmodel.SharedViewModel
-import kaaes.spotify.webapi.android.models.*
+import kaaes.spotify.webapi.android.models.Album
+import kaaes.spotify.webapi.android.models.Pager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -53,10 +53,10 @@ fun Home(
         mutableStateOf(listOf(blue, black))
     }
 
-    val playList: PlaylistsPager by viewModel.moodAlbum.observeAsState(PlaylistsPager())
-    val party: PlaylistsPager by viewModel.partyAlbum.observeAsState(PlaylistsPager())
-    val featuredPlaylists: FeaturedPlaylists by viewModel.featuredPlaylists.observeAsState(
-        FeaturedPlaylists()
+    val playList: List<SpotOnMusicModel> by viewModel.moodAlbum.observeAsState(listOf())
+    val party: List<SpotOnMusicModel> by viewModel.partyAlbum.observeAsState(listOf())
+    val featuredPlaylists: List<SpotOnMusicModel> by viewModel.featuredPlaylists.observeAsState(
+        listOf()
     )
     val favouriteArtistSongs: Pager<Album> by viewModel.favouriteArtist.observeAsState(Pager<Album>())
     val secondFavouriteArtistSongs: Pager<Album> by viewModel.secondFavouriteArtist.observeAsState(
@@ -64,16 +64,18 @@ fun Home(
     )
     val favouriteArtistImage: String by viewModel.favouriteArtistImage.observeAsState("")
     val secondFavouriteArtistImage: String by viewModel.secondFavouriteArtistImage.observeAsState("")
-    val newReleases: NewReleases by viewModel.newReleases.observeAsState(NewReleases())
-    val myPlayList: Pager<PlaylistSimple> by viewModel.getMyPlayList.observeAsState(Pager<PlaylistSimple>())
-    val recentlyPlayed: RecentlyPlayed by viewModel.recentlyPlayed.observeAsState(initial = RecentlyPlayed())
-    val favouriteArtists: Pager<Artist> by viewModel.favouriteArtists.observeAsState(initial = Pager<Artist>())
-    val charts: List<Playlist> by viewModel.charts.observeAsState(initial = ArrayList())
+    val newReleases: List<SpotOnMusicModel> by viewModel.newReleases.observeAsState(listOf())
+    val myPlayList: List<SpotOnMusicModel> by viewModel.getMyPlayList.observeAsState(listOf())
+    val recentlyPlayed: List<SpotOnMusicModel> by viewModel.recentlyPlayed.observeAsState(initial = listOf())
+    val favouriteArtists: List<SpotOnMusicModel> by viewModel.favouriteArtists.observeAsState(
+        initial = listOf()
+    )
+    val charts: List<SpotOnMusicModel> by viewModel.charts.observeAsState(initial = ArrayList())
 
-    val firstFavouriteArtistRecommendations: Recommendations by viewModel
-        .firstFavouriteArtistRecommendations.observeAsState(initial = Recommendations())
-    val secondFavouriteArtistRecommendations: Recommendations by viewModel
-        .secondFavouriteArtistRecommendations.observeAsState(initial = Recommendations())
+    val firstFavouriteArtistRecommendations: List<SpotOnMusicModel> by viewModel
+        .firstFavouriteArtistRecommendations.observeAsState(initial = listOf())
+    val secondFavouriteArtistRecommendations: List<SpotOnMusicModel> by viewModel
+        .secondFavouriteArtistRecommendations.observeAsState(initial = listOf())
 
 
 
@@ -81,7 +83,7 @@ fun Home(
     viewModel.recentlyPlayed.observeForever {
         if (it != null) {
             GlobalScope.launch {
-                val myBitmap = getBitmapFromURL(it.items[0].track.album.images[0].url)
+                val myBitmap = getBitmapFromURL(it[0].imageUrls[0])
                 withContext(Dispatchers.Main) {
 
                     if (myBitmap != null && !myBitmap.isRecycled) {
@@ -153,42 +155,42 @@ fun Home(
 
             item {
                 SuggestionsRow(
-                    data = playList.toSuggestionModel(),
-                    title = "Mood",
-                    onCardClicked = {
-                        onPlayListClicked(it)
-                    })
+                    data = playList,
+                    title = "Mood"
+                ) {
+                    onPlayListClicked(it)
+                }
             }
             item {
                 FavouriteArtistSongs(
                     title = "For the fans of",
                     data = favouriteArtistSongs,
-                    favouriteArtistImage, albumClicked = {
-                        Log.d(TAG, "Home:Lana ")
-                        onAlbumClicked(it)
-                    }
-                )
+                    favouriteArtistImage
+                ) {
+                    Log.d(TAG, "Home:Lana ")
+                    onAlbumClicked(it)
+                }
 
             }
 
             item {
-                SuggestionsRow("Your Playlists", myPlayList.toSuggestionModel(), onCardClicked = {
+                SuggestionsRow("Your Playlists", myPlayList) {
                     onUserPlayListClicked(it)
-                })
+                }
             }
             item {
-                SuggestionsRow(data = party.toSuggestionModel(), title = "Party", onCardClicked = {
+                SuggestionsRow(data = party, title = "Party") {
                     onPlayListClicked(it)
-                })
+                }
             }
 
             item {
                 SuggestionsRow(
                     title = "Recently Played",
-                    data = recentlyPlayed.toSuggestionModel(),
-                    onCardClicked = {
-                        onAlbumClicked(it)
-                    })
+                    data = recentlyPlayed
+                ) {
+                    onAlbumClicked(it)
+                }
             }
 
 
@@ -205,21 +207,20 @@ fun Home(
             item {
 
                 SuggestionsRow(
-                    data = featuredPlaylists.toSuggestionModel(),
-                    title = "Featured Playlists",
-                    onCardClicked = {
-                        onPlayListClicked(it)
-                    }
-                )
+                    data = featuredPlaylists,
+                    title = "Featured Playlists"
+                ) {
+                    onPlayListClicked(it)
+                }
             }
             item {
                 SuggestionsRow(
                     title = "Charts",
-                    data = charts.toSuggestionModel(),
-                    size = 150,
-                    onCardClicked = {
-                        onPlayListClicked(it)
-                    })
+                    data = charts,
+                    size = 150
+                ) {
+                    onPlayListClicked(it)
+                }
             }
 
 
@@ -238,30 +239,29 @@ fun Home(
                 FavouriteArtistSongs(
                     title = "For the fans of",
                     data = secondFavouriteArtistSongs,
-                    secondFavouriteArtistImage,
-                    albumClicked = {
-                        onAlbumClicked(it)
-                    }
-                )
+                    secondFavouriteArtistImage
+                ) {
+                    onAlbumClicked(it)
+                }
             }
 
             item {
                 SuggestionsRow(
                     title = "Your Favourites",
-                    data = favouriteArtists.toSuggestionModel(),
-                    onCardClicked = {
-                        onArtistClicked(it)
-                    })
+                    data = favouriteArtists
+                ) {
+                    onArtistClicked(it)
+                }
             }
 
 
             item {
                 SuggestionsRow(
-                    data = newReleases.toSuggestionModel(),
-                    title = "New Releases",
-                    onCardClicked = {
-                        onAlbumClicked(it)
-                    })
+                    data = newReleases,
+                    title = "New Releases"
+                ) {
+                    onAlbumClicked(it)
+                }
             }
 
 

@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.glide.rememberGlidePainter
 import com.shaun.spotonmusic.R
 import com.shaun.spotonmusic.database.model.LibraryModel
+import com.shaun.spotonmusic.utils.TypeConverters.Companion.toListString
 import com.shaun.spotonmusic.utils.getImageUrl
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
@@ -114,8 +115,8 @@ fun LibraryItemRow(
                         type = Pair(item[i].type, item[i + 1].title),
                         owner = Pair(item[i].owner, item[i + 1].owner),
                         imageUrl = Pair(
-                            getImageUrl(item[i].imageUrl, 1),
-                            getImageUrl(item[i + 1].imageUrl, 1)
+                            getImageUrl(item[i].imageUrl.toListString(), 1),
+                            getImageUrl(item[i + 1].imageUrl.toListString(), 1)
                         )
                     )
 
@@ -135,7 +136,7 @@ fun LibraryItemRow(
                         type = Pair(item[i].type, ""),
                         owner = Pair(item[i].owner, ""),
                         imageUrl = Pair(
-                            getImageUrl(item[i].imageUrl, 1),
+                            getImageUrl(item[i].imageUrl.toListString(), 1),
                             ""
                         ),
                         count = 1

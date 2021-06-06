@@ -1,34 +1,38 @@
 package com.shaun.spotonmusic.utils
 
-import com.shaun.spotonmusic.database.model.SuggestionModel
+import com.shaun.spotonmusic.database.model.SpotOnMusicModel
 import com.shaun.spotonmusic.network.model.RecentlyPlayed
 import kaaes.spotify.webapi.android.models.*
 
 class TypeConverters {
 
     companion object {
-        fun Pager<Artist>.toSuggestionModel(): List<SuggestionModel>? {
+        fun Pager<Artist>.toSpotOnMusicModel(): List<SpotOnMusicModel>? {
 
             return this.items?.map {
-                SuggestionModel(
+                SpotOnMusicModel(
                     title = it.name,
                     type = "artist",
                     id = it.id,
-                    imageUrls = it.images
+                    imageUrls = it.images.map { image ->
+                        image.url
+                    }
                 )
             }
         }
 
         @JvmName("toSuggestionModelAlbum")
-        fun Pager<Album>.toSuggestionModel(): List<SuggestionModel>? {
+        fun Pager<Album>.toSpotOnMusicModel(): List<SpotOnMusicModel>? {
 
             return this.items?.map {
 
-                SuggestionModel(
+                SpotOnMusicModel(
                     title = it.name,
                     type = "album",
                     id = it.id,
-                    imageUrls = it.images
+                    imageUrls = it.images.map { image ->
+                        image.url
+                    }
                 )
             }
 
@@ -36,12 +40,14 @@ class TypeConverters {
 
 
         @JvmName("toSuggestionModelPlaylistSimple")
-        fun Pager<PlaylistSimple>.toSuggestionModel(): List<SuggestionModel>? {
+        fun Pager<PlaylistSimple>.toSpotOnMusicModel(): List<SpotOnMusicModel>? {
 
             return this.items?.map {
-                SuggestionModel(
+                SpotOnMusicModel(
                     title = it.name,
-                    imageUrls = it.images,
+                    imageUrls = it.images.map { image ->
+                        image.url
+                    },
                     id = it.id,
                     type = "playlist"
                 )
@@ -49,11 +55,13 @@ class TypeConverters {
         }
 
 
-        fun RecentlyPlayed.toSuggestionModel(): List<SuggestionModel> {
+        fun RecentlyPlayed.toSpotOnMusicModel(): List<SpotOnMusicModel> {
             return this.items.map {
-                SuggestionModel(
+                SpotOnMusicModel(
                     title = it.track.name,
-                    imageUrls = it.track.album.images,
+                    imageUrls = it.track.album.images.map { image ->
+                        image.url
+                    },
                     id = it.track.album.id,
                     type = "album"
                 )
@@ -61,22 +69,26 @@ class TypeConverters {
         }
 
 
-        fun Recommendations.toSuggestionModel(): List<SuggestionModel>? {
+        fun Recommendations.toSpotOnMusicModel(): List<SpotOnMusicModel>? {
             return this.tracks?.map {
-                SuggestionModel(
+                SpotOnMusicModel(
                     title = it.album.name,
-                    imageUrls = it.album.images,
+                    imageUrls = it.album.images.map { image ->
+                        image.url
+                    },
                     type = "album",
                     id = it.album.id
                 )
             }
         }
 
-        fun PlaylistsPager.toSuggestionModel(): List<SuggestionModel>? {
+        fun PlaylistsPager.toSpotOnMusicModel(): List<SpotOnMusicModel>? {
             return this.playlists?.items?.map {
-                SuggestionModel(
+                SpotOnMusicModel(
                     title = it.name,
-                    imageUrls = it.images,
+                    imageUrls = it.images.map { image ->
+                        image.url
+                    },
                     type = "playlist",
                     id = it.id
                 )
@@ -84,41 +96,88 @@ class TypeConverters {
         }
 
 
-        fun NewReleases.toSuggestionModel(): List<SuggestionModel>? {
+        fun NewReleases.toSpotOnMusicModel(): List<SpotOnMusicModel>? {
             return this.albums?.items?.map {
-                SuggestionModel(
+                SpotOnMusicModel(
                     title = it.name,
-                    imageUrls = it.images,
+                    imageUrls = it.images.map { image ->
+                        image.url
+                    },
                     type = "album",
                     id = it.id
                 )
             }
         }
-        fun List<Playlist>.toSuggestionModel(): List<SuggestionModel> {
+
+        fun List<Playlist>.toSpotOnMusicModel(): List<SpotOnMusicModel> {
 
             return this.map {
 
-                SuggestionModel(
+                SpotOnMusicModel(
                     title = it.description,
                     type = "album",
                     id = it.id,
-                    imageUrls = it.images
+                    imageUrls = it.images.map { image ->
+                        image.url
+                    }
                 )
             }
         }
 
 
-        fun FeaturedPlaylists.toSuggestionModel(): List<SuggestionModel>? {
+        fun FeaturedPlaylists.toSpotOnMusicModel(): List<SpotOnMusicModel>? {
 
-            return  this.playlists?.items?.map {
-                SuggestionModel( title = it.name,
-                type = "playlist",
-                id = it.id,
-                imageUrls = it.images)
+            return this.playlists?.items?.map {
+                SpotOnMusicModel(
+                    title = it.name,
+                    type = "playlist",
+                    id = it.id,
+                    imageUrls = it.images.map { image ->
+                        image.url
+                    }
+                )
+            }
+        }
+
+        @JvmName("toSuggestionModelTrack")
+        fun Pager<Track>.toSpotOnMusicModel(): List<SpotOnMusicModel> {
+
+            return this.items.map {
+                SpotOnMusicModel(
+                    id = it.id,
+                    imageUrls = it.album.images.map { image ->
+                        image.url
+                    },
+                    type = "track",
+                    title = it.name
+                )
             }
         }
 
 
+        fun SeedsGenres.toListString():List<String>{
+            return this.genres
+        }
 
+
+        fun CategoriesPager.toSpotOnMusicModel():List<SpotOnMusicModel>{
+            return this.categories.items.map {
+                SpotOnMusicModel(
+                    id = it.id,
+                    imageUrls =it.icons.map {
+                        it.url
+                    },
+                    title = it.name,
+                    type = "genre"
+                )
+            }
+        }
+
+        fun List<Image>.toListString():List<String>{
+            return this.map {
+                it.url
+            }
+        }
     }
+
 }
