@@ -15,7 +15,7 @@ import javax.inject.Singleton
 private val Context.dataStore by preferencesDataStore("accesstoken")
 
 
-@Singleton
+
 class DatastoreManager @Inject constructor(@ApplicationContext appContext: Context) {
 
     private val accessTokenDatastore = appContext.dataStore

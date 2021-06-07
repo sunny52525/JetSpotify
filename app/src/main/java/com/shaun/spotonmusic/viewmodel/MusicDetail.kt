@@ -1,5 +1,6 @@
 package com.shaun.spotonmusic.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
@@ -21,14 +22,8 @@ class MusicDetail @Inject constructor(
     private var repository: MusicDetailRepositoryImpl =
         MusicDetailRepositoryImpl(accessToken = accessToken.toString(), spotifyAppService)
 
-    var tokenExpired = MutableLiveData<Boolean>()
-
-    var albumDetail = MutableLiveData<Album>()
-
 
     var id = MutableLiveData("")
-
-
     var playList = Transformations.switchMap(id) {
         repository.getPlaylistAsync(it)
     }
@@ -43,7 +38,10 @@ class MusicDetail @Inject constructor(
 
 
     fun newPlaylist(playlistId: String) {
+        Log.d(TAG, "newPlaylist: Called")
 
+        if (id.value == playlistId)
+            return
         id.value = playlistId
 
     }

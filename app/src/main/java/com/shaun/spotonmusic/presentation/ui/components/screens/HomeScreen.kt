@@ -37,7 +37,6 @@ import com.shaun.spotonmusic.presentation.ui.navigation.Routes
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.spotifyGray
 import com.shaun.spotonmusic.viewmodel.LibraryViewModel
-import com.shaun.spotonmusic.viewmodel.MusicDetail
 import com.shaun.spotonmusic.viewmodel.SharedViewModel
 import kotlinx.coroutines.CoroutineScope
 
@@ -55,7 +54,6 @@ fun HomeScreen(
 
     val homeViewModel: SharedViewModel = viewModel()
     val libraryViewModel: LibraryViewModel = viewModel()
-    val musicDetailViewModel: MusicDetail = viewModel()
 
 
     libraryViewModel.tokenExpired.observeForever {
@@ -126,8 +124,7 @@ fun HomeScreen(
                     },
                     modalBottomSheetState = state,
                     libraryViewModel = libraryViewModel,
-                    scope = scope,
-                    playDetail = musicDetailViewModel
+                    scope = scope
                 )
             }
 
@@ -214,8 +211,7 @@ fun HomeScreenNavigationConfiguration(
     tokenExpired: () -> Unit,
     modalBottomSheetState: ModalBottomSheetState,
     libraryViewModel: LibraryViewModel,
-    scope: CoroutineScope,
-    playDetail: MusicDetail
+    scope: CoroutineScope
 
 ) {
     val listState = rememberLazyListState()
@@ -269,16 +265,11 @@ fun HomeScreenNavigationConfiguration(
         composable(Routes.AlbumDetail.route + "/{id}") {
 
             val id = it.arguments?.getString("id")
-            id?.let { it1 ->
 
-                Log.d("TAG", "MOOD: $it1")
-                playDetail.newPlaylist(it1)
-            }
 
             EnterAnimation {
 
                 PlaylistDetail(
-                    playDetail,
                     id
                 )
 

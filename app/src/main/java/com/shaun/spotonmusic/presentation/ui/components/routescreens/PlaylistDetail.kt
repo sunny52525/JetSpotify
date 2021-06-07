@@ -1,5 +1,6 @@
 package com.shaun.spotonmusic.presentation.ui.components.routescreens
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,7 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.shaun.spotonmusic.presentation.ui.components.albumcomponents.AnimatedToolBar
 import com.shaun.spotonmusic.presentation.ui.components.albumcomponents.BoxTopSection
 import com.shaun.spotonmusic.presentation.ui.components.albumcomponents.SongList
@@ -28,12 +29,18 @@ private const val TAG: String = "PlayListDetail"
 
 @ExperimentalFoundationApi
 @Composable
-fun PlaylistDetail(viewModel: MusicDetail, id: String?) {
+fun PlaylistDetail(id: String?) {
 
-//    val view = viewModel(MusicDetail::class.java)
+    val viewModel = hiltViewModel<MusicDetail>()
 
-    val currentAlbum: Playlist?
-            by viewModel.playList.observeAsState(initial = Playlist())
+
+
+    id?.let { viewModel.newPlaylist(it) }
+
+
+    val currentAlbum
+//    = Playlist()
+    : Playlist? by viewModel.playList.observeAsState(initial = Playlist())
 
 
     val colors = remember {
