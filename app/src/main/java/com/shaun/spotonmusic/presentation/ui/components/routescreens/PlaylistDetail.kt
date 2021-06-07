@@ -20,17 +20,26 @@ import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
 import com.shaun.spotonmusic.utils.PaletteExtractor
 import com.shaun.spotonmusic.viewmodel.MusicDetail
 import kaaes.spotify.webapi.android.models.Playlist
+import kaaes.spotify.webapi.android.models.UserPrivate
 
 
 private const val TAG: String = "PlayListDetail"
 
 @ExperimentalFoundationApi
 @Composable
-fun PlaylistDetail(id: String?) {
+fun PlaylistDetail(id: String?, myDetails: UserPrivate?) {
 
     val viewModel = hiltViewModel<MusicDetail>()
     var follow by remember {
         mutableStateOf(false)
+    }
+
+
+
+
+    viewModel.followsPlaylist(id.toString(), myDetails?.id.toString()).observeForever {
+        if (it != null)
+            follow = it
     }
 
     Log.d(TAG, "PlaylistDetail: $id")
@@ -59,7 +68,8 @@ fun PlaylistDetail(id: String?) {
 
     Box(
         modifier = Modifier
-            .fillMaxSize().background(spotifyDarkBlack)
+            .fillMaxSize()
+            .background(spotifyDarkBlack)
 
 
     ) {
@@ -83,9 +93,9 @@ fun PlaylistDetail(id: String?) {
 
             tracks = currentAlbum?.tracks,
             onFollowClicked = {
-                follow = !follow
-            }
-
+                viewModel.follows.postValue(!follow)
+            },
+            viewModel = viewModel,
         )
         AnimatedToolBar(
             album = currentAlbum?.name ?: "",

@@ -38,6 +38,7 @@ import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.spotifyGray
 import com.shaun.spotonmusic.viewmodel.LibraryViewModel
 import com.shaun.spotonmusic.viewmodel.SharedViewModel
+import kaaes.spotify.webapi.android.models.UserPrivate
 import kotlinx.coroutines.CoroutineScope
 
 @ExperimentalFoundationApi
@@ -216,10 +217,14 @@ fun HomeScreenNavigationConfiguration(
 ) {
     val listState = rememberLazyListState()
     val listStateLibrary = rememberLazyListState()
+
+
+
+
+
     NavHost(
         navController = navHostController,
         startDestination = BottomNavRoutes.Home.route,
-//        startDestination = Routes.AlbumDetail.route,
         modifier = Modifier.background(
             black
         )
@@ -266,11 +271,12 @@ fun HomeScreenNavigationConfiguration(
 
             val id = it.arguments?.getString("id")
 
+            val myDetails: UserPrivate by viewModel.myDetails.observeAsState(UserPrivate())
 
             EnterAnimation {
-
                 PlaylistDetail(
-                    id
+                    id,
+                    myDetails
                 )
 
             }

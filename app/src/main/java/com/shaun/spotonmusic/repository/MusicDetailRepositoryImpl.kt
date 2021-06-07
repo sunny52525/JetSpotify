@@ -10,6 +10,7 @@ import kaaes.spotify.webapi.android.models.Album
 import kaaes.spotify.webapi.android.models.Playlist
 import retrofit.Callback
 import retrofit.RetrofitError
+import retrofit.client.Response
 import javax.inject.Inject
 
 class MusicDetailRepositoryImpl @Inject constructor(
@@ -60,6 +61,51 @@ class MusicDetailRepositoryImpl @Inject constructor(
 
         return result
 
+    }
+
+
+    fun hasLikedThisSong(id: String): MutableLiveData<Boolean> {
+
+        val result = MutableLiveData<Boolean>()
+        spotify.containsMySavedTracks(id, object : Callback<BooleanArray> {
+            override fun success(t: BooleanArray?, response: Response?) {
+
+
+                result.postValue(t?.get(0))
+            }
+
+            override fun failure(error: RetrofitError?) {
+                Log.d(TAG, "failure: $error")
+            }
+
+        })
+        return result
+    }
+
+
+    fun followsPlayList(playList: String, userId: String): MutableLiveData<Boolean> {
+        val result = MutableLiveData<Boolean>(false)
+
+        val call = retrofit.followsPlaylist(
+            playList,
+            userId = userId,
+            "Authorization: Bearer $accessToken"
+        )
+
+        call.enqueue {
+            when (it) {
+                is Result.Success -> {
+                    Log.d(TAG, "followsPlayList: ${it.response.body()?.get(0)}")
+                    result.postValue(it.response.body()?.get(0))
+                }
+                is Result.Failure -> {
+
+                    Log.d(TAG, "followsPlayList: ${it.error}")
+                }
+            }
+        }
+
+        return result
     }
 
 

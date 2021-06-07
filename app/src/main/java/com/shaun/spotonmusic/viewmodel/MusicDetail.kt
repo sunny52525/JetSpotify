@@ -28,10 +28,16 @@ class MusicDetail @Inject constructor(
         repository.getPlaylistAsync(it)
     }
 
+    var userId = MutableLiveData("")
+
+    var follows = MutableLiveData(false)
+
+
     fun getAlbum(id: String): MutableLiveData<Album> {
 
         if (id.isEmpty())
             return MutableLiveData(Album())
+
 
         return repository.getAlbum(id)
     }
@@ -40,12 +46,31 @@ class MusicDetail @Inject constructor(
     fun newPlaylist(playlistId: String) {
         Log.d(TAG, "newPlaylist: Called")
 
+
         if (id.value == playlistId)
             return
+
         id.value = playlistId
 
     }
 
+
+    fun hasLikedThisSong(songId: String): MutableLiveData<Boolean> {
+        return repository.hasLikedThisSong(songId)
+    }
+
+    fun followsPlaylist(playlistId: String, userId: String): MutableLiveData<Boolean> {
+
+
+        Log.d(TAG, "followsPlaylist: ${follows.value}")
+        if (this.id.value == playlistId && userId == this.userId.value)
+            return follows
+
+        this.userId.postValue(userId)
+        follows = repository.followsPlayList(playList = playlistId, userId = userId)
+
+        return follows
+    }
 
     companion object {
         private const val TAG = "MusicDetail"

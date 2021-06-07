@@ -113,7 +113,7 @@ class HomeScreenRepositoryImpl @Inject constructor(
 
     override fun getAlbumsFromFavouriteArtists(index: Int): MutableLiveData<Pager<Album>> {
 
-        val result = MutableLiveData< Pager<Album>>()
+        val result = MutableLiveData<Pager<Album>>()
         spotify.getTopArtists(mapOf("limit" to 10), object : Callback<Pager<Artist>> {
             override fun success(t: Pager<Artist>?, response: Response?) {
 
@@ -239,7 +239,7 @@ class HomeScreenRepositoryImpl @Inject constructor(
 
         val call = retrofit.getRecentlyPlayed(50, "Authorization: Bearer $accessToken")
 
-        call.enqueue{
+        call.enqueue {
 
             when (it) {
                 is Result.Success -> {
@@ -390,6 +390,22 @@ class HomeScreenRepositoryImpl @Inject constructor(
                 }
 
             })
+        return result
+    }
+
+
+    fun getUserDetail(): MutableLiveData<UserPrivate> {
+        val result=MutableLiveData<UserPrivate>()
+        spotify.getMe(object : Callback<UserPrivate> {
+            override fun success(t: UserPrivate?, response: Response?) {
+                result.postValue(t)
+            }
+
+            override fun failure(error: RetrofitError?) {
+                Log.d(TAG, "failure: $error")
+            }
+
+        })
         return result
     }
 

@@ -15,6 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kaaes.spotify.webapi.android.models.Album
 import kaaes.spotify.webapi.android.models.Pager
 import kaaes.spotify.webapi.android.models.Playlist
+import kaaes.spotify.webapi.android.models.UserPrivate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -59,17 +60,23 @@ class SharedViewModel @Inject constructor(
     var categoriesPager = MutableLiveData<List<SpotOnMusicModel>>()
 
 
+    var myDetails = MutableLiveData<UserPrivate>()
+
     init {
         getAccessToken()
 
     }
+
 
     private fun setToken() {
         repo = HomeScreenRepositoryImpl(accessToken.toString(), retrofit)
         albums = repo.album
 
 
+
         Log.d(TAG, "setToken: $accessToken")
+
+        myDetails = repo.getUserDetail()
         getCharts()
 
         tokenExpired = repo.tokenExpired
