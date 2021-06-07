@@ -1,4 +1,4 @@
-package com.shaun.spotonmusic.presentation.ui.components.homeComponents
+package com.shaun.spotonmusic.presentation.ui.components.homecomponents
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

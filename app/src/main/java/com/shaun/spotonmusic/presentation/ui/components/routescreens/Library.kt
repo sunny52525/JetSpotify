@@ -1,4 +1,4 @@
-package com.shaun.spotonmusic.presentation.ui.components.routeScreens
+package com.shaun.spotonmusic.presentation.ui.components.routescreens
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -13,8 +13,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import com.shaun.spotonmusic.database.model.LibraryModel
-import com.shaun.spotonmusic.presentation.ui.components.libraryComponents.Header
-import com.shaun.spotonmusic.presentation.ui.components.libraryComponents.LibraryItemRow
+import com.shaun.spotonmusic.presentation.ui.components.librarycomponents.Header
+import com.shaun.spotonmusic.presentation.ui.components.librarycomponents.LibraryItemRow
 import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
 import com.shaun.spotonmusic.viewmodel.LibraryViewModel
 import com.shaun.spotonmusic.viewmodel.SharedViewModel

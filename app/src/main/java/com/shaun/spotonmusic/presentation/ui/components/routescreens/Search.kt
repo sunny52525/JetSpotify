@@ -1,6 +1,7 @@
-package com.shaun.spotonmusic.presentation.ui.components.routeScreens
+package com.shaun.spotonmusic.presentation.ui.components.routescreens
 
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
@@ -14,9 +15,9 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.shaun.spotonmusic.database.model.SpotOnMusicModel
-import com.shaun.spotonmusic.presentation.ui.components.searchComponents.SearchBar
-import com.shaun.spotonmusic.presentation.ui.components.searchComponents.SearchGrid
-import com.shaun.spotonmusic.presentation.ui.components.searchComponents.SearchHeading
+import com.shaun.spotonmusic.presentation.ui.components.searchcomponents.SearchBar
+import com.shaun.spotonmusic.presentation.ui.components.searchcomponents.SearchGrid
+import com.shaun.spotonmusic.presentation.ui.components.searchcomponents.SearchHeading
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.gridColors
 import com.shaun.spotonmusic.viewmodel.SharedViewModel
@@ -35,6 +36,7 @@ fun Search(sharedViewModel: SharedViewModel, onSearchClicked: () -> Unit) {
 
 
 
+    Log.d(TAG, "Search: ${gridColors.size}")
 
     LazyColumn(
         Modifier

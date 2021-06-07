@@ -1,13 +1,13 @@
 package com.shaun.spotonmusic.viewmodel
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.shaun.spotonmusic.di.DatastoreManager
 import com.shaun.spotonmusic.network.api.SpotifyAppService
 import com.shaun.spotonmusic.repository.MusicDetailRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kaaes.spotify.webapi.android.models.Album
-import kaaes.spotify.webapi.android.models.Playlist
 import javax.inject.Inject
 
 
@@ -26,6 +26,13 @@ class MusicDetail @Inject constructor(
     var albumDetail = MutableLiveData<Album>()
 
 
+    var id = MutableLiveData("")
+
+
+    var playList = Transformations.switchMap(id) {
+        repository.getPlaylistAsync(it)
+    }
+
     fun getAlbum(id: String): MutableLiveData<Album> {
 
         if (id.isEmpty())
@@ -34,7 +41,15 @@ class MusicDetail @Inject constructor(
         return repository.getAlbum(id)
     }
 
-    fun getPlaylist(id: String): MutableLiveData<Playlist> {
-        return repository.getPlaylistAsync(id)
+
+    fun newPlaylist(playlistId: String) {
+
+        id.value = playlistId
+
+    }
+
+
+    companion object {
+        private const val TAG = "MusicDetail"
     }
 }

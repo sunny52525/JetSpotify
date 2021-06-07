@@ -1,4 +1,4 @@
-package com.shaun.spotonmusic.presentation.ui.components.albumComponents
+package com.shaun.spotonmusic.presentation.ui.components.albumcomponents
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -48,7 +48,7 @@ fun AnimatedToolBar(album: String, scrollState: LazyListState, surfaceGradient: 
 
         Row(
             Modifier
-                .padding(top = 40.dp)
+                .padding(top = 40.dp,start = 8.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -83,7 +83,6 @@ fun AnimatedToolBar(album: String, scrollState: LazyListState, surfaceGradient: 
 @Composable
 fun TopSectionOverlay(scrollState: LazyListState) {
 
-//    Log.d(TAG, "TopSectionOverlay: ")
 
     val dynamicAlpha =
         if (scrollState.firstVisibleItemIndex < 1) {

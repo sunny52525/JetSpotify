@@ -1,4 +1,4 @@
-package com.shaun.spotonmusic.presentation.ui.components.routeScreens
+package com.shaun.spotonmusic.presentation.ui.components.routescreens
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -15,23 +15,17 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.blue
-import androidx.core.graphics.green
-import androidx.core.graphics.red
-import androidx.palette.graphics.Palette
+import com.shaun.spotonmusic.database.model.LibraryModel
 import com.shaun.spotonmusic.database.model.SpotOnMusicModel
-import com.shaun.spotonmusic.presentation.ui.components.homeComponents.*
+import com.shaun.spotonmusic.presentation.ui.components.homecomponents.*
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.blue
-import com.shaun.spotonmusic.utils.getBitmapFromURL
+import com.shaun.spotonmusic.utils.PaletteExtractor
 import com.shaun.spotonmusic.utils.getGreeting
+import com.shaun.spotonmusic.viewmodel.LibraryViewModel
 import com.shaun.spotonmusic.viewmodel.SharedViewModel
 import kaaes.spotify.webapi.android.models.Album
 import kaaes.spotify.webapi.android.models.Pager
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 private const val TAG = "Home"
 
@@ -47,6 +41,7 @@ fun Home(
     onArtistClicked: (String) -> Unit = {},
 
     ) {
+
 
 
     val headerBackgroundColor = remember {
@@ -78,39 +73,23 @@ fun Home(
         .secondFavouriteArtistRecommendations.observeAsState(initial = listOf())
 
 
-
+    val paletteExtractor = PaletteExtractor()
 
     viewModel.recentlyPlayed.observeForever {
         if (it != null) {
-            GlobalScope.launch {
-                val myBitmap = getBitmapFromURL(it[0].imageUrls[0])
-                withContext(Dispatchers.Main) {
-
-                    if (myBitmap != null && !myBitmap.isRecycled) {
-                        val palette: Palette = Palette.from(myBitmap).generate()
-                        val color = palette.dominantSwatch?.rgb?.let { color ->
-                            arrayListOf(color.red, color.green, color.blue)
-
-                        }
-
-                        val composeColor =
-                            color?.get(0)?.let { it1 ->
-                                Color(
-                                    red = it1,
-                                    green = color[1],
-                                    blue = color[2]
-                                )
-                            }
-
-                        if (composeColor != null) {
-
-                            headerBackgroundColor.value = listOf(composeColor, black)
-                        }
-                    }
+            val shade = paletteExtractor.getColorFromSwatch(it[0].imageUrls[0])
+            shade.observeForever { shadeColor ->
+                shadeColor?.let { col ->
+                    headerBackgroundColor.value = listOf(
+                        col,
+                        black
+                    )
                 }
             }
+
         }
     }
+
 
 
 
@@ -128,6 +107,7 @@ fun Home(
             .background(Color.Black)
 
     ) {
+
         val brush = Brush.linearGradient(
             colors = headerBackgroundColor.value,
             start = Offset(0f, 0f), end = Offset(50f, 250f)
@@ -156,10 +136,11 @@ fun Home(
             item {
                 SuggestionsRow(
                     data = playList,
-                    title = "Mood"
-                ) {
-                    onPlayListClicked(it)
-                }
+                    title = "Mood",
+                    onCardClicked = {
+                        onPlayListClicked(it)
+                    }
+                )
             }
             item {
                 FavouriteArtistSongs(
@@ -180,6 +161,7 @@ fun Home(
             }
             item {
                 SuggestionsRow(data = party, title = "Party") {
+
                     onPlayListClicked(it)
                 }
             }

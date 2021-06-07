@@ -1,4 +1,4 @@
-package com.shaun.spotonmusic.presentation.ui.components.homeComponents
+package com.shaun.spotonmusic.presentation.ui.components.homecomponents
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

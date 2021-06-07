@@ -11,6 +11,5 @@ sealed class BottomNavRoutes(val route: String, val resId: Int, val index: Int) 
 
 
 sealed class Routes(val route: String) {
-
     object AlbumDetail:Routes("AlbumDetail")
 }

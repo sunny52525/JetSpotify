@@ -1,7 +1,6 @@
-package com.shaun.spotonmusic.presentation.ui.components.searchComponents
+package com.shaun.spotonmusic.presentation.ui.components.searchcomponents
 
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,18 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.blue
-import androidx.core.graphics.green
-import androidx.core.graphics.red
-import androidx.lifecycle.MutableLiveData
-import androidx.palette.graphics.Palette
 import com.google.accompanist.glide.rememberGlidePainter
-import com.shaun.spotonmusic.utils.getBitmapFromURL
-import com.shaun.spotonmusic.ui.theme.green
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @Composable
 fun SearchGrid(
@@ -102,45 +90,6 @@ fun RotatedImage(title: String = "Pop", imageUrl: String, color: Color?) {
         )
     }
     }
-}
-
-fun getColorFromSwatch(imageUrl: String): MutableLiveData<Color> {
-
-    Log.d(TAG, "getColorFromSwatch: $imageUrl")
-    val color = MutableLiveData<Color>()
-    if (imageUrl.isEmpty()) {
-        Log.d(TAG, "getColorFromSwatch: why")
-        color.postValue(green)
-    } else {
-        GlobalScope.launch {
-
-            val bitmap = getBitmapFromURL(imageUrl)
-            withContext(Dispatchers.Main) {
-                if (bitmap != null && !bitmap.isRecycled) {
-                    val palette: Palette = Palette.from(bitmap).generate()
-                    val dominant = palette.dominantSwatch?.rgb?.let { color ->
-                        arrayListOf(color.red, color.green, color.blue)
-
-                    }
-                    Log.d(TAG, "getColorFromSwatch: $dominant")
-                    val composeColor =
-                        dominant?.get(0)?.let { it1 ->
-                            Color(
-                                red = it1,
-                                green = dominant[1],
-                                blue = dominant[2]
-                            )
-                        }
-                    Log.d(TAG, "getColorFromSwatch: $composeColor")
-                    if (composeColor != null)
-                        color.postValue(composeColor)
-                }
-
-            }
-        }
-    }
-
-    return color
 }
 
 private const val TAG = "SearchScreenGrid"

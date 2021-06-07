@@ -41,14 +41,15 @@ class MusicDetailRepositoryImpl @Inject constructor(
         return result
     }
 
-    fun getPlaylistAsync(playlistId: String): MutableLiveData<Playlist> {
+    fun getPlaylistAsync(playlistId: String): MutableLiveData<Playlist?> {
 
-        val result = MutableLiveData<Playlist>()
+        val result = MutableLiveData<Playlist?>()
 
         retrofit.getAPlayList(playList_id = playlistId, "IN", "Authorization: Bearer $accessToken")
             .enqueue {
                 when (it) {
                     is Result.Success -> {
+                        Log.d(TAG, "getPlaylistAsync: ${it.response.body()}")
                         result.postValue(it.response.body())
                     }
                     is Result.Failure -> {

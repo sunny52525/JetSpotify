@@ -2,19 +2,23 @@ package com.shaun.spotonmusic.utils
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
+import android.util.Log
+import androidx.compose.ui.graphics.Color
+import androidx.core.graphics.blue
+import androidx.core.graphics.green
+import androidx.core.graphics.red
+import androidx.lifecycle.MutableLiveData
+import androidx.palette.graphics.Palette
+import com.shaun.spotonmusic.ui.theme.green
 import kaaes.spotify.webapi.android.models.*
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
-
-
-
 
 
 fun getGreeting(): String {
@@ -35,8 +39,6 @@ fun getGreeting(): String {
         }
     }
 }
-
-
 
 fun getImageUrl(list: List<String>, demand: Int): String {
 
@@ -62,19 +64,7 @@ fun getImageUrl(list: List<String>, demand: Int): String {
 
 }
 
-fun getBitmapFromURL(src: String?): Bitmap? {
-    return try {
-        val url = URL(src)
-        val connection = url.openConnection() as HttpURLConnection
-        connection.doInput = true
-        connection.connect()
-        val input = connection.inputStream
-        BitmapFactory.decodeStream(input)
-    } catch (e: IOException) {
-        e.printStackTrace()
-        null
-    }
-}
-fun getHexColor(color: ArrayList<Int>): Int {
-    return Color.rgb(color[0], color[1], color[2])
-}
+//
+//fun getHexColor(color: ArrayList<Int>): Int {
+//    return Color.rgb(color[0], color[1], color[2])
+//}

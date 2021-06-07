@@ -137,7 +137,9 @@ class SharedViewModel @Inject constructor(
             var responses = listOf<Response<Playlist>>()
             try {
                 responses = chartsIDs.map {
+
                     val res = getAPlaylist(it)
+                    Log.d(TAG, "getCharts: $res")
                     res
                 }
             } catch (e: Exception) {

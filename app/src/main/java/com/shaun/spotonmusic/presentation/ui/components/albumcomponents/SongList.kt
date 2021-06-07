@@ -1,4 +1,4 @@
-package com.shaun.spotonmusic.presentation.ui.components.albumComponents
+package com.shaun.spotonmusic.presentation.ui.components.albumcomponents
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -11,52 +11,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.shaun.spotonmusic.presentation.ui.components.libraryComponents.Chip
+import com.shaun.spotonmusic.presentation.ui.components.librarycomponents.Chip
 import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
 import kaaes.spotify.webapi.android.models.Pager
 import kaaes.spotify.webapi.android.models.PlaylistTrack
-
-val items =
-    arrayListOf(
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help",
-        "Help"
-    )
 
 @ExperimentalFoundationApi
 @Composable
 fun SongList(
     scrollState: LazyListState,
-    surfaceGradient: List<Color>,
+    surfaceGradient: ArrayList<Color>?,
     tracks: Pager<PlaylistTrack?>?
 ) {
     LazyColumn(state = scrollState) {

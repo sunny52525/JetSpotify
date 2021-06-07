@@ -1,6 +1,8 @@
 package com.shaun.spotonmusic.presentation.ui.components.screens
 
+
 import android.os.Looper
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -25,17 +27,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.shaun.spotonmusic.presentation.ui.activity.HomeActivity
-import com.shaun.spotonmusic.presentation.ui.components.libraryComponents.LibraryBottomSheet
-import com.shaun.spotonmusic.presentation.ui.components.routeScreens.PlaylistDetail
-import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Home
-import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Library
-import com.shaun.spotonmusic.presentation.ui.components.routeScreens.Search
+import com.shaun.spotonmusic.presentation.ui.components.librarycomponents.LibraryBottomSheet
+import com.shaun.spotonmusic.presentation.ui.components.routescreens.Home
+import com.shaun.spotonmusic.presentation.ui.components.routescreens.Library
+import com.shaun.spotonmusic.presentation.ui.components.routescreens.PlaylistDetail
+import com.shaun.spotonmusic.presentation.ui.components.routescreens.Search
 import com.shaun.spotonmusic.presentation.ui.navigation.BottomNavRoutes
 import com.shaun.spotonmusic.presentation.ui.navigation.Routes
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.spotifyGray
-import com.shaun.spotonmusic.viewmodel.MusicDetail
 import com.shaun.spotonmusic.viewmodel.LibraryViewModel
+import com.shaun.spotonmusic.viewmodel.MusicDetail
 import com.shaun.spotonmusic.viewmodel.SharedViewModel
 import kotlinx.coroutines.CoroutineScope
 
@@ -53,7 +55,8 @@ fun HomeScreen(
 
     val homeViewModel: SharedViewModel = viewModel()
     val libraryViewModel: LibraryViewModel = viewModel()
-    val musicDetail: MusicDetail = viewModel()
+    val musicDetailViewModel: MusicDetail = viewModel()
+
 
     libraryViewModel.tokenExpired.observeForever {
         if (it == true) {
@@ -124,7 +127,7 @@ fun HomeScreen(
                     modalBottomSheetState = state,
                     libraryViewModel = libraryViewModel,
                     scope = scope,
-                    musicDetail = musicDetail
+                    playDetail = musicDetailViewModel
                 )
             }
 
@@ -212,9 +215,9 @@ fun HomeScreenNavigationConfiguration(
     modalBottomSheetState: ModalBottomSheetState,
     libraryViewModel: LibraryViewModel,
     scope: CoroutineScope,
-    musicDetail: MusicDetail,
+    playDetail: MusicDetail
 
-    ) {
+) {
     val listState = rememberLazyListState()
     val listStateLibrary = rememberLazyListState()
     NavHost(
@@ -232,6 +235,7 @@ fun HomeScreenNavigationConfiguration(
                 Home(viewModel = viewModel, listState = listState, tokenExpired = {
                     tokenExpired()
                 }, onPlayListClicked = {
+                    Log.d("", "MOODD: $it")
                     navHostController.navigate(Routes.AlbumDetail.route + "/$it")
                 }
                 )
@@ -263,10 +267,19 @@ fun HomeScreenNavigationConfiguration(
 
         }
         composable(Routes.AlbumDetail.route + "/{id}") {
+
+            val id = it.arguments?.getString("id")
+            id?.let { it1 ->
+
+                Log.d("TAG", "MOOD: $it1")
+                playDetail.newPlaylist(it1)
+            }
+
             EnterAnimation {
+
                 PlaylistDetail(
-                    it.arguments?.getString("id"),
-                    musicDetail
+                    playDetail,
+                    id
                 )
 
             }

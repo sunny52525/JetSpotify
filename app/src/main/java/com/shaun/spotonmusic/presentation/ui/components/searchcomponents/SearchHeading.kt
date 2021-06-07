@@ -1,4 +1,4 @@
-package com.shaun.spotonmusic.presentation.ui.components.searchComponents
+package com.shaun.spotonmusic.presentation.ui.components.searchcomponents
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

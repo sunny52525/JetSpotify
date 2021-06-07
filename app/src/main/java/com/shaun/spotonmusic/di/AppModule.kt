@@ -4,12 +4,12 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import androidx.core.content.ContextCompat.getSystemService
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.shaun.spotonmusic.SpotOnApplication
 import com.shaun.spotonmusic.network.api.SpotifyAppService
 import com.shaun.spotonmusic.utils.AppConstants.BASEURL
+import com.shaun.spotonmusic.utils.PaletteExtractor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,6 +17,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
 
 
 @Module
@@ -83,5 +84,9 @@ object AppModule {
         return result
 
     }
+
+    @Provides
+    @Singleton
+    fun getPaletteExtractor() = PaletteExtractor()
 
 }

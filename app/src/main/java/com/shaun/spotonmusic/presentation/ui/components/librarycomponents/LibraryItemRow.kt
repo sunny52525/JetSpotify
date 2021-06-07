@@ -1,4 +1,4 @@
-package com.shaun.spotonmusic.presentation.ui.components.libraryComponents
+package com.shaun.spotonmusic.presentation.ui.components.librarycomponents
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
