@@ -7,7 +7,7 @@ val Teal200 = Color(0xFF03DAC5)
 val black = Color(0xFF191414)
 val green = Color(0xFF1DB954)
 val greenDark = Color(0xFF179B46)
-
+val lightGreen=Color(0xFF1ED760)
 val spotifyGray = Color(0xFF212121)
 
 

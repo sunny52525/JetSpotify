@@ -1,7 +1,9 @@
 package com.shaun.spotonmusic.presentation.ui.components.albumcomponents
 
+import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.Icon
@@ -20,10 +22,8 @@ import androidx.compose.ui.unit.dp
 import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
 import kotlin.math.min
 
-private const val TAG = "Toolbar"
-
 @Composable
-fun AnimatedToolBar(album: String, scrollState: LazyListState, surfaceGradient: List<Color>) {
+fun AnimatedToolBar(album: String, scrollState: LazyListState ) {
 
     val dynamicAlpha =
         if (scrollState.firstVisibleItemIndex < 1) {

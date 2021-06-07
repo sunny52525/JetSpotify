@@ -29,9 +29,11 @@ import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
 
 @Preview
 @Composable
-fun SpotifySongListItem(album: String="Test") {
+fun SpotifySongListItem(album: String = "Test") {
     Row(
-        modifier = Modifier.padding(0.dp).background(spotifyDarkBlack),
+        modifier = Modifier
+            .padding(0.dp)
+            .background(spotifyDarkBlack),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(

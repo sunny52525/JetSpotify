@@ -35,6 +35,9 @@ class PaletteExtractor() {
                 withContext(Dispatchers.Main) {
                     if (bitmap != null && !bitmap.isRecycled) {
                         val palette: Palette = Palette.from(bitmap).generate()
+
+
+
                         val dominant = palette.dominantSwatch?.rgb?.let { color ->
                             arrayListOf(color.red, color.green, color.blue)
 

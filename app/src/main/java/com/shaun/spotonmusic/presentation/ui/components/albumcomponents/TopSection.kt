@@ -1,23 +1,15 @@
 package com.shaun.spotonmusic.presentation.ui.components.albumcomponents
 
+import android.util.Log
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -27,22 +19,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.glide.rememberGlidePainter
 import com.shaun.spotonmusic.ui.theme.black
+import com.shaun.spotonmusic.ui.theme.green
+import kaaes.spotify.webapi.android.models.Playlist
+import java.util.*
 
 @Composable
 fun BoxTopSection(
     album: String, listState: LazyListState, surfaceGradient: ArrayList<Color>? = arrayListOf(
         black, black
-    ), imageUrl: String
+    ), imageUrl: String, currentAlbum: Playlist,
+    isFollowing: Boolean
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
             .background(
-                Brush.linearGradient(
-                    surfaceGradient!!.toList()
+                Brush.verticalGradient(
+                    surfaceGradient!!.toList(),
+                    endY = 500f
                 )
             )
             .fillMaxWidth()
-            .padding(top = 80.dp)
+            .padding(top = 100.dp)
+
     ) {
 
         val dynamicValue by remember {
@@ -70,22 +68,46 @@ fun BoxTopSection(
             modifier = Modifier.padding(8.dp),
             color = MaterialTheme.colors.onSurface
         )
+
+        IsFollowing(Modifier.clickable {
+            Log.d("TAG", "IsFollowing: Clicked")
+
+        }, isFollowing)
+
         Text(
-            text = "FOLLOWING",
-            color = MaterialTheme.colors.onSurface,
-            style = typography.h6.copy(fontSize = 12.sp),
-            modifier = Modifier
-                .padding(4.dp)
-                .border(
-                    border = BorderStroke(2.dp, MaterialTheme.colors.primaryVariant),
-                    shape = RoundedCornerShape(12.dp)
-                )
-                .padding(vertical = 4.dp, horizontal = 24.dp)
+            text = "BY ${currentAlbum.owner.display_name.toUpperCase(Locale.ROOT)}    ${currentAlbum.followers.total} FOLLOWERS",
+            modifier = Modifier.padding(4.dp),
+            fontSize = 10.sp
         )
-        Text(
-            text = album,
-            style = typography.subtitle2,
-            modifier = Modifier.padding(4.dp)
-        )
+        Spacer(modifier = Modifier.height(65.dp))
     }
+}
+
+
+@Composable
+fun IsFollowing(modifier: Modifier, isFollowing: Boolean = false) {
+
+    var follow by remember {
+        mutableStateOf(isFollowing)
+    }
+
+    val title = if (follow) "FOLLOWING" else "FOLLOW"
+    val borderColor = if (follow) green else Color.Gray
+
+
+    Text(
+        text = title,
+        color = MaterialTheme.colors.onSurface,
+        style = typography.h6.copy(fontSize = 10.sp),
+        modifier = Modifier
+            .padding(2.dp)
+            .border(
+                border = BorderStroke(2.dp, borderColor),
+                shape = RoundedCornerShape(12.dp)
+            )
+            .padding(vertical = 6.dp, horizontal = 24.dp)
+
+    )
+
+
 }
