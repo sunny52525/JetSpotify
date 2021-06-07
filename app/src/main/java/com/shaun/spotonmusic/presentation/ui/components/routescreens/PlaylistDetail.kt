@@ -2,6 +2,7 @@ package com.shaun.spotonmusic.presentation.ui.components.routescreens
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -40,8 +41,6 @@ fun PlaylistDetail(id: String?) {
             : Playlist? by viewModel.playList.observeAsState(initial = Playlist())
 
 
-
-
     val colors = remember {
         mutableStateOf(arrayListOf<Color>(black, spotifyDarkBlack, black))
     }
@@ -60,7 +59,7 @@ fun PlaylistDetail(id: String?) {
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize().background(spotifyDarkBlack)
 
 
     ) {
@@ -82,9 +81,12 @@ fun PlaylistDetail(id: String?) {
         SongList(
             scrollState = scrollState,
 
-            currentAlbum?.tracks,
+            tracks = currentAlbum?.tracks,
+            onFollowClicked = {
+                follow = !follow
+            }
 
-            )
+        )
         AnimatedToolBar(
             album = currentAlbum?.name ?: "",
             scrollState = scrollState

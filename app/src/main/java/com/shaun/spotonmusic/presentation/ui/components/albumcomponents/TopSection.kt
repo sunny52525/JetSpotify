@@ -1,15 +1,21 @@
 package com.shaun.spotonmusic.presentation.ui.components.albumcomponents
 
-import android.util.Log
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -54,7 +60,7 @@ fun BoxTopSection(
 
 
         val animateImageSize =
-            animateDpAsState(((200 - dynamicValue / 10).coerceAtLeast(100)).dp).value
+            animateDpAsState(((230 - dynamicValue / 10).coerceAtLeast(100)).dp).value
         Image(
             painter = rememberGlidePainter(request = imageUrl),
             contentDescription = null,
@@ -69,10 +75,7 @@ fun BoxTopSection(
             color = MaterialTheme.colors.onSurface
         )
 
-        IsFollowing(Modifier.clickable {
-            Log.d("TAG", "IsFollowing: Clicked")
-
-        }, isFollowing)
+        IsFollowing(isFollowing)
 
         Text(
             text = "BY ${currentAlbum.owner.display_name.toUpperCase(Locale.ROOT)}    ${currentAlbum.followers.total} FOLLOWERS",
@@ -85,14 +88,11 @@ fun BoxTopSection(
 
 
 @Composable
-fun IsFollowing(modifier: Modifier, isFollowing: Boolean = false) {
+fun IsFollowing(sFollowing: Boolean) {
 
-    var follow by remember {
-        mutableStateOf(isFollowing)
-    }
 
-    val title = if (follow) "FOLLOWING" else "FOLLOW"
-    val borderColor = if (follow) green else Color.Gray
+    val title = if (sFollowing) "FOLLOWING" else "FOLLOW"
+    val borderColor = if (sFollowing) green else Color.Gray
 
 
     Text(
@@ -106,6 +106,7 @@ fun IsFollowing(modifier: Modifier, isFollowing: Boolean = false) {
                 shape = RoundedCornerShape(12.dp)
             )
             .padding(vertical = 6.dp, horizontal = 24.dp)
+            .animateContentSize()
 
     )
 
