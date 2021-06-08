@@ -23,8 +23,8 @@ interface SpotifyAppService {
 
     @GET("v1/playlists/{playlist_id}/followers/contains")
     fun followsPlaylist(
-        @Path("playlist_id") playList_id: String,
-        @Query("ids") userId: String,
+        @Path("playlist_id") playList_id: String?,
+        @Query("ids") userId: String?,
         @Header("Authorization") authorization: String
     ): Call<BooleanArray>
 

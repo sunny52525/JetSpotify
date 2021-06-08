@@ -83,7 +83,7 @@ class MusicDetailRepositoryImpl(
     }
 
 
-    fun followsPlayList(playList: String, userId: String): MutableLiveData<Boolean> {
+    fun followsPlayList(playList: String?, userId: String?): MutableLiveData<Boolean> {
         val result = MutableLiveData<Boolean>(false)
 
         val call = retrofit.followsPlaylist(
@@ -110,6 +110,7 @@ class MusicDetailRepositoryImpl(
 
 
     fun followPlaylist(playlistId: String, onFollowed: () -> Unit) {
+        Log.d(TAG, "followPlaylist: $playlistId")
         retrofit.followAPlaylist(
             playList_id = playlistId,
             "Authorization: Bearer $accessToken"

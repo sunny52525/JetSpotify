@@ -2,14 +2,13 @@ package com.shaun.spotonmusic.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.shaun.spotonmusic.di.DatastoreManager
 import com.shaun.spotonmusic.network.api.SpotifyAppService
 import com.shaun.spotonmusic.repository.MusicDetailRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kaaes.spotify.webapi.android.models.Album
-import retrofit2.Call
+import kaaes.spotify.webapi.android.models.Playlist
 import javax.inject.Inject
 
 
@@ -25,14 +24,21 @@ class PlaylistDetailViewModel @Inject constructor(
 
 
     var id = MutableLiveData("")
-    var playList = Transformations.switchMap(id) {
-        repository.getPlaylistAsync(it)
-    }
+    var playList = MutableLiveData(Playlist())
 
     var userId = MutableLiveData("")
 
     var follows = MutableLiveData(false)
 
+
+    fun setUserId(id: String, userId: String) {
+        this.userId.postValue(userId)
+        this.id.postValue(id)
+        follows = repository.followsPlayList(userId = userId, playList = id)
+
+        playList = repository.getPlaylistAsync(id)
+
+    }
 
     fun getAlbum(id: String): MutableLiveData<Album> {
 
@@ -47,10 +53,6 @@ class PlaylistDetailViewModel @Inject constructor(
     fun newPlaylist(playlistId: String) {
         Log.d(TAG, "newPlaylist: Called")
 
-
-        if (id.value == playlistId)
-            return
-
         id.value = playlistId
 
     }
@@ -60,18 +62,17 @@ class PlaylistDetailViewModel @Inject constructor(
         return repository.hasLikedThisSong(songId)
     }
 
-    fun followsPlaylist(playlistId: String, userId: String): MutableLiveData<Boolean> {
-
-
-        Log.d(TAG, "followsPlaylist: ${follows.value}")
-        if (this.id.value == playlistId && userId == this.userId.value)
-            return follows
-
-        this.userId.postValue(userId)
-        follows = repository.followsPlayList(playList = playlistId, userId = userId)
-
-        return follows
-    }
+//    fun followsPlaylist(playlistId: String, userId: String): MutableLiveData<Boolean> {
+//
+//        Log.d(TAG, "followsPlaylist: ${follows.value}")
+//        if (this.id.value == playlistId && userId == this.userId.value)
+//            return follows
+//
+//        this.userId.postValue(userId)
+//        follows = repository.followsPlayList(playList = playlistId, userId = userId)
+//
+//        return follows
+//    }
 
 
     fun followAPlaylist(playlistId: String, onFollowed: () -> Unit) {
@@ -80,9 +81,9 @@ class PlaylistDetailViewModel @Inject constructor(
         })
     }
 
-    fun unFollowPlaylist(playlistId: String,onUnFollowed: () -> Unit) {
+    fun unFollowPlaylist(playlistId: String, onUnFollowed: () -> Unit) {
 
-        return repository.unfollowAPlaylist(playlistId,onUnFollowed = {
+        return repository.unfollowAPlaylist(playlistId, onUnFollowed = {
             onUnFollowed()
         })
     }

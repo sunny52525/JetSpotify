@@ -10,7 +10,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.shaun.spotonmusic.presentation.ui.components.playlistcomponents.AnimatedToolBar
 import com.shaun.spotonmusic.presentation.ui.components.playlistcomponents.BoxTopSection
 import com.shaun.spotonmusic.presentation.ui.components.playlistcomponents.SongList
@@ -20,7 +19,6 @@ import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
 import com.shaun.spotonmusic.utils.PaletteExtractor
 import com.shaun.spotonmusic.viewmodel.PlaylistDetailViewModel
 import kaaes.spotify.webapi.android.models.Playlist
-import kaaes.spotify.webapi.android.models.UserPrivate
 
 
 private const val TAG: String = "PlayListDetail"
@@ -28,26 +26,14 @@ private const val TAG: String = "PlayListDetail"
 @ExperimentalFoundationApi
 @Composable
 fun PlaylistDetail(
-    id: String?, myDetails: UserPrivate?,
-    updatePlaylist: () -> Unit
+    id: String?,
+    updatePlaylist: () -> Unit,
+    viewModel: PlaylistDetailViewModel
 ) {
 
-    val viewModel = hiltViewModel<PlaylistDetailViewModel>()
-    var follow by remember {
-        mutableStateOf(false)
-    }
-
-
+    val follow by viewModel.follows.observeAsState(false)
 
     Log.d(TAG, "PlaylistDetail: $id")
-    id?.let { viewModel.newPlaylist(it) }
-
-
-    viewModel.followsPlaylist(id.toString(), myDetails?.id.toString()).observeForever {
-        if (it != null)
-            follow = it
-    }
-
 
     val currentPlaylist
             : Playlist? by viewModel.playList.observeAsState(initial = Playlist())
@@ -96,9 +82,11 @@ fun PlaylistDetail(
 
             tracks = currentPlaylist?.tracks,
             onFollowClicked = {
-                viewModel.follows.postValue(!follow)
 
-                if (!follow)
+
+                viewModel.follows.value=!follow
+
+                if (follow)
                     id?.let {
                         viewModel.followAPlaylist(it, onFollowed = {
 

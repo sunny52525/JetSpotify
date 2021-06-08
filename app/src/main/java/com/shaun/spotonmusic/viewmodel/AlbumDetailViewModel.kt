@@ -34,8 +34,8 @@ class AlbumDetailViewModel @Inject constructor(
 
     fun updateAlbum(id: String) {
 
-        if(id==albumId.value)
-            return
+//        if(id==albumId.value)
+//            return
         albumId.postValue(id)
     }
 

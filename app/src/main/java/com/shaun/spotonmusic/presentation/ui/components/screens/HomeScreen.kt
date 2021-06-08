@@ -19,6 +19,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -33,7 +34,9 @@ import com.shaun.spotonmusic.presentation.ui.navigation.BottomNavRoutes
 import com.shaun.spotonmusic.presentation.ui.navigation.Routes
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.spotifyGray
+import com.shaun.spotonmusic.viewmodel.AlbumDetailViewModel
 import com.shaun.spotonmusic.viewmodel.LibraryViewModel
+import com.shaun.spotonmusic.viewmodel.PlaylistDetailViewModel
 import com.shaun.spotonmusic.viewmodel.SharedViewModel
 import kaaes.spotify.webapi.android.models.UserPrivate
 import kotlinx.coroutines.CoroutineScope
@@ -271,19 +274,26 @@ fun HomeScreenNavigationConfiguration(
 
 
         }
-        composable(Routes.PlaylistDetail.route + "/{id}") {
-
+        composable(Routes.PlaylistDetail.route + "/{id}") { it ->
             val id = it.arguments?.getString("id")
+            val playlistDetailViewModel = hiltViewModel<PlaylistDetailViewModel>()
+
+//            id?.let { id -> playlistDetailViewModel.newPlaylist(id) }
 
             val myDetails: UserPrivate by viewModel.myDetails.observeAsState(UserPrivate())
 
+            myDetails?.id.let { userId ->
+//                playlistDetailViewModel.userId.postValue(userId)
+                if(userId!=null)
+                playlistDetailViewModel.setUserId(id.toString(),userId = userId)
+            }
             EnterAnimation {
                 PlaylistDetail(
                     id,
-                    myDetails,
                     updatePlaylist = {
                         libraryViewModel.getLibraryItems()
-                    }
+                    },
+                    viewModel = playlistDetailViewModel
                 )
 
             }
@@ -291,9 +301,14 @@ fun HomeScreenNavigationConfiguration(
         composable(Routes.AlbumDetail.route + "/{id}") {
 
             val id = it.arguments?.getString("id")
+
+            val albumDetailViewModel = hiltViewModel<AlbumDetailViewModel>()
+
+            albumDetailViewModel.updateAlbum(id.toString())
+
             EnterAnimation {
 
-                AlbumDetail(id = id)
+                AlbumDetail(id = id, viewModel = albumDetailViewModel)
             }
         }
     }
