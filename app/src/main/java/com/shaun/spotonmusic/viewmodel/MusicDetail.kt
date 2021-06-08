@@ -72,6 +72,16 @@ class MusicDetail @Inject constructor(
         return follows
     }
 
+
+    fun followAPlaylist(playlistId: String) {
+        repository.followPlaylist(playlistId = playlistId)
+    }
+
+    fun unFollowPlaylist(playlistId: String) {
+
+        repository.unfollowAPlaylist(playlistId)
+    }
+
     companion object {
         private const val TAG = "MusicDetail"
     }

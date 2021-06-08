@@ -11,6 +11,7 @@ import kaaes.spotify.webapi.android.models.Playlist
 import retrofit.Callback
 import retrofit.RetrofitError
 import retrofit.client.Response
+import retrofit2.Call
 import javax.inject.Inject
 
 class MusicDetailRepositoryImpl @Inject constructor(
@@ -108,6 +109,38 @@ class MusicDetailRepositoryImpl @Inject constructor(
         return result
     }
 
+
+    fun followPlaylist(playlistId: String) {
+        retrofit.followAPlaylist(playList_id = playlistId, "Authorization: Bearer $accessToken")
+            .enqueue(object : retrofit2.Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: retrofit2.Response<Void>) {
+
+                    Log.d(TAG, "onResponse: ${response.body()}")
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Log.d(TAG, "onFailure: $t")
+                }
+
+            })
+    }
+
+    fun unfollowAPlaylist(playlistId: String) {
+
+        retrofit.unfollowAPlaylist(playList_id = playlistId, "Authorization: Bearer $accessToken")
+            .enqueue(object : retrofit2.Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: retrofit2.Response<Void>) {
+
+                    Log.d(TAG, "onResponse: ${response.body()}")
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Log.d(TAG, "onFailure: $t")
+                }
+
+            })
+
+    }
 
     companion object {
         private const val TAG = "AlbumDetailRepos"

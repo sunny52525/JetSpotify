@@ -94,6 +94,11 @@ fun PlaylistDetail(id: String?, myDetails: UserPrivate?) {
             tracks = currentAlbum?.tracks,
             onFollowClicked = {
                 viewModel.follows.postValue(!follow)
+
+                if (!follow)
+                    id?.let { viewModel.followAPlaylist(it) }
+                else
+                    id?.let { viewModel.unFollowPlaylist(it) }
             },
             viewModel = viewModel,
         )

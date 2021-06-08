@@ -3,6 +3,7 @@ package com.shaun.spotonmusic.presentation.ui.components.librarycomponents
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -40,11 +41,12 @@ fun LibraryItemRow(
     libraryItems: LibraryModel,
     listState: LazyListState,
     scope: CoroutineScope,
-    isGrid:Boolean,
-    sortRowCLick:()->Unit
+    isGrid: Boolean,
+    sortRowCLick: () -> Unit,
+    onClick: (String, String) -> Unit,
+    chipSelected:(String,Boolean)->Unit
 ) {
     var previousOffset = 0
-
 
 
     val chipsVisible by remember {
@@ -81,13 +83,17 @@ fun LibraryItemRow(
                 ) + fadeIn(initialAlpha = 0.1f),
                 exit = fadeOut() + slideOutVertically()
             ) {
-                LibraryChips()
+                LibraryChips(
+                    chipSelected = {type,selected->
+                        chipSelected(type,selected)
+                    }
+                )
             }
         }
         item {
             SortRow(modalBottomSheetState, onChangeViewCLicked = {
-               sortRowCLick()
-            },isGrid)
+                sortRowCLick()
+            }, isGrid)
         }
 
         libraryItems.items.forEachIndexed { index, libraryItem ->
@@ -97,7 +103,10 @@ fun LibraryItemRow(
                         title = libraryItem.title,
                         type = libraryItem.type,
                         owner = libraryItem.owner,
-                        imageUrl = if (libraryItem.imageUrl.isEmpty()) "" else libraryItem.imageUrl[0].url
+                        imageUrl = if (libraryItem.imageUrl.isEmpty()) "" else libraryItem.imageUrl[0].url,
+                        onClick = {
+                            onClick(libraryItem.typeID, libraryItem.id)
+                        }
                     )
             }
 
@@ -117,7 +126,14 @@ fun LibraryItemRow(
                         imageUrl = Pair(
                             getImageUrl(item[i].imageUrl.toListString(), 1),
                             getImageUrl(item[i + 1].imageUrl.toListString(), 1)
-                        )
+                        ),
+                        onFirstClick = {
+                            onClick(item[i].typeID, item[i].id)
+                        }, onSecondClick = {
+
+                            onClick(item[i + 1].typeID, item[i + 1].id)
+                        }
+
                     )
 
             }
@@ -139,7 +155,13 @@ fun LibraryItemRow(
                             getImageUrl(item[i].imageUrl.toListString(), 1),
                             ""
                         ),
-                        count = 1
+                        count = 1,
+                        onSecondClick = {
+
+                        }, onFirstClick = {
+
+                            onClick(item[i].typeID, item[i].id)
+                        }
                     )
                 }
 
@@ -159,14 +181,18 @@ fun Item(
     type: String = "Playlist",
     owner: String = "Shaun",
     imageUrl: String,
-
-    ) {
+    onClick: () -> Unit
+) {
 
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 7.dp, start = 20.dp, top = 8.dp),
+            .padding(bottom = 7.dp, start = 20.dp, top = 8.dp)
+            .clickable {
+                onClick()
+
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
@@ -199,7 +225,9 @@ fun LibraryGrid(
     type: Pair<String, String>,
     owner: Pair<String, String>,
     imageUrl: Pair<String, String>,
-    count: Int = 2
+    count: Int = 2,
+    onFirstClick: () -> Unit,
+    onSecondClick: () -> Unit
 ) {
 
     Row(
@@ -213,6 +241,9 @@ fun LibraryGrid(
                 .fillMaxWidth(0.5f)
 
                 .weight(1f)
+                .clickable {
+                    onFirstClick()
+                }
         ) {
 
             SingleGrid(title.first, type.first, owner.first, imageUrl.first)
@@ -224,6 +255,9 @@ fun LibraryGrid(
                 .fillMaxWidth(0.5f)
 
                 .weight(1f)
+                .clickable {
+                    onSecondClick()
+                }
         ) {
 
             SingleGrid(title.second, type.second, owner.second, imageUrl.second)

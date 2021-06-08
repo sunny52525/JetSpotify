@@ -23,7 +23,7 @@ object AppConstants {
     )
     const val BASEURL = "https://api.spotify.com"
 
-    val LIBRARYCHIPS = arrayOf("Playlists", "Albums", "Artists")
+    val LIBRARYCHIPS = arrayOf("Playlist", "Album", "Artist")
 
     val SORT_ITEMS = arrayOf("Recently Played", "Recently Added", "Alphabetical", "Creator")
 

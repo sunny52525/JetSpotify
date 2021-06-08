@@ -15,7 +15,15 @@ data class LibraryItem(
     var owner: String,
     var id: String,
     var imageUrl: MutableList<Image>,
-    var recentlyPlayedTime:String,
-    var addedAt:String,
-    val creator:String
+    var recentlyPlayedTime: String,
+    var addedAt: String,
+    val creator: String
 )
+
+ class TYPE() {
+   companion object{
+       val PLAYLIST="playlist"
+       val ARTIST="artist"
+       val ALBUM="album"
+   }
+}

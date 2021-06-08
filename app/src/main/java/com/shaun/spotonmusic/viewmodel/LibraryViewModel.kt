@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.shaun.spotonmusic.SpotOnApplication
 import com.shaun.spotonmusic.database.model.LibraryItem
 import com.shaun.spotonmusic.database.model.LibraryModel
+import com.shaun.spotonmusic.database.model.TYPE
 import com.shaun.spotonmusic.di.DatastoreManager
 import com.shaun.spotonmusic.network.api.SpotifyAppService
 import com.shaun.spotonmusic.repository.LibraryRepositoryImpl
@@ -86,7 +87,7 @@ class LibraryViewModel @Inject constructor(
 
                     val libraryItem = LibraryItem(
                         title = it.name,
-                        typeID = "playlist",
+                        typeID = TYPE.PLAYLIST,
                         type = "Playlist",
                         owner = it.owner.display_name,
                         id = it.id,
@@ -103,7 +104,7 @@ class LibraryViewModel @Inject constructor(
                     val libraryItem = LibraryItem(
                         title = it.name,
                         type = "Artist",
-                        typeID = "artist",
+                        typeID = TYPE.ARTIST,
                         owner = it.name,
                         id = it.id,
                         imageUrl = it.images,
@@ -119,7 +120,7 @@ class LibraryViewModel @Inject constructor(
                 savedAlbums?.items?.forEach { it ->
                     val libraryItem = LibraryItem(
                         title = it.album.name,
-                        typeID = "album",
+                        typeID = TYPE.ALBUM,
                         type = "Album",
                         owner = it.album.artists[0].name,
                         id = it.album.id,

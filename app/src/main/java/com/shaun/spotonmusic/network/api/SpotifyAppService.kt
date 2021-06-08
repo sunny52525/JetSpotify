@@ -3,10 +3,7 @@ package com.shaun.spotonmusic.network.api
 import com.shaun.spotonmusic.network.model.RecentlyPlayed
 import kaaes.spotify.webapi.android.models.Playlist
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 
 interface SpotifyAppService {
@@ -31,6 +28,17 @@ interface SpotifyAppService {
         @Header("Authorization") authorization: String
     ): Call<BooleanArray>
 
+    @PUT("v1/playlists/{playlist_id}/followers")
+    fun followAPlaylist(
+        @Path("playlist_id") playList_id: String,
+        @Header("Authorization") authorization: String
+    ): Call<Void>
+
+    @DELETE("v1/playlists/{playlist_id}/followers")
+    fun unfollowAPlaylist(
+        @Path("playlist_id") playList_id: String,
+        @Header("Authorization") authorization: String
+    ): Call<Void>
 
 //    @GET("/v1/browse/categories/{category_id}/playlists")
 //    fun getCategoryPlaylist(

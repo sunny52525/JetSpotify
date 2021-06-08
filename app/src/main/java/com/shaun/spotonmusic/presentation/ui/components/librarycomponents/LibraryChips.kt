@@ -15,14 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.shaun.spotonmusic.utils.AppConstants
 import com.shaun.spotonmusic.ui.theme.green
 import com.shaun.spotonmusic.ui.theme.greenDark
 import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
+import com.shaun.spotonmusic.utils.AppConstants
 
-@Preview
 @Composable
-fun LibraryChips() {
+fun LibraryChips(chipSelected:(String,Boolean)->Unit ) {
 
     LazyRow(
         Modifier
@@ -31,7 +30,9 @@ fun LibraryChips() {
     ) {
         item { Spacer(modifier = Modifier.width(20.dp)) }
         items(AppConstants.LIBRARYCHIPS) { item ->
-            Chip(item)
+            Chip(item,onValueChanged = {
+                chipSelected(item,it)
+            })
         }
     }
 
@@ -40,7 +41,11 @@ fun LibraryChips() {
 
 @Preview
 @Composable
-fun Chip(title: String = "Albums", isSelected: Boolean = false) {
+fun Chip(
+    title: String = "Albums",
+    isSelected: Boolean = false,
+    onValueChanged: (Boolean) -> Unit = {}
+) {
     var isSelectedChip by remember {
         mutableStateOf(isSelected)
     }
@@ -64,6 +69,8 @@ fun Chip(title: String = "Albums", isSelected: Boolean = false) {
                 value = isSelectedChip,
                 onValueChange = {
                     isSelectedChip = !isSelectedChip
+                    onValueChanged(isSelectedChip)
+
                 }
             )
             .background(

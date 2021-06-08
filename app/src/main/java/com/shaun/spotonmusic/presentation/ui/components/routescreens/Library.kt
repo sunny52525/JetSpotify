@@ -1,5 +1,6 @@
 package com.shaun.spotonmusic.presentation.ui.components.routescreens
 
+import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -8,11 +9,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import com.shaun.spotonmusic.database.model.LibraryItem
 import com.shaun.spotonmusic.database.model.LibraryModel
+import com.shaun.spotonmusic.database.model.TYPE
 import com.shaun.spotonmusic.presentation.ui.components.librarycomponents.Header
 import com.shaun.spotonmusic.presentation.ui.components.librarycomponents.LibraryItemRow
 import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
@@ -31,15 +33,28 @@ fun Library(
     libraryViewModel: LibraryViewModel,
     scope: CoroutineScope,
     listStateLibrary: LazyListState,
+    onAlbumClicked: (String) -> Unit = {},
+    onArtistClicked: (String) -> Unit = {},
+    onPlaylistClicked: (String) -> Unit = {}
 
-    ) {
+) {
 
+    var items by remember {
+        mutableStateOf(LibraryModel(arrayListOf()))
+    }
+    var sorted by remember {
+        mutableStateOf(LibraryModel(arrayListOf()))
+    }
 
-    val libraryItems by libraryViewModel.libraryItemsList.observeAsState(
-        initial = LibraryModel(
-            arrayListOf()
-        )
-    )
+    var sortMode by remember {
+        mutableStateOf(false)
+    }
+
+    libraryViewModel.libraryItemsList.observeForever {
+        if (it != null) {
+            items = it
+        }
+    }
 
 
     val isGrid by libraryViewModel.isGrid.observeAsState(initial = true)
@@ -54,12 +69,36 @@ fun Library(
 
         LibraryItemRow(
             modalBottomSheetState = modalBottomSheetState,
-            libraryItems = libraryItems,
+            libraryItems = if (sortMode) sorted else items,
             listState = listStateLibrary,
             scope = scope,
             isGrid = isGrid,
             sortRowCLick = {
                 libraryViewModel.updateGrid()
+            }, onClick = { type, id ->
+
+                Log.d("TAG", "Library: $type")
+
+                if (type == TYPE.PLAYLIST) {
+                    onPlaylistClicked(id)
+                }
+
+            }, chipSelected = { type, sortModeBool ->
+                Log.d("TAG", "Library: $type,$sortModeBool")
+
+                if (sortModeBool) {
+                    sorted.items = items.items.filter {
+                        it.type == type
+                    } as ArrayList<LibraryItem>
+
+                    Log.d("TAG", "Library: $sorted")
+                }else{
+                    sorted=items
+                    Log.d("TAG", "Library: $items")
+
+                }
+                sortMode=sortModeBool
+
             })
 
 

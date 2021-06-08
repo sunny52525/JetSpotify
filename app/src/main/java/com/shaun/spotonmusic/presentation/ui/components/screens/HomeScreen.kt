@@ -261,7 +261,10 @@ fun HomeScreenNavigationConfiguration(
                     modalBottomSheetState = modalBottomSheetState,
                     libraryViewModel = libraryViewModel,
                     scope = scope,
-                    listStateLibrary = listStateLibrary
+                    listStateLibrary = listStateLibrary, onPlaylistClicked = {
+                        Log.d("", "MOODD: $it")
+                        navHostController.navigate(Routes.AlbumDetail.route + "/$it")
+                    }
                 )
             }
 

@@ -15,14 +15,12 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.shaun.spotonmusic.database.model.LibraryModel
 import com.shaun.spotonmusic.database.model.SpotOnMusicModel
 import com.shaun.spotonmusic.presentation.ui.components.homecomponents.*
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.blue
 import com.shaun.spotonmusic.utils.PaletteExtractor
 import com.shaun.spotonmusic.utils.getGreeting
-import com.shaun.spotonmusic.viewmodel.LibraryViewModel
 import com.shaun.spotonmusic.viewmodel.SharedViewModel
 import kaaes.spotify.webapi.android.models.Album
 import kaaes.spotify.webapi.android.models.Pager
@@ -41,7 +39,6 @@ fun Home(
     onArtistClicked: (String) -> Unit = {},
 
     ) {
-
 
 
     val headerBackgroundColor = remember {
@@ -156,7 +153,7 @@ fun Home(
 
             item {
                 SuggestionsRow("Your Playlists", myPlayList) {
-                    onUserPlayListClicked(it)
+                    onPlayListClicked(it)
                 }
             }
             item {
