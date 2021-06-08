@@ -1,4 +1,4 @@
-package com.shaun.spotonmusic.presentation.ui.components.albumcomponents
+package com.shaun.spotonmusic.presentation.ui.components.playlistcomponents
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,7 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.glide.rememberGlidePainter
 import com.shaun.spotonmusic.ui.theme.lightGreen
 import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
-import com.shaun.spotonmusic.viewmodel.MusicDetailViewModel
+import com.shaun.spotonmusic.viewmodel.PlaylistDetailViewModel
 import kaaes.spotify.webapi.android.models.ArtistSimple
 
 
@@ -33,7 +33,7 @@ import kaaes.spotify.webapi.android.models.ArtistSimple
 @Composable
 fun SpotifySongListItem(
     album: String = "Test",
-    viewModel: MusicDetailViewModel = viewModel(),
+    viewModel: PlaylistDetailViewModel = viewModel(),
     trackId: Boolean = true,
     explicit: Boolean = true,
     singer: MutableList<ArtistSimple> = mutableListOf(),

@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class MusicDetailViewModel @Inject constructor(
+class PlaylistDetailViewModel @Inject constructor(
     datastoreManager: DatastoreManager,
     spotifyAppService: SpotifyAppService
 ) : ViewModel() {

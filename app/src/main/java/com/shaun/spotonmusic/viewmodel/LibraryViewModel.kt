@@ -56,8 +56,6 @@ class LibraryViewModel @Inject constructor(
     }
 
     private fun getAccessToken() {
-
-        //        accessToken.postValue(value)
         setToken()
     }
 

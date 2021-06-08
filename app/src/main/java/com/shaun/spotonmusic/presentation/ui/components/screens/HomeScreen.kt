@@ -28,10 +28,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.shaun.spotonmusic.presentation.ui.activity.HomeActivity
 import com.shaun.spotonmusic.presentation.ui.components.librarycomponents.LibraryBottomSheet
-import com.shaun.spotonmusic.presentation.ui.components.routescreens.Home
-import com.shaun.spotonmusic.presentation.ui.components.routescreens.Library
-import com.shaun.spotonmusic.presentation.ui.components.routescreens.PlaylistDetail
-import com.shaun.spotonmusic.presentation.ui.components.routescreens.Search
+import com.shaun.spotonmusic.presentation.ui.components.routescreens.*
 import com.shaun.spotonmusic.presentation.ui.navigation.BottomNavRoutes
 import com.shaun.spotonmusic.presentation.ui.navigation.Routes
 import com.shaun.spotonmusic.ui.theme.black
@@ -237,7 +234,10 @@ fun HomeScreenNavigationConfiguration(
                     tokenExpired()
                 }, onPlayListClicked = {
                     Log.d("", "MOODD: $it")
+                    navHostController.navigate(Routes.PlaylistDetail.route + "/$it")
+                }, onAlbumClicked = {
                     navHostController.navigate(Routes.AlbumDetail.route + "/$it")
+
                 }
                 )
             }
@@ -246,6 +246,7 @@ fun HomeScreenNavigationConfiguration(
             EnterAnimation {
 
                 Search(viewModel, onSearchClicked = {
+
 
                 })
 
@@ -263,14 +264,14 @@ fun HomeScreenNavigationConfiguration(
                     scope = scope,
                     listStateLibrary = listStateLibrary, onPlaylistClicked = {
                         Log.d("", "MOODD: $it")
-                        navHostController.navigate(Routes.AlbumDetail.route + "/$it")
+                        navHostController.navigate(Routes.PlaylistDetail.route + "/$it")
                     }
                 )
             }
 
 
         }
-        composable(Routes.AlbumDetail.route + "/{id}") {
+        composable(Routes.PlaylistDetail.route + "/{id}") {
 
             val id = it.arguments?.getString("id")
 
@@ -285,6 +286,14 @@ fun HomeScreenNavigationConfiguration(
                     }
                 )
 
+            }
+        }
+        composable(Routes.AlbumDetail.route + "/{id}") {
+
+            val id = it.arguments?.getString("id")
+            EnterAnimation {
+
+                AlbumDetail(id = id)
             }
         }
     }

@@ -12,9 +12,8 @@ import retrofit.Callback
 import retrofit.RetrofitError
 import retrofit.client.Response
 import retrofit2.Call
-import javax.inject.Inject
 
-class MusicDetailRepositoryImpl @Inject constructor(
+class MusicDetailRepositoryImpl(
     private val accessToken: String,
     private val retrofit: SpotifyAppService
 ) {
@@ -110,46 +109,65 @@ class MusicDetailRepositoryImpl @Inject constructor(
     }
 
 
-    fun followPlaylist(playlistId: String,onFollowed:()->Unit){
-         retrofit.followAPlaylist(
+    fun followPlaylist(playlistId: String, onFollowed: () -> Unit) {
+        retrofit.followAPlaylist(
             playList_id = playlistId,
             "Authorization: Bearer $accessToken"
-        ).enqueue(object :retrofit2.Callback<Void>{
-             override fun onResponse(call: Call<Void>, response: retrofit2.Response<Void>) {
+        ).enqueue(object : retrofit2.Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: retrofit2.Response<Void>) {
 
-               onFollowed()
+                onFollowed()
 
-             }
+            }
 
-             override fun onFailure(call: Call<Void>, t: Throwable) {
+            override fun onFailure(call: Call<Void>, t: Throwable) {
 
-                 Log.d( TAG, "onFailure: ${t.message}")
-             }
+                Log.d(TAG, "onFailure: ${t.message}")
+            }
 
-         })
+        })
 
     }
 
-    fun unfollowAPlaylist(playlistId: String,onUnFollowed:()->Unit) {
+    fun unfollowAPlaylist(playlistId: String, onUnFollowed: () -> Unit) {
 
-         retrofit.unfollowAPlaylist(
+        retrofit.unfollowAPlaylist(
             playList_id = playlistId,
             "Authorization: Bearer $accessToken"
-        ).enqueue(object :retrofit2.Callback<Void>{
-             override fun onResponse(call: Call<Void>, response: retrofit2.Response<Void>) {
+        ).enqueue(object : retrofit2.Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: retrofit2.Response<Void>) {
 
-                 onUnFollowed()
+                onUnFollowed()
 
-             }
+            }
 
-             override fun onFailure(call: Call<Void>, t: Throwable) {
+            override fun onFailure(call: Call<Void>, t: Throwable) {
 
-                 Log.d( TAG, "onFailure: ${t.message}")
-             }
+                Log.d(TAG, "onFailure: ${t.message}")
+            }
 
-         })
+        })
 
 
+    }
+
+
+    fun getAAlbum(albumId: String): MutableLiveData<Album?> {
+
+        val result = MutableLiveData<Album?>()
+        spotify.getAlbum(albumId, object : Callback<Album> {
+            override fun success(t: Album?, response: Response?) {
+
+                result.postValue(t)
+            }
+
+            override fun failure(error: RetrofitError?) {
+
+                Log.d(TAG, "failure: get Album ${error}")
+            }
+
+        })
+        return result
     }
 
     companion object {

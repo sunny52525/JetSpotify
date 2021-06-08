@@ -1,4 +1,4 @@
-package com.shaun.spotonmusic.presentation.ui.components.albumcomponents
+package com.shaun.spotonmusic.presentation.ui.components.playlistcomponents
 
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.spring

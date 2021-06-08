@@ -11,14 +11,14 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.shaun.spotonmusic.presentation.ui.components.albumcomponents.AnimatedToolBar
-import com.shaun.spotonmusic.presentation.ui.components.albumcomponents.BoxTopSection
-import com.shaun.spotonmusic.presentation.ui.components.albumcomponents.SongList
-import com.shaun.spotonmusic.presentation.ui.components.albumcomponents.TopSectionOverlay
+import com.shaun.spotonmusic.presentation.ui.components.playlistcomponents.AnimatedToolBar
+import com.shaun.spotonmusic.presentation.ui.components.playlistcomponents.BoxTopSection
+import com.shaun.spotonmusic.presentation.ui.components.playlistcomponents.SongList
+import com.shaun.spotonmusic.presentation.ui.components.playlistcomponents.TopSectionOverlay
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
 import com.shaun.spotonmusic.utils.PaletteExtractor
-import com.shaun.spotonmusic.viewmodel.MusicDetailViewModel
+import com.shaun.spotonmusic.viewmodel.PlaylistDetailViewModel
 import kaaes.spotify.webapi.android.models.Playlist
 import kaaes.spotify.webapi.android.models.UserPrivate
 
@@ -32,12 +32,15 @@ fun PlaylistDetail(
     updatePlaylist: () -> Unit
 ) {
 
-    val viewModel = hiltViewModel<MusicDetailViewModel>()
+    val viewModel = hiltViewModel<PlaylistDetailViewModel>()
     var follow by remember {
         mutableStateOf(false)
     }
 
 
+
+    Log.d(TAG, "PlaylistDetail: $id")
+    id?.let { viewModel.newPlaylist(it) }
 
 
     viewModel.followsPlaylist(id.toString(), myDetails?.id.toString()).observeForever {
@@ -45,11 +48,8 @@ fun PlaylistDetail(
             follow = it
     }
 
-    Log.d(TAG, "PlaylistDetail: $id")
-    id?.let { viewModel.newPlaylist(it) }
 
-
-    val currentAlbum
+    val currentPlaylist
             : Playlist? by viewModel.playList.observeAsState(initial = Playlist())
 
 
@@ -59,7 +59,7 @@ fun PlaylistDetail(
 
     val paletteExtractor = PaletteExtractor()
 
-    currentAlbum?.images?.let {
+    currentPlaylist?.images?.let {
         val shade = paletteExtractor.getColorFromSwatch(it[0].url)
         shade.observeForever { shadeColor ->
             shadeColor?.let { col ->
@@ -79,13 +79,13 @@ fun PlaylistDetail(
 
 
         val scrollState = rememberLazyListState()
-        currentAlbum?.images?.get(0)?.url?.let {
+        currentPlaylist?.images?.get(0)?.url?.let {
             BoxTopSection(
-                album = currentAlbum?.name ?: "",
+                album = currentPlaylist?.name ?: "",
                 listState = scrollState,
                 surfaceGradient = colors.value,
                 imageUrl = it,
-                currentAlbum = currentAlbum ?: Playlist(),
+                currentAlbum = currentPlaylist ?: Playlist(),
                 isFollowing = follow,
 
                 )
@@ -94,13 +94,13 @@ fun PlaylistDetail(
         SongList(
             scrollState = scrollState,
 
-            tracks = currentAlbum?.tracks,
+            tracks = currentPlaylist?.tracks,
             onFollowClicked = {
                 viewModel.follows.postValue(!follow)
 
                 if (!follow)
                     id?.let {
-                        viewModel.followAPlaylist(it,onFollowed = {
+                        viewModel.followAPlaylist(it, onFollowed = {
 
                             updatePlaylist()
                         })
@@ -118,7 +118,7 @@ fun PlaylistDetail(
             viewModel = viewModel,
         )
         AnimatedToolBar(
-            album = currentAlbum?.name ?: "",
+            album = currentPlaylist?.name ?: "",
             scrollState = scrollState
         )
     }

@@ -1,5 +1,6 @@
-package com.shaun.spotonmusic.presentation.ui.components.albumcomponents
+package com.shaun.spotonmusic.presentation.ui.components.playlistcomponents
 
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.BorderStroke
@@ -36,6 +37,9 @@ fun BoxTopSection(
     ), imageUrl: String, currentAlbum: Playlist,
     isFollowing: Boolean
 ) {
+
+
+    Log.d("TAG", "BoxTopSection: $imageUrl")
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
             .background(
@@ -78,7 +82,8 @@ fun BoxTopSection(
         IsFollowing(isFollowing)
 
         Text(
-            text = "BY ${currentAlbum.owner.display_name.toUpperCase(Locale.ROOT)}   ${getFollowerCount(
+            text = "BY ${currentAlbum.owner.display_name.toUpperCase(Locale.ROOT)}   ${
+                getFollowerCount(
                     currentAlbum.followers.total
                 )
             }",

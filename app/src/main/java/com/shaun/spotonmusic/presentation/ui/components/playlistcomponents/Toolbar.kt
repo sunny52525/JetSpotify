@@ -1,29 +1,23 @@
-package com.shaun.spotonmusic.presentation.ui.components.albumcomponents
+package com.shaun.spotonmusic.presentation.ui.components.playlistcomponents
 
-import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.shaun.spotonmusic.presentation.ui.components.albumcomponents.TopBar
 import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
 import kotlin.math.min
 
 @Composable
-fun AnimatedToolBar(album: String, scrollState: LazyListState ) {
+fun AnimatedToolBar(album: String, scrollState: LazyListState) {
 
     val dynamicAlpha =
         if (scrollState.firstVisibleItemIndex < 1) {
@@ -46,37 +40,38 @@ fun AnimatedToolBar(album: String, scrollState: LazyListState ) {
             )
     ) {
 
-        Row(
-            Modifier
-                .padding(top = 40.dp,start = 8.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack, tint = MaterialTheme.colors.onSurface,
-                contentDescription = null,
-            )
-
-
-            Text(
-                text = album,
-                color = MaterialTheme.colors.onSurface,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .alpha(
-                        dynamicAlpha
-                    )
-            )
-
-
-            Icon(
-                imageVector = Icons.Default.MoreVert, tint = MaterialTheme.colors.onSurface,
-                contentDescription = null,
-            )
-
-
-        }
+        TopBar(isAlbum = false, alpha = dynamicAlpha,title=album)
+//        Row(
+//            Modifier
+//                .padding(top = 40.dp,start = 8.dp)
+//                .fillMaxWidth(),
+//            horizontalArrangement = Arrangement.SpaceBetween,
+//            verticalAlignment = Alignment.CenterVertically,
+//        ) {
+//            Icon(
+//                imageVector = Icons.Default.ArrowBack, tint = MaterialTheme.colors.onSurface,
+//                contentDescription = null,
+//            )
+//
+//
+//            Text(
+//                text = album,
+//                color = MaterialTheme.colors.onSurface,
+//                modifier = Modifier
+//                    .padding(16.dp)
+//                    .alpha(
+//                        dynamicAlpha
+//                    )
+//            )
+//
+//
+//            Icon(
+//                imageVector = Icons.Default.MoreVert, tint = MaterialTheme.colors.onSurface,
+//                contentDescription = null,
+//            )
+//
+//
+//        }
     }
 }
 
