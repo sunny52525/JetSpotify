@@ -62,9 +62,10 @@ class LibraryViewModel @Inject constructor(
     }
 
 
-    private fun getLibraryItems() {
+     fun getLibraryItems() {
 
 
+         Log.d(TAG, "getLibraryItems: CAlled")
         GlobalScope.launch {
             var savedPlaylist: Pager<PlaylistSimple> = Pager()
             var followedArtist = ArtistsCursorPager()
@@ -137,7 +138,7 @@ class LibraryViewModel @Inject constructor(
 
 
                 libraryList.forEach {
-                    Log.d(TAG, "getLibraryItems: $it")
+                    Log.d(TAG, "getLibraryItems: ${it.title}")
                 }
             }
         }

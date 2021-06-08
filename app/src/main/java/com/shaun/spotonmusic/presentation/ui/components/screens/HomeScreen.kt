@@ -259,7 +259,7 @@ fun HomeScreenNavigationConfiguration(
                 Library(
                     viewModel = viewModel,
                     modalBottomSheetState = modalBottomSheetState,
-                    libraryViewModel = libraryViewModel,
+                    libraryViewModel,
                     scope = scope,
                     listStateLibrary = listStateLibrary, onPlaylistClicked = {
                         Log.d("", "MOODD: $it")
@@ -279,7 +279,10 @@ fun HomeScreenNavigationConfiguration(
             EnterAnimation {
                 PlaylistDetail(
                     id,
-                    myDetails
+                    myDetails,
+                    updatePlaylist = {
+                        libraryViewModel.getLibraryItems()
+                    }
                 )
 
             }

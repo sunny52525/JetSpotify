@@ -18,7 +18,7 @@ import com.shaun.spotonmusic.presentation.ui.components.albumcomponents.TopSecti
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
 import com.shaun.spotonmusic.utils.PaletteExtractor
-import com.shaun.spotonmusic.viewmodel.MusicDetail
+import com.shaun.spotonmusic.viewmodel.MusicDetailViewModel
 import kaaes.spotify.webapi.android.models.Playlist
 import kaaes.spotify.webapi.android.models.UserPrivate
 
@@ -27,9 +27,12 @@ private const val TAG: String = "PlayListDetail"
 
 @ExperimentalFoundationApi
 @Composable
-fun PlaylistDetail(id: String?, myDetails: UserPrivate?) {
+fun PlaylistDetail(
+    id: String?, myDetails: UserPrivate?,
+    updatePlaylist: () -> Unit
+) {
 
-    val viewModel = hiltViewModel<MusicDetail>()
+    val viewModel = hiltViewModel<MusicDetailViewModel>()
     var follow by remember {
         mutableStateOf(false)
     }
@@ -96,9 +99,21 @@ fun PlaylistDetail(id: String?, myDetails: UserPrivate?) {
                 viewModel.follows.postValue(!follow)
 
                 if (!follow)
-                    id?.let { viewModel.followAPlaylist(it) }
+                    id?.let {
+                        viewModel.followAPlaylist(it,onFollowed = {
+
+                            updatePlaylist()
+                        })
+                    }
                 else
-                    id?.let { viewModel.unFollowPlaylist(it) }
+                    id?.let {
+                        viewModel.unFollowPlaylist(it, onUnFollowed = {
+
+                            updatePlaylist()
+                        })
+                    }
+
+
             },
             viewModel = viewModel,
         )

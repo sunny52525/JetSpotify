@@ -9,10 +9,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import com.shaun.spotonmusic.database.model.LibraryItem
 import com.shaun.spotonmusic.database.model.LibraryModel
 import com.shaun.spotonmusic.database.model.TYPE
 import com.shaun.spotonmusic.presentation.ui.components.librarycomponents.Header
@@ -38,24 +38,34 @@ fun Library(
     onPlaylistClicked: (String) -> Unit = {}
 
 ) {
+//
+//    val libraryViewModel: LibraryViewModel =
+//        hiltViewModel()
 
-    var items by remember {
-        mutableStateOf(LibraryModel(arrayListOf()))
-    }
-    var sorted by remember {
-        mutableStateOf(LibraryModel(arrayListOf()))
-    }
+//    var items by remember {
+//        mutableStateOf(LibraryModel(arrayListOf()))
+//    }
+//    var sorted by remember {
+//        mutableStateOf(LibraryModel(arrayListOf()))
+//    }
+//
+//    var sortMode by remember {
+//        mutableStateOf(false)
+//    }
 
-    var sortMode by remember {
-        mutableStateOf(false)
-    }
+    val list: LibraryModel by libraryViewModel.libraryItemsList.observeAsState(
+        initial = LibraryModel(
+            arrayListOf()
+        )
+    )
 
     libraryViewModel.libraryItemsList.observeForever {
-        if (it != null) {
-            items = it
+        Log.d("TAG", "Library: CHanged")
+
+        it.items.forEach {
+            Log.d("TAG", "Library: ${it.title}")
         }
     }
-
 
     val isGrid by libraryViewModel.isGrid.observeAsState(initial = true)
     val userDetails by libraryViewModel.userDetails.observeAsState(initial = UserPrivate())
@@ -69,7 +79,7 @@ fun Library(
 
         LibraryItemRow(
             modalBottomSheetState = modalBottomSheetState,
-            libraryItems = if (sortMode) sorted else items,
+            libraryItems = list,
             listState = listStateLibrary,
             scope = scope,
             isGrid = isGrid,
@@ -84,20 +94,20 @@ fun Library(
                 }
 
             }, chipSelected = { type, sortModeBool ->
-                Log.d("TAG", "Library: $type,$sortModeBool")
-
-                if (sortModeBool) {
-                    sorted.items = items.items.filter {
-                        it.type == type
-                    } as ArrayList<LibraryItem>
-
-                    Log.d("TAG", "Library: $sorted")
-                }else{
-                    sorted=items
-                    Log.d("TAG", "Library: $items")
-
-                }
-                sortMode=sortModeBool
+//                Log.d("TAG", "Library: $type,$sortModeBool")
+//
+//                if (sortModeBool) {
+//                    sorted.items = items.items.filter {
+//                        it.type == type
+//                    } as ArrayList<LibraryItem>
+//
+//                    Log.d("TAG", "Library: $sorted")
+//                } else {
+//                    sorted = items
+//                    Log.d("TAG", "Library: $items")
+//
+//                }
+//                sortMode = sortModeBool
 
             })
 

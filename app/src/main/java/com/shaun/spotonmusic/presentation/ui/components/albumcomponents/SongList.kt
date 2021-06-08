@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.shaun.spotonmusic.utils.getImageUrl
-import com.shaun.spotonmusic.viewmodel.MusicDetail
+import com.shaun.spotonmusic.viewmodel.MusicDetailViewModel
 import kaaes.spotify.webapi.android.models.Pager
 import kaaes.spotify.webapi.android.models.PlaylistTrack
 
@@ -27,7 +27,7 @@ fun SongList(
     scrollState: LazyListState,
     tracks: Pager<PlaylistTrack?>?,
     onFollowClicked: () -> Unit,
-    viewModel: MusicDetail,
+    viewModel: MusicDetailViewModel,
 
     ) {
 

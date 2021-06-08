@@ -9,11 +9,12 @@ import com.shaun.spotonmusic.network.api.SpotifyAppService
 import com.shaun.spotonmusic.repository.MusicDetailRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kaaes.spotify.webapi.android.models.Album
+import retrofit2.Call
 import javax.inject.Inject
 
 
 @HiltViewModel
-class MusicDetail @Inject constructor(
+class MusicDetailViewModel @Inject constructor(
     datastoreManager: DatastoreManager,
     spotifyAppService: SpotifyAppService
 ) : ViewModel() {
@@ -73,13 +74,17 @@ class MusicDetail @Inject constructor(
     }
 
 
-    fun followAPlaylist(playlistId: String) {
-        repository.followPlaylist(playlistId = playlistId)
+    fun followAPlaylist(playlistId: String, onFollowed: () -> Unit) {
+        repository.followPlaylist(playlistId = playlistId, onFollowed = {
+            onFollowed()
+        })
     }
 
-    fun unFollowPlaylist(playlistId: String) {
+    fun unFollowPlaylist(playlistId: String,onUnFollowed: () -> Unit) {
 
-        repository.unfollowAPlaylist(playlistId)
+        return repository.unfollowAPlaylist(playlistId,onUnFollowed = {
+            onUnFollowed()
+        })
     }
 
     companion object {

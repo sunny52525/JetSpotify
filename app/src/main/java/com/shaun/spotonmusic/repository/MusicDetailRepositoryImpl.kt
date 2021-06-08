@@ -110,35 +110,45 @@ class MusicDetailRepositoryImpl @Inject constructor(
     }
 
 
-    fun followPlaylist(playlistId: String) {
-        retrofit.followAPlaylist(playList_id = playlistId, "Authorization: Bearer $accessToken")
-            .enqueue(object : retrofit2.Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: retrofit2.Response<Void>) {
+    fun followPlaylist(playlistId: String,onFollowed:()->Unit){
+         retrofit.followAPlaylist(
+            playList_id = playlistId,
+            "Authorization: Bearer $accessToken"
+        ).enqueue(object :retrofit2.Callback<Void>{
+             override fun onResponse(call: Call<Void>, response: retrofit2.Response<Void>) {
 
-                    Log.d(TAG, "onResponse: ${response.body()}")
-                }
+               onFollowed()
 
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Log.d(TAG, "onFailure: $t")
-                }
+             }
 
-            })
+             override fun onFailure(call: Call<Void>, t: Throwable) {
+
+                 Log.d( TAG, "onFailure: ${t.message}")
+             }
+
+         })
+
     }
 
-    fun unfollowAPlaylist(playlistId: String) {
+    fun unfollowAPlaylist(playlistId: String,onUnFollowed:()->Unit) {
 
-        retrofit.unfollowAPlaylist(playList_id = playlistId, "Authorization: Bearer $accessToken")
-            .enqueue(object : retrofit2.Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: retrofit2.Response<Void>) {
+         retrofit.unfollowAPlaylist(
+            playList_id = playlistId,
+            "Authorization: Bearer $accessToken"
+        ).enqueue(object :retrofit2.Callback<Void>{
+             override fun onResponse(call: Call<Void>, response: retrofit2.Response<Void>) {
 
-                    Log.d(TAG, "onResponse: ${response.body()}")
-                }
+                 onUnFollowed()
 
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Log.d(TAG, "onFailure: $t")
-                }
+             }
 
-            })
+             override fun onFailure(call: Call<Void>, t: Throwable) {
+
+                 Log.d( TAG, "onFailure: ${t.message}")
+             }
+
+         })
+
 
     }
 
