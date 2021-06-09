@@ -69,7 +69,7 @@ fun RecentHeardCards(
 }
 
 @Composable
-fun RecentHeardBlock(recentlyPlayed: List<SpotOnMusicModel>) {
+fun RecentHeardBlock(recentlyPlayed: List<SpotOnMusicModel>, onCardClicked: (String) -> Unit) {
 
     if (recentlyPlayed.isEmpty())
         return
@@ -82,9 +82,9 @@ fun RecentHeardBlock(recentlyPlayed: List<SpotOnMusicModel>) {
 
     val name = recentlyPlayedArray.subList(0, 6.coerceAtMost(length)).map {
         if (it.title.length > 15) {
-            Pair(it.title.substring(0, 14) + "...", getImageUrl(it.imageUrls,1))
+            Pair(it.title.substring(0, 14) + "...", getImageUrl(it.imageUrls, 1))
         } else {
-            Pair(it.title, getImageUrl(it.imageUrls,1))
+            Pair(it.title, getImageUrl(it.imageUrls, 1))
         }
     }
 
@@ -108,6 +108,7 @@ fun RecentHeardBlock(recentlyPlayed: List<SpotOnMusicModel>) {
                 RecentHeardCards(
                     onCardClicked = {
                         Log.d("TAG", "RecentHeardBlock: CLICKED")
+                        onCardClicked(recentlyPlayed[0].id)
 
                     }, modifier = Modifier
                         .weight(0.9f),
@@ -116,6 +117,7 @@ fun RecentHeardBlock(recentlyPlayed: List<SpotOnMusicModel>) {
                 Spacer(modifier = Modifier.width(5.dp))
                 RecentHeardCards(
                     onCardClicked = {
+                        onCardClicked(recentlyPlayed[1].id)
                     }, modifier = Modifier
                         .weight(0.9f),
                     data = name[1]
@@ -138,7 +140,7 @@ fun RecentHeardBlock(recentlyPlayed: List<SpotOnMusicModel>) {
                 RecentHeardCards(
                     onCardClicked = {
                         Log.d("TAG", "RecentHeardBlock: CLICKED")
-
+                        onCardClicked(recentlyPlayed[2].id)
                     }, modifier = Modifier
                         .weight(0.9f),
                     data = name[2]
@@ -146,6 +148,7 @@ fun RecentHeardBlock(recentlyPlayed: List<SpotOnMusicModel>) {
                 Spacer(modifier = Modifier.width(5.dp))
                 RecentHeardCards(
                     onCardClicked = {
+                        onCardClicked(recentlyPlayed[3].id)
                     }, modifier = Modifier
                         .weight(0.9f),
                     data = name[3]
@@ -168,7 +171,7 @@ fun RecentHeardBlock(recentlyPlayed: List<SpotOnMusicModel>) {
                 RecentHeardCards(
                     onCardClicked = {
                         Log.d("TAG", "RecentHeardBlock: CLICKED")
-
+                        onCardClicked(recentlyPlayed[4].id)
                     }, modifier = Modifier
                         .weight(0.9f),
                     data = name[4]
@@ -176,6 +179,7 @@ fun RecentHeardBlock(recentlyPlayed: List<SpotOnMusicModel>) {
                 Spacer(modifier = Modifier.width(5.dp))
                 RecentHeardCards(
                     onCardClicked = {
+                        onCardClicked(recentlyPlayed[5].id)
                     }, modifier = Modifier
                         .weight(0.9f),
                     data = name[5]

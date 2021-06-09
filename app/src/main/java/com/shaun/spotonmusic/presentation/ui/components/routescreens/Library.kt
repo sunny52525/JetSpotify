@@ -92,6 +92,9 @@ fun Library(
                 if (type == TYPE.PLAYLIST) {
                     onPlaylistClicked(id)
                 }
+                if (type == TYPE.ALBUM) {
+                    onAlbumClicked(id)
+                }
 
             }, chipSelected = { type, sortModeBool ->
 //                Log.d("TAG", "Library: $type,$sortModeBool")

@@ -123,9 +123,11 @@ fun Home(
                             .fillMaxWidth()
                     )
                     Greeting(onClick = {
+
+                    })
+                    RecentHeardBlock(recentlyPlayed,onCardClicked = {
                         onAlbumClicked(it)
                     })
-                    RecentHeardBlock(recentlyPlayed)
                 }
 
             }
