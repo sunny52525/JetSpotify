@@ -1,12 +1,15 @@
 package com.shaun.spotonmusic.presentation.ui.components.routescreens
 
 import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import com.shaun.spotonmusic.presentation.ui.components.albumcomponents.AlbumSongList
 import com.shaun.spotonmusic.presentation.ui.components.albumcomponents.TopBar
 import com.shaun.spotonmusic.ui.theme.black
@@ -26,10 +29,21 @@ fun AlbumDetail(id: String?, viewModel: AlbumDetailViewModel) {
     val liked by viewModel.liked.observeAsState(initial = false)
 
 
+    var isLoaded by remember {
+
+        mutableStateOf(false)
+    }
     Log.d(TAG, "AlbumDetail: $id")
 
 
     val currentAlbum: Album? by viewModel.album.observeAsState()
+
+    viewModel.album.observeForever {
+        it?.let {
+            isLoaded = true
+        }
+
+    }
 
     val colors = remember {
         mutableStateOf(arrayListOf(black, spotifyDarkBlack))
@@ -49,17 +63,29 @@ fun AlbumDetail(id: String?, viewModel: AlbumDetailViewModel) {
 
     Log.d(TAG, "AlbumDetail: ${currentAlbum?.name}")
 
-    Column() {
-        TopBar(isAlbum = true, title = currentAlbum?.name, onBackPressed = {
+    if (isLoaded) {
+        Column() {
+            TopBar(isAlbum = true, title = currentAlbum?.name, onBackPressed = {
 
-        }, onMoreOptionClicked = {
+            }, onMoreOptionClicked = {
 
-        }, onLikeButtonClicked = {
+            }, onLikeButtonClicked = {
 
-        }, backgroundColor = spotifyGray,
-            liked = liked ?: false
-        )
+            }, backgroundColor = spotifyGray,
+                liked = liked ?: false
+            )
 
-        AlbumSongList(currentAlbum, colors.value)
+            AlbumSongList(currentAlbum, colors.value)
+        }
+    } else {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .background(spotifyDarkBlack)
+        ) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        }
     }
 }
