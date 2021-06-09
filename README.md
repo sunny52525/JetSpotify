@@ -3,7 +3,7 @@ JetSpotify is an Spotify App (made in Jetpack Compose) and functionalites (using
 
 
 ## What It has/Tech stack
-* Spotify Auth ,Retreive spotify data using Spotify SDK and WebApi
+* Spotify Auth ,Retreive spotify data,Recommendations using Spotify SDK and WebApi
 * Full UI functionality with Animations
 * MVVM Architecture
 * Hilt Dependency Injection
