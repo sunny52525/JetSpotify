@@ -14,7 +14,8 @@ fun RecommendationsRow(
     recommendations: List<SpotOnMusicModel>,
     image: String,
     artistName: List<SpotOnMusicModel>,
-    index: Int
+    index: Int,
+    onCardClicked: (String) -> Unit
 ) {
 
     if (artistName.isEmpty())
@@ -32,6 +33,8 @@ fun RecommendationsRow(
                         CustomizedSuggestionCard(
                             album = Pair(its.imageUrls[0], its.title),
                             paddingValues = if (index == 0) 20 else 10, onCardClick = {
+
+                                onCardClicked(its.id)
 
                             })
                     }

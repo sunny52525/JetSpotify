@@ -27,7 +27,8 @@ enum class ComponentState { Pressed, Released }
 @Preview(showBackground = true)
 @Composable
 fun ShuffleButton(
-    shuffleClicked: () -> Unit = {}
+    modifier: Modifier = Modifier,
+    shuffleClicked: () -> Unit = {},
 ) {
 
 
@@ -51,7 +52,7 @@ fun ShuffleButton(
 
 
     Surface(
-        modifier = Modifier
+        modifier = modifier
             .padding(end = 8.dp, bottom = 8.dp)
             .graphicsLayer {
                 scaleX = scalex;

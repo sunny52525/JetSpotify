@@ -35,7 +35,6 @@ class PlaylistDetailViewModel @Inject constructor(
         this.userId.postValue(userId)
         this.id.postValue(id)
         follows = repository.followsPlayList(userId = userId, playList = id)
-
         playList = repository.getPlaylistAsync(id)
 
     }

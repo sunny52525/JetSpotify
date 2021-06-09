@@ -1,23 +1,6 @@
 package com.shaun.spotonmusic.utils
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.util.Log
-import androidx.compose.ui.graphics.Color
-import androidx.core.graphics.blue
-import androidx.core.graphics.green
-import androidx.core.graphics.red
-import androidx.lifecycle.MutableLiveData
-import androidx.palette.graphics.Palette
-import com.shaun.spotonmusic.ui.theme.green
-import kaaes.spotify.webapi.android.models.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
+import java.text.DateFormatSymbols
 import java.util.*
 
 
@@ -61,6 +44,20 @@ fun getImageUrl(list: List<String>, demand: Int): String {
         }
         else -> return ""
     }
+
+}
+
+fun getMonth(month: Int): String? {
+    return DateFormatSymbols().months[month - 1]
+}
+
+
+fun dateToString(date: String): String {
+    val separated = date.split("-")
+
+    return """
+        ${getMonth(separated[1].toInt())} ${separated[2]},${separated[0]}
+    """.trimIndent()
 
 }
 

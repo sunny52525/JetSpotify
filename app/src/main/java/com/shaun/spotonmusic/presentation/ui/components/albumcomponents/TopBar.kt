@@ -25,12 +25,13 @@ import com.shaun.spotonmusic.ui.theme.lightGreen
 fun TopBar(
     isAlbum: Boolean = true,
     alpha: Float = 1f,
-    title: String = "Album",
+    title: String? = "Album",
     onBackPressed: () -> Unit = {},
     onMoreOptionClicked: () -> Unit = {},
     onLikeButtonClicked: () -> Unit = {},
     backgroundColor: Color = Color.Transparent,
-    paddingStart: Int = 8
+    paddingStart: Int = 8,
+    liked: Boolean = false
 ) {
 
     Row(
@@ -51,7 +52,7 @@ fun TopBar(
 
 
         Text(
-            text = title,
+            text = title ?: "",
             color = MaterialTheme.colors.onSurface,
             modifier = Modifier
                 .padding(16.dp)
@@ -66,7 +67,7 @@ fun TopBar(
                 Icon(
                     imageVector = Icons.Default.Favorite,
                     contentDescription = null,
-                    tint = lightGreen,
+                    tint = if (liked) lightGreen else Color.Transparent,
                     modifier = Modifier
                         .padding(4.dp)
                         .size(20.dp)

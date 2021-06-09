@@ -268,6 +268,10 @@ fun HomeScreenNavigationConfiguration(
                     listStateLibrary = listStateLibrary, onPlaylistClicked = {
                         Log.d("", "MOODD: $it")
                         navHostController.navigate(Routes.PlaylistDetail.route + "/$it")
+                    }, onAlbumClicked = {
+                        navHostController.navigate(Routes.AlbumDetail.route + "/$it")
+
+
                     }
                 )
             }
@@ -284,8 +288,8 @@ fun HomeScreenNavigationConfiguration(
 
             myDetails?.id.let { userId ->
 //                playlistDetailViewModel.userId.postValue(userId)
-                if(userId!=null)
-                playlistDetailViewModel.setUserId(id.toString(),userId = userId)
+                if (userId != null)
+                    playlistDetailViewModel.setUserId(id.toString(), userId = userId)
             }
             EnterAnimation {
                 PlaylistDetail(
@@ -303,8 +307,8 @@ fun HomeScreenNavigationConfiguration(
             val id = it.arguments?.getString("id")
 
             val albumDetailViewModel = hiltViewModel<AlbumDetailViewModel>()
+            albumDetailViewModel.setUserId(id.toString())
 
-            albumDetailViewModel.updateAlbum(id.toString())
 
             EnterAnimation {
 

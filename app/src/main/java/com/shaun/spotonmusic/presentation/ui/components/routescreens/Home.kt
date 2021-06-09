@@ -123,7 +123,7 @@ fun Home(
                             .fillMaxWidth()
                     )
                     Greeting(onClick = {
-
+                        onAlbumClicked(it)
                     })
                     RecentHeardBlock(recentlyPlayed)
                 }
@@ -179,7 +179,10 @@ fun Home(
                     recommendations = firstFavouriteArtistRecommendations,
                     image = favouriteArtistImage,
                     artistName = favouriteArtists,
-                    index = 0
+                    index = 0,
+                    onCardClicked = {
+                        onAlbumClicked(it)
+                    }
                 )
             }
 
@@ -209,7 +212,10 @@ fun Home(
                     recommendations = secondFavouriteArtistRecommendations,
                     image = secondFavouriteArtistImage,
                     artistName = favouriteArtists,
-                    index = 1
+                    index = 1,
+                    onCardClicked = {
+                        onAlbumClicked(it)
+                    }
                 )
             }
 

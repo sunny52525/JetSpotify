@@ -21,11 +21,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.glide.rememberGlidePainter
 import com.shaun.spotonmusic.ui.theme.lightGreen
 import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
-import com.shaun.spotonmusic.viewmodel.PlaylistDetailViewModel
 import kaaes.spotify.webapi.android.models.ArtistSimple
 
 
@@ -33,11 +31,11 @@ import kaaes.spotify.webapi.android.models.ArtistSimple
 @Composable
 fun SpotifySongListItem(
     album: String = "Test",
-    viewModel: PlaylistDetailViewModel = viewModel(),
     trackId: Boolean = true,
     explicit: Boolean = true,
     singer: MutableList<ArtistSimple> = mutableListOf(),
-    imageUrl: String = ""
+    imageUrl: String = "",
+    showImage: Boolean = true
 ) {
 
 
@@ -47,14 +45,16 @@ fun SpotifySongListItem(
             .padding(start = 8.dp, bottom = 5.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Image(
-            painter = rememberGlidePainter(request = imageUrl),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(55.dp)
-                .padding(4.dp)
-        )
+        if (showImage) {
+            Image(
+                painter = rememberGlidePainter(request = imageUrl),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(55.dp)
+                    .padding(4.dp)
+            )
+        }
         Column(
             modifier = Modifier
                 .padding(horizontal = 4.dp)

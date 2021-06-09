@@ -210,7 +210,7 @@ fun Item(
             Row {
                 Text(text = type, color = Color.LightGray, fontSize = 12.sp)
                 Spacer(modifier = Modifier.width(5.dp))
-                Text(text = owner, color = Color.LightGray, fontSize = 12.sp)
+                Text(text = "• $owner", color = Color.LightGray, fontSize = 12.sp)
 
             }
         }

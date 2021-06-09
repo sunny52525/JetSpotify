@@ -82,7 +82,7 @@ fun BoxTopSection(
         IsFollowing(isFollowing)
 
         Text(
-            text = "BY ${currentAlbum.owner.display_name.toUpperCase(Locale.ROOT)}   ${
+            text = "BY ${currentAlbum.owner.display_name.toUpperCase(Locale.ROOT)} • ${
                 getFollowerCount(
                     currentAlbum.followers.total
                 )

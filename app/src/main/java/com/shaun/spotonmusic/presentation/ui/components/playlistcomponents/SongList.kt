@@ -74,7 +74,6 @@ fun SongList(
                     Log.d("TAG", "SongList: ${it.track.id}, ${it.track.name}")
                     SpotifySongListItem(
                         album = it.track.name,
-                        viewModel = viewModel,
                         trackId = true,
                         singer = it.track.artists,
                         explicit = it.track.explicit,

@@ -152,6 +152,22 @@ class MusicDetailRepositoryImpl(
 
     }
 
+    fun followsAlbum(albumId: String):MutableLiveData<Boolean>{
+
+        val result=MutableLiveData(false)
+        spotify.containsMySavedAlbums(albumId,object :Callback<BooleanArray>{
+            override fun success(t: BooleanArray?, response: Response?) {
+                result.postValue(t?.get(0))
+
+            }
+
+            override fun failure(error: RetrofitError?) {
+
+            }
+
+        })
+        return result
+    }
 
     fun getAAlbum(albumId: String): MutableLiveData<Album?> {
 
