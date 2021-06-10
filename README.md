@@ -1,5 +1,5 @@
 # JetSpotify
-JetSpotify is an Spotify App (made in Jetpack Compose) and functionalites (using Spotify SDK and webapi)
+JetSpotify is a Spotify App (made in Jetpack Compose) and functionalites (using Spotify SDK and webapi)
 
 
 ## What It has/Tech stack
