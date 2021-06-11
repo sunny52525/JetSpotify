@@ -1,9 +1,9 @@
 # JetSpotify
-JetSpotify is an Spotify App (made in Jetpack Compose) and functionalites (using Spotify SDK and webapi)
+JetSpotify is a Spotify App (made in Jetpack Compose) and functionalites (using Spotify SDK and webapi)
 
 
 ## What It has/Tech stack
-* Spotify Auth using Spotify SDK and WebApi
+* Spotify Auth ,Retreive spotify data,Recommendations using Spotify SDK and WebApi
 * Full UI functionality with Animations
 * MVVM Architecture
 * Hilt Dependency Injection
@@ -29,4 +29,4 @@ JetSpotify is an Spotify App (made in Jetpack Compose) and functionalites (using
     for creating Spotify webapi wrapper
     
 #### Note: [Spotify web api wrapper](https://github.com/kaaes/spotify-web-api-android) Uses retrofit v1 for api calls.
-         I have written some api calls in retrofit2  
+     I have written some api calls in retrofit2  
