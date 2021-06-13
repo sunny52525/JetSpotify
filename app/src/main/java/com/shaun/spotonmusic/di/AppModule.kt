@@ -4,10 +4,12 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.shaun.spotonmusic.SpotOnApplication
 import com.shaun.spotonmusic.network.api.SpotifyAppService
+import com.shaun.spotonmusic.utils.AppConstants
 import com.shaun.spotonmusic.utils.AppConstants.BASEURL
 import com.shaun.spotonmusic.utils.PaletteExtractor
 import dagger.Module
@@ -15,6 +17,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Cache
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -28,9 +33,9 @@ object AppModule {
     private val gson: Gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
         .setLenient().create()
 
-//    val interceptor = HttpLoggingInterceptor().apply {
-//        level = HttpLoggingInterceptor.Level.BODY
-//    }
+    val interceptor = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY
+    }
 //    val client = OkHttpClient.Builder().addInterceptor(interceptor)
 //        .build()
 
@@ -48,12 +53,43 @@ object AppModule {
 
     @Provides
 //    @Singleton
-    fun spotifyService(): SpotifyAppService = Retrofit.Builder()
-        .baseUrl(BASEURL).addConverterFactory(GsonConverterFactory.create(gson))
-        .build().create(SpotifyAppService::class.java)
+    fun spotifyService(@ApplicationContext context: Context): SpotifyAppService {
+
+
+        val cacheSpotify = Cache(context.cacheDir, AppConstants.CACHE_SIZE)
+
+        val okHttpClient = OkHttpClient.Builder().cache(cacheSpotify)
+            .addInterceptor { chain ->
+                var request = chain.request()
+                request = if (hasInternetConnection(context = context)) {
+                    Log.d("TAG", "spotifyService: Here")
+                    request.newBuilder().header("Cache-Control", "public, max-age=" + 60)
+                        .removeHeader("Pragma")
+                        .build()
+                } else
+                    request.newBuilder().header(
+                        "Cache-Control",
+                        "public, only-if-cached, max-stale=" + 60 * 60 * 24 * 7
+                    ).removeHeader("Pragma")
+                        .build()
+
+
+                chain.proceed(request = request)
+            }
+//            .addInterceptor(
+//                interceptor
+//            )
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl(BASEURL).addConverterFactory(GsonConverterFactory.create(gson))
+            .client(okHttpClient)
+            .build().create(SpotifyAppService::class.java)
+    }
 
     @Provides
     fun hasInternetConnection(@ApplicationContext context: Context): Boolean {
+
         var result = false
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

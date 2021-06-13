@@ -26,6 +26,7 @@ class MusicDetailRepositoryImpl(
         spotify = api.service
     }
 
+    var header = "Authorization: Bearer $accessToken"
 
     fun getAlbum(id: String): MutableLiveData<Album> {
         val result = MutableLiveData<Album>()
@@ -67,18 +68,53 @@ class MusicDetailRepositoryImpl(
     fun hasLikedThisSong(id: String): MutableLiveData<Boolean> {
 
         val result = MutableLiveData<Boolean>()
-        spotify.containsMySavedTracks(id, object : Callback<BooleanArray> {
-            override fun success(t: BooleanArray?, response: Response?) {
 
+        retrofit.hasLikedSong(id, header).enqueue(object : retrofit2.Callback<BooleanArray> {
+            override fun onResponse(
+                call: Call<BooleanArray>,
+                response: retrofit2.Response<BooleanArray>
+            ) {
+                if (response.raw().cacheResponse != null) {
+                    Log.d(TAG, "onResponse: ${response.raw().cacheResponse}")
+                    Log.e("Network", "response came from cache");
+                }
 
-                result.postValue(t?.get(0))
+                if (response.raw().networkResponse != null) {
+                    Log.e("Network", "response came from server");
+                }
+
+                result.postValue(response.body()?.get(0))
             }
 
-            override fun failure(error: RetrofitError?) {
-                Log.d(TAG, "failure: $error")
+            override fun onFailure(call: Call<BooleanArray>, t: Throwable) {
+                Log.d(TAG, "onFailure: ${t.message}")
             }
 
         })
+//        retrofit.hasLikedSong(id, header).enqueue {
+//            when (it) {
+//                is Result.Success -> {
+//                    Log.d(TAG, "hasLikedThisSong: ${it.response.body()}")
+//                    result.postValue(it.response.body()?.get(0))
+//                }
+//                is Result.Failure -> {
+//                    Log.d(TAG, "hasLikedThisSong: ${it.error}")
+//                }
+//            }
+//        }
+
+//        spotify.containsMySavedTracks(id, object : Callback<BooleanArray> {
+//            override fun success(t: BooleanArray?, response: Response?) {
+//
+//
+//                result.postValue(t?.get(0))
+//            }
+//
+//            override fun failure(error: RetrofitError?) {
+//                Log.d(TAG, "failure: $error")
+//            }
+//
+//        })
         return result
     }
 
@@ -152,10 +188,10 @@ class MusicDetailRepositoryImpl(
 
     }
 
-    fun followsAlbum(albumId: String):MutableLiveData<Boolean>{
+    fun followsAlbum(albumId: String): MutableLiveData<Boolean> {
 
-        val result=MutableLiveData(false)
-        spotify.containsMySavedAlbums(albumId,object :Callback<BooleanArray>{
+        val result = MutableLiveData(false)
+        spotify.containsMySavedAlbums(albumId, object : Callback<BooleanArray> {
             override fun success(t: BooleanArray?, response: Response?) {
                 result.postValue(t?.get(0))
 

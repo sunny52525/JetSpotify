@@ -31,6 +31,13 @@ fun SongList(
 
     ) {
 
+//
+//    val hasLiked by remember {
+//        mutableStateOf(mutableMapOf("sds" to false))
+//    }
+//    var count by remember {
+//        mutableStateOf(1)
+//    }
 
     LazyColumn(state = scrollState) {
         item {
@@ -46,7 +53,7 @@ fun SongList(
         }
         stickyHeader {
             Spacer(modifier = Modifier
-                .height(90.dp)
+                .height(85.dp)
                 .fillMaxWidth()
                 .pointerInput(Unit) {
                     detectTapGestures(
@@ -66,24 +73,41 @@ fun SongList(
             }
         }
         tracks?.let { tracksPager ->
-            items(tracksPager?.items) {
+            items(tracksPager.items) {
                 //TODO(DO SOMETHING ABOUT IT)
-//                val liked: Boolean by viewModel.hasLikedThisSong(it?.track?.id.toString())
-//                    .observeAsState(initial = false)
+
+
+//                val trackId = it?.track?.id
+//
+//                viewModel.hasLikedThisSong(trackId.toString()).observeForever { like ->
+//                    like?.let {
+//                        if (like) {
+//                            trackId?.let {
+//
+//                                hasLiked.put(trackId, like)
+//                                count++
+//
+//                            }
+//                        }
+//                    }
+//                }
                 if (it != null) {
                     Log.d("TAG", "SongList: ${it.track.id}, ${it.track.name}")
                     SpotifySongListItem(
                         album = it.track.name,
-                        trackId = true,
+                        liked = false,
                         singer = it.track.artists,
                         explicit = it.track.explicit,
                         imageUrl = getImageUrl(it.track.album.images.map { url ->
                             url.url
-                        }, 0)
+                        }, 0),
+//                        count = count
+
                     )
 
                 }
             }
+
         }
         item {
 

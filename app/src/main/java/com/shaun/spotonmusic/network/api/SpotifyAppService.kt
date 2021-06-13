@@ -40,6 +40,13 @@ interface SpotifyAppService {
         @Header("Authorization") authorization: String
     ): Call<Void>
 
+
+    @GET("v1/me/tracks/contains")
+    fun hasLikedSong(
+        @Query("ids") id: String,
+        @Header("Authorization") authorization: String
+
+    ): Call<BooleanArray>
 //    @GET("/v1/browse/categories/{category_id}/playlists")
 //    fun getCategoryPlaylist(
 //        @Path("category_id ") category_id:String,

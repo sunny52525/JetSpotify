@@ -27,15 +27,15 @@ import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
 import kaaes.spotify.webapi.android.models.ArtistSimple
 
 
-@Preview(showBackground = true)
 @Composable
 fun SpotifySongListItem(
     album: String = "Test",
-    trackId: Boolean = true,
     explicit: Boolean = true,
     singer: MutableList<ArtistSimple> = mutableListOf(),
     imageUrl: String = "",
-    showImage: Boolean = true
+    showImage: Boolean = true,
+    liked: Boolean = false,
+    count: Int = 0
 ) {
 
 
@@ -82,7 +82,7 @@ fun SpotifySongListItem(
             }
         }
 
-        if (trackId)
+        if (liked)
             Icon(
                 imageVector = Icons.Default.Favorite,
                 contentDescription = null,

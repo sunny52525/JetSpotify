@@ -40,10 +40,9 @@ fun AlbumSongList(currentAlbum: Album?, colors: ArrayList<Color>?) {
             items(currentAlbum.tracks.items) {
                 SpotifySongListItem(
                     album = it.name,
-                    trackId = false,
                     explicit = it.explicit,
                     singer = it.artists,
-                    showImage = false
+                    showImage = false,
                 )
 
                 Spacer(

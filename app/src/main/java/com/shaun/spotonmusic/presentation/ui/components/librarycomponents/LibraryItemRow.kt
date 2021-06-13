@@ -96,7 +96,7 @@ fun LibraryItemRow(
             }, isGrid)
         }
 
-        libraryItems.items.forEachIndexed { index, libraryItem ->
+        libraryItems.items.forEachIndexed { _, libraryItem ->
             item {
                 if (isGrid)
                     Item(

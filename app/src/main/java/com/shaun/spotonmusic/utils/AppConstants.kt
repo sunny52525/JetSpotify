@@ -27,6 +27,7 @@ object AppConstants {
 
     val SORT_ITEMS = arrayOf("Recently Played", "Recently Added", "Alphabetical", "Creator")
 
+    val CACHE_SIZE = (5 * 1024 * 1024).toLong()
 
 }
 
