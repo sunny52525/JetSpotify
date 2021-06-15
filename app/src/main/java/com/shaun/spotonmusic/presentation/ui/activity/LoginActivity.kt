@@ -8,18 +8,22 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.annotation.MainThread
-import com.shaun.spotonmusic.presentation.ui.components.screens.LoginScreen
+import androidx.compose.material.ExperimentalMaterialApi
+import com.shaun.spotonmusic.presentation.ui.screens.LoginScreen
 import com.spotify.sdk.android.authentication.AuthenticationResponse
 import io.github.kaaes.spotify.webapi.core.models.UserPrivate
 import net.openid.appauth.TokenResponse
+import kotlin.math.log
 
 
 class LoginActivity : BaseSpotifyActivity() {
 
+    @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             LoginScreen(onLoginButtonClick = {
+                Log.d(TAG, "onCreate: Login")
                 startLoginFlow()
             }, onSingUpButton = {
 

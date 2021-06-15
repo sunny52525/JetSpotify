@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.lifecycle.lifecycleScope
 import com.pghaz.spotify.webapi.auth.SpotifyAuthorizationCallback
-import com.shaun.spotonmusic.presentation.ui.components.screens.Splash
+import com.shaun.spotonmusic.presentation.ui.screens.Splash
 import com.shaun.spotonmusic.ui.theme.SpotOnMusicTheme
 import com.shaun.spotonmusic.ui.theme.black
 import io.github.kaaes.spotify.webapi.core.models.UserPrivate

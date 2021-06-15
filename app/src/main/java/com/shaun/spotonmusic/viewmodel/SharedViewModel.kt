@@ -8,7 +8,7 @@ import com.shaun.spotonmusic.SpotOnApplication
 import com.shaun.spotonmusic.database.model.SpotOnMusicModel
 import com.shaun.spotonmusic.di.DatastoreManager
 import com.shaun.spotonmusic.network.api.SpotifyAppService
-import com.shaun.spotonmusic.presentation.ui.navigation.BottomNavRoutes
+import com.shaun.spotonmusic.navigation.BottomNavRoutes
 import com.shaun.spotonmusic.repository.HomeScreenRepositoryImpl
 import com.shaun.spotonmusic.utils.TypeConverters.Companion.toSpotOnMusicModel
 import dagger.hilt.android.lifecycle.HiltViewModel

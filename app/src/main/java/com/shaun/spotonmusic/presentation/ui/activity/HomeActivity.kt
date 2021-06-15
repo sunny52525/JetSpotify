@@ -12,7 +12,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.ExperimentalComposeUiApi
 import com.google.android.material.snackbar.Snackbar
 import com.shaun.spotonmusic.R
-import com.shaun.spotonmusic.presentation.ui.components.screens.HomeScreen
+import com.shaun.spotonmusic.presentation.ui.screens.HomeScreen
 import com.shaun.spotonmusic.ui.theme.SpotOnMusicTheme
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kaaes.spotify.webapi.core.models.UserPrivate

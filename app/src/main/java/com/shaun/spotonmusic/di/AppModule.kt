@@ -22,6 +22,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 import javax.inject.Singleton
 
 
@@ -54,6 +55,7 @@ object AppModule {
     @Provides
 //    @Singleton
     fun spotifyService(@ApplicationContext context: Context): SpotifyAppService {
+
 
 
         val cacheSpotify = Cache(context.cacheDir, AppConstants.CACHE_SIZE)
@@ -120,6 +122,10 @@ object AppModule {
         return result
 
     }
+
+
+
+
 
     @Provides
     @Singleton
