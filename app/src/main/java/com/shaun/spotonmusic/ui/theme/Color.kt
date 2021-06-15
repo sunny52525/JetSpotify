@@ -1,6 +1,7 @@
 package com.shaun.spotonmusic.ui.theme
 
 import androidx.compose.ui.graphics.Color
+import java.util.ArrayList
 
 val Teal200 = Color(0xFF03DAC5)
 
@@ -13,7 +14,7 @@ val spotifyGray = Color(0xFF212121)
 
 val blue = Color(0xFF4117b7)
 
-val gridColors = arrayListOf(
+val gridColors: ArrayList<Color> = arrayListOf(
     Color(red = 0.09411765f, blue = 0.09411765f, green = 0.09411765f),
     Color(red = 0.09411765f, blue = 0.09411765f, green = 0.09411765f),
     Color(red = 0.09411765f, blue = 0.09411765f, green = 0.15686275f),

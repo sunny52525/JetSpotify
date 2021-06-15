@@ -228,7 +228,8 @@ fun LibraryGrid(
     imageUrl: Pair<String, String>,
     count: Int = 2,
     onFirstClick: () -> Unit,
-    onSecondClick: () -> Unit
+    onSecondClick: () -> Unit,
+    textAlign: TextAlign = TextAlign.Left
 ) {
 
     Row(
@@ -247,7 +248,7 @@ fun LibraryGrid(
                 }
         ) {
 
-            SingleGrid(title.first, type.first, owner.first, imageUrl.first)
+            SingleGrid(title.first, type.first, owner.first, imageUrl.first, textAlign)
         }
         if (count == 1) return
         Spacer(modifier = Modifier.width(10.dp))
@@ -261,7 +262,7 @@ fun LibraryGrid(
                 }
         ) {
 
-            SingleGrid(title.second, type.second, owner.second, imageUrl.second)
+            SingleGrid(title.second, type.second, owner.second, imageUrl.second,textAlign)
         }
 
     }
@@ -270,7 +271,13 @@ fun LibraryGrid(
 
 
 @Composable
-fun SingleGrid(title: String, type: String, owner: String, imageUrl: String) {
+fun SingleGrid(
+    title: String,
+    type: String,
+    owner: String,
+    imageUrl: String,
+    align: TextAlign = TextAlign.Left
+) {
     Image(
         painter = if (imageUrl.isNotEmpty()) rememberGlidePainter(
             request = imageUrl
@@ -288,7 +295,7 @@ fun SingleGrid(title: String, type: String, owner: String, imageUrl: String) {
         text = title,
         style = MaterialTheme.typography.body1,
         color = Color.White,
-        textAlign = TextAlign.Center,
+        textAlign = align,
         modifier = Modifier.fillMaxWidth()
     )
     Row {
@@ -296,7 +303,7 @@ fun SingleGrid(title: String, type: String, owner: String, imageUrl: String) {
             text = "$type  $owner",
             color = Color.LightGray,
             fontSize = 10.sp,
-            textAlign = TextAlign.Center,
+            textAlign = align,
             modifier = Modifier.fillMaxWidth()
         )
     }

@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.shaun.spotonmusic.database.model.SpotOnMusicModel
 import com.shaun.spotonmusic.presentation.ui.components.search.SearchBar
@@ -29,7 +30,7 @@ private const val TAG = "Search"
 @Composable
 fun Search(
     sharedViewModel: SharedViewModel, onSearchClicked: () -> Unit,
-    onCategoryClicked: (String) -> Unit
+    onCategoryClicked: (String,Int) -> Unit
 ) {
 
     val categories: List<SpotOnMusicModel> by sharedViewModel.categoriesPager.observeAsState(
@@ -70,8 +71,9 @@ fun Search(
                             imageUrl = Pair(it[i].imageUrls[0], it[i + 1].imageUrls[0]),
                             title = Pair(it[i].title, it[i + 1].title),
                             color = Pair(gridColors[i], gridColors[i + 1]),
-                            onCardClicked = { category ->
-                                onCategoryClicked(category)
+                            onCardClicked = { category,index->
+                                Log.d(TAG, "Search: $i")
+                                onCategoryClicked(category,index+i)
 
                             }
                         )

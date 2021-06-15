@@ -26,7 +26,6 @@ abstract class BaseSpotifyActivity : ComponentActivity(), SpotifyAuthorizationCa
 
 
     lateinit var dataStoreManager: DatastoreManager
-    private lateinit var dataStore: DataStore<Preferences>
 
     companion object {
         const val EXTRA_USING_PENDING_INTENT = "EXTRA_USING_PENDING_INTENT"

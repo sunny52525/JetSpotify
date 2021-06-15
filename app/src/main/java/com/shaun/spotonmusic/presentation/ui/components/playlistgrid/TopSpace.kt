@@ -28,7 +28,6 @@ fun TopSpace(title: String = "Chill", color: Color = Color.Cyan) {
             .background(brush = brush)
             .fillMaxWidth()
             .height(100.dp)
-            .border(1.dp, Color.Red)
     ) {
 
         Text(

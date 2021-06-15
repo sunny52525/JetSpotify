@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -26,6 +27,7 @@ import kaaes.spotify.webapi.android.models.Playlist
 
 private const val TAG: String = "PlayListDetail"
 
+@ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable
 fun PlaylistDetail(

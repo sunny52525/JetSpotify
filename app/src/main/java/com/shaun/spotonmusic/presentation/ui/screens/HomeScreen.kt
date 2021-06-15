@@ -1,6 +1,9 @@
+@file:Suppress("UNUSED_VARIABLE")
+
 package com.shaun.spotonmusic.presentation.ui.screens
 
 
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -251,7 +254,10 @@ fun HomeScreenNavigationConfiguration(
                 Search(viewModel, onSearchClicked = {
 
 
-                }, onCategoryClicked = {
+                }, onCategoryClicked = { id, color ->
+                    navHostController.currentBackStackEntry?.arguments = Bundle().apply {
+                        putInt("color", color)
+                    }
                     navHostController.navigate(Routes.PlaylistGrid.route + "/$it")
                 })
 
@@ -321,8 +327,10 @@ fun HomeScreenNavigationConfiguration(
         composable(Routes.PlaylistGrid.route + "/{id}") {
             val id = it.arguments?.getString("id")
 
+            val color=navHostController.previousBackStackEntry?.arguments?.getInt("color")
+            Log.d("TAG", "HomeScreenNavigationConfiguration: $color")
             EnterAnimation {
-                PlaylistGridScreen(id = id)
+                PlaylistGridScreen(id = id, color = color?:0)
             }
         }
     }

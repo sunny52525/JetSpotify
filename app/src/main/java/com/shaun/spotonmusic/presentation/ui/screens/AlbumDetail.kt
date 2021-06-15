@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -22,6 +23,7 @@ import kaaes.spotify.webapi.android.models.Album
 
 private const val TAG = "ALbumDETAIL"
 
+@ExperimentalMaterialApi
 @Composable
 fun AlbumDetail(id: String?, viewModel: AlbumDetailViewModel) {
 

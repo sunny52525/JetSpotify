@@ -3,6 +3,7 @@ package com.shaun.spotonmusic.presentation.ui.components.album
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -16,6 +17,7 @@ import com.google.accompanist.glide.rememberGlidePainter
 import com.shaun.spotonmusic.presentation.ui.components.playlist.ShuffleButton
 import java.util.ArrayList
 
+@ExperimentalMaterialApi
 @Composable
 
 fun AlbumTopSection(

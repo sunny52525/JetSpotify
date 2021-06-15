@@ -37,7 +37,7 @@ fun TopBar(
 
     Row(
         Modifier
-            .padding(top = 35.dp, start = paddingStart.dp)
+            .padding(top = 35.dp)
             .fillMaxWidth()
             .background(backgroundColor),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -46,9 +46,11 @@ fun TopBar(
         Icon(
             imageVector = Icons.Default.ArrowBack, tint = MaterialTheme.colors.onSurface,
             contentDescription = null,
-            modifier = Modifier.clickable {
-                onBackPressed()
-            }
+            modifier = Modifier
+                .clickable {
+                    onBackPressed()
+                }
+                .padding(start = paddingStart.dp)
         )
 
 

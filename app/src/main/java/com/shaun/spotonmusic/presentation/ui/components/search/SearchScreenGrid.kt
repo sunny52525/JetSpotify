@@ -1,10 +1,8 @@
 package com.shaun.spotonmusic.presentation.ui.components.search
 
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,7 +25,7 @@ fun SearchGrid(
     title: Pair<String, String>,
     heading: String = "Your top genres",
     color: Pair<Color?, Color?>,
-    onCardClicked: (String) -> Unit
+    onCardClicked: (String,Int) -> Unit
 ) {
 
     Row() {
@@ -36,7 +34,7 @@ fun SearchGrid(
                 .padding(10.dp)
                 .weight(1f)
                 .fillMaxWidth(.5f)
-                .height(100.dp) ,
+                .height(100.dp),
             shape = RoundedCornerShape(7.dp)
         ) {
             RotatedImage(
@@ -44,7 +42,7 @@ fun SearchGrid(
                 title = title.first,
                 color = color.first,
                 onCardClicked = {
-                    onCardClicked(albumId.first)
+                    onCardClicked(albumId.first,0)
                 })
 
         }
@@ -53,10 +51,7 @@ fun SearchGrid(
                 .padding(10.dp)
                 .weight(1f)
                 .fillMaxWidth(.5f)
-                .height(100.dp)
-                .clickable {
-                    onCardClicked(albumId.second)
-                },
+                .height(100.dp),
             shape = RoundedCornerShape(7.dp)
         ) {
             RotatedImage(
@@ -64,7 +59,7 @@ fun SearchGrid(
                 title = title.second,
                 color = color.second,
                 onCardClicked = {
-                    onCardClicked(albumId.second)
+                    onCardClicked(albumId.second,1)
                 })
 
         }

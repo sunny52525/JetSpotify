@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +22,7 @@ import com.shaun.spotonmusic.viewmodel.PlaylistDetailViewModel
 import kaaes.spotify.webapi.android.models.Pager
 import kaaes.spotify.webapi.android.models.PlaylistTrack
 
+@ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable
 fun SongList(
