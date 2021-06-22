@@ -1,5 +1,6 @@
 package com.shaun.spotonmusic.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
@@ -7,6 +8,7 @@ import com.shaun.spotonmusic.di.DatastoreManager
 import com.shaun.spotonmusic.network.api.SpotifyAppService
 import com.shaun.spotonmusic.repository.MusicDetailRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kaaes.spotify.webapi.android.models.Album
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,7 +24,7 @@ class AlbumDetailViewModel @Inject constructor(
 
     var albumId = MutableLiveData("")
 
-    var album = Transformations.switchMap(albumId) {
+    var album: LiveData<Album?> = Transformations.switchMap(albumId) {
         repo.getAAlbum(it)
     }
 

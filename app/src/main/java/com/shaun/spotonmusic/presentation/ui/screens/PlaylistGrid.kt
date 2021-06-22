@@ -1,33 +1,41 @@
 package com.shaun.spotonmusic.presentation.ui.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.intl.LocaleList
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.toUpperCase
+import androidx.compose.ui.unit.dp
 import com.shaun.spotonmusic.presentation.ui.components.album.TopBar
 import com.shaun.spotonmusic.presentation.ui.components.library.LibraryGrid
 import com.shaun.spotonmusic.presentation.ui.components.playlistgrid.TopSpace
 import com.shaun.spotonmusic.ui.theme.gridColors
+import com.shaun.spotonmusic.utils.getImageUrl
+import com.shaun.spotonmusic.viewmodel.PlaylistGridViewModel
+import kaaes.spotify.webapi.android.models.PlaylistsPager
 import kotlin.math.min
 
 @ExperimentalFoundationApi
-@Preview(showBackground = true)
 @Composable
 fun PlaylistGridScreen(
-    title: String = "Chill",
     color: Int = 0,
-    id: String? = "chill"
+    id: String? = "chill",
+    viewModel: PlaylistGridViewModel,
+    title: String?,
+    onPlaylistClicked: (String) -> Unit
 ) {
 
+
+    val playlist: PlaylistsPager? by viewModel.playlistList.observeAsState(initial = PlaylistsPager())
 
     val scrollState = rememberLazyListState()
     val dynamicAlpha =
@@ -36,12 +44,13 @@ fun PlaylistGridScreen(
         } else {
             0.99f
         }
+
     Column(Modifier.fillMaxSize()) {
 
         TopBar(
             showHeart = false,
             showThreeDots = true,
-            title = title,
+            title = id?.toUpperCase(LocaleList.current),
             onBackPressed = {
 
             },
@@ -64,22 +73,40 @@ fun PlaylistGridScreen(
                     fontWeight = FontWeight.Bold
                 )
             }
-            repeat(10) {
-                item {
-                    LibraryGrid(
-                        title = Pair("Lana", "Del"),
-                        type = Pair("Lana", "del"),
-                        owner = Pair("Me", "Me"),
-                        imageUrl = Pair(
-                            "https://i.scdn.co/image/17a4cbd857bb8d8d7e9cfc14897b7799e7858465",
-                            "https://i.scdn.co/image/17a4cbd857bb8d8d7e9cfc14897b7799e7858465"
-                        ),
-                        onFirstClick = { /*TODO*/ },
-                        onSecondClick = {},
-                        textAlign = TextAlign.Center
-                    )
 
+            playlist?.playlists?.items?.let { items ->
+                for (i in 0 until items.size - 1 step 2) {
+                    with(items) {
+                        get(i)?.let {
+                            item {
+                                LibraryGrid(
+                                    title = Pair(get(i).name, get(i + 1).name),
+                                    type = Pair(get(i).type, get(i + 1).type),
+                                    owner = Pair(
+                                        get(i).owner.display_name,
+                                        get(i + 1).owner.display_name
+                                    ),
+                                    imageUrl = Pair(
+                                        getImageUrl(get(i).images.map { it.url }, 2),
+                                        getImageUrl(get(i + 1).images.map { it.url }, 2)
+                                    ),
+                                    onFirstClick = {
+                                        onPlaylistClicked(get(i).id)
+                                    },
+                                    onSecondClick = {
+                                        onPlaylistClicked(get(i + 1).id)
+                                    },
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+                    }
                 }
+
+
+            }
+            item {
+                Spacer(modifier = Modifier.height(70.dp))
             }
         }
 

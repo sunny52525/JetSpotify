@@ -37,10 +37,7 @@ import com.shaun.spotonmusic.presentation.ui.activity.HomeActivity
 import com.shaun.spotonmusic.presentation.ui.components.library.LibraryBottomSheet
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.spotifyGray
-import com.shaun.spotonmusic.viewmodel.AlbumDetailViewModel
-import com.shaun.spotonmusic.viewmodel.LibraryViewModel
-import com.shaun.spotonmusic.viewmodel.PlaylistDetailViewModel
-import com.shaun.spotonmusic.viewmodel.SharedViewModel
+import com.shaun.spotonmusic.viewmodel.*
 import kaaes.spotify.webapi.android.models.UserPrivate
 import kotlinx.coroutines.CoroutineScope
 
@@ -257,8 +254,10 @@ fun HomeScreenNavigationConfiguration(
                 }, onCategoryClicked = { id, color ->
                     navHostController.currentBackStackEntry?.arguments = Bundle().apply {
                         putInt("color", color)
+
                     }
-                    navHostController.navigate(Routes.PlaylistGrid.route + "/$it")
+
+                    navHostController.navigate(Routes.PlaylistGrid.route + "/$id")
                 })
 
             }
@@ -326,11 +325,23 @@ fun HomeScreenNavigationConfiguration(
 
         composable(Routes.PlaylistGrid.route + "/{id}") {
             val id = it.arguments?.getString("id")
+            val playlistGridViewModel = hiltViewModel<PlaylistGridViewModel>()
 
-            val color=navHostController.previousBackStackEntry?.arguments?.getInt("color")
+            Log.d("TAG", "HomeScreenNavigationConfiguration: $id")
+            playlistGridViewModel.setCategory(id.toString())
+
+            val color = navHostController.previousBackStackEntry?.arguments?.getInt("color")
             Log.d("TAG", "HomeScreenNavigationConfiguration: $color")
             EnterAnimation {
-                PlaylistGridScreen(id = id, color = color?:0)
+                PlaylistGridScreen(
+                    id = id,
+                    color = color ?: 0,
+                    viewModel = playlistGridViewModel,
+                    title = id,
+                    onPlaylistClicked = {
+                        navHostController.navigate(Routes.PlaylistDetail.route + "/$it")
+                    }
+                )
             }
         }
     }
