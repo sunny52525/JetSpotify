@@ -85,14 +85,7 @@ fun AlbumSongList(
 
                 CopyWrites(title = currentAlbum.copyrights[0].text)
             }
-            item {
-                Spacer(
-                    modifier = Modifier
-                        .height(60.dp)
-                        .background(spotifyDarkBlack)
-                        .fillMaxWidth()
-                )
-            }
+
 
         }
 

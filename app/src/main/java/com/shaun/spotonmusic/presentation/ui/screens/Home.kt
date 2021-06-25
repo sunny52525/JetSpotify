@@ -253,9 +253,7 @@ fun Home(
 
 
 
-            item {
-                Spacer(modifier = Modifier.height(50.dp))
-            }
+
 
         }
 

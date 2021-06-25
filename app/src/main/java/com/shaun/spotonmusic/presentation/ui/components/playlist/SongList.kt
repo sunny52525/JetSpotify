@@ -116,9 +116,6 @@ fun SongList(
             }
 
         }
-        item {
 
-            Spacer(modifier = Modifier.height(50.dp))
-        }
     }
 }

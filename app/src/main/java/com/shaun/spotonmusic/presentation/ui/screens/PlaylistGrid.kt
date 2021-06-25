@@ -105,9 +105,7 @@ fun PlaylistGridScreen(
 
 
             }
-            item {
-                Spacer(modifier = Modifier.height(70.dp))
-            }
+
         }
 
     }

@@ -1,5 +1,3 @@
-@file:Suppress("UNUSED_VARIABLE")
-
 package com.shaun.spotonmusic.presentation.ui.screens
 
 
@@ -11,18 +9,22 @@ import android.widget.Toast
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
+import androidx.compose.ui.text.font.FontWeight.Companion.Normal
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -31,6 +33,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.shaun.spotonmusic.R
 import com.shaun.spotonmusic.navigation.BottomNavRoutes
 import com.shaun.spotonmusic.navigation.Routes
 import com.shaun.spotonmusic.presentation.ui.activity.HomeActivity
@@ -129,7 +132,10 @@ fun HomeScreen(
                     modalBottomSheetState = state,
                     libraryViewModel = libraryViewModel,
                     scope = scope,
+                    paddingValues = it
                 )
+
+
             }
 
         )
@@ -148,54 +154,114 @@ fun BottomNavigationSpotOnMusic(
         modifier = Modifier
 
     ) {
-        BottomNavigation(
-            modifier = Modifier
-                .background(black)
-                .background(black)
 
-        ) {
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val currentRoute = navBackStackEntry?.destination?.route
+        Column {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+                    .background(spotifyGray)
+            ) {
 
-            val dimension by remember {
-                mutableStateOf(arrayListOf(20, 20, 20))
+                Image(
+                    painter = painterResource(id = R.drawable.spotify_liked),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(60.dp),
+                )
+
+                Column(
+                    Modifier
+                        .padding(start = 10.dp)
+                        .align(Alignment.CenterVertically)
+                ) {
+                    Text(
+                        text = "Song Name",
+                        color = Color.White,
+                        fontWeight = Bold,
+                        fontSize = 15.sp
+                    )
+                    Text(
+                        text = "Artist Name",
+                        color = Color.Gray,
+                        fontWeight = Normal,
+                        fontSize = 13.sp
+                    )
+                }
+                Box(contentAlignment = Alignment.CenterEnd, modifier = Modifier.fillMaxWidth()) {
+
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_cast),
+                        contentDescription = "Cast"
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_heart),
+                        contentDescription = "Like"
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_heart),
+                        contentDescription = "Like"
+                    )
+                }
             }
 
-            items.forEach {
-                BottomNavigationItem(
-                    selected = currentRoute == it.route, onClick = {
 
-                        navController.navigate(it.route) {
-                            launchSingleTop = true
-                        }
+            Spacer(
+                modifier = Modifier
+                    .height(2.dp)
+                    .fillMaxWidth()
+                    .background(black)
+            )
+            BottomNavigation(
+                modifier = Modifier
+                    .background(black)
+                    .background(black)
 
-                        dimension.forEachIndexed { index, _ ->
-                            if (index == it.index)
-                                dimension[index] = 21
-                            else
-                                dimension[index] = 20
-                        }
+            ) {
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute = navBackStackEntry?.destination?.route
 
-                    },
-                    modifier = Modifier
-                        .background(spotifyGray)
-                        .animateContentSize(),
-                    label = { Text(text = it.route) },
+                val dimension by remember {
+                    mutableStateOf(arrayListOf(20, 20, 20))
+                }
 
-                    icon = {
+                items.forEach {
+                    BottomNavigationItem(
+                        selected = currentRoute == it.route, onClick = {
 
-                        Icon(
-                            painter = painterResource(id = it.resId), contentDescription = "",
-                            modifier = Modifier
-                                .width(dimension[it.index].dp)
-                                .height(dimension[it.index].dp)
-                                .animateContentSize()
+                            navController.navigate(it.route) {
+                                launchSingleTop = true
+                            }
+
+                            dimension.forEachIndexed { index, _ ->
+                                if (index == it.index)
+                                    dimension[index] = 21
+                                else
+                                    dimension[index] = 20
+                            }
+
+                        },
+                        modifier = Modifier
+                            .background(spotifyGray)
+                            .animateContentSize(),
+                        label = { Text(text = it.route) },
+
+                        icon = {
+
+                            Icon(
+                                painter = painterResource(id = it.resId), contentDescription = "",
+                                modifier = Modifier
+                                    .width(dimension[it.index].dp)
+                                    .height(dimension[it.index].dp)
+                                    .animateContentSize()
 
 
-                        )
-                    },
-                    alwaysShowLabel = true
-                )
+                            )
+                        },
+                        alwaysShowLabel = true
+                    )
+                }
             }
 
         }
@@ -216,6 +282,7 @@ fun HomeScreenNavigationConfiguration(
     modalBottomSheetState: ModalBottomSheetState,
     libraryViewModel: LibraryViewModel,
     scope: CoroutineScope,
+    paddingValues: PaddingValues,
 
     ) {
     val listState = rememberLazyListState()
@@ -225,12 +292,15 @@ fun HomeScreenNavigationConfiguration(
 
 
 
+
     NavHost(
         navController = navHostController,
         startDestination = BottomNavRoutes.Home.route,
-        modifier = Modifier.background(
-            black
-        )
+        modifier = Modifier
+            .background(
+                black
+            )
+            .padding(bottom = paddingValues.calculateBottomPadding())
     ) {
 
         composable(BottomNavRoutes.Home.route) {
