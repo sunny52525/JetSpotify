@@ -5,20 +5,22 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.core.content.ContextCompat
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.lifecycleScope
 import com.pghaz.spotify.webapi.auth.SpotifyAuthorizationCallback
 import com.pghaz.spotify.webapi.auth.SpotifyAuthorizationClient
+import com.shaun.spotonmusic.R
+import com.shaun.spotonmusic.di.DatastoreManager
 import com.shaun.spotonmusic.utils.AppConstants.AUTH_SCOPES
 import com.shaun.spotonmusic.utils.AppConstants.CLIENT_ID
 import com.shaun.spotonmusic.utils.AppConstants.REDIRECT_URL
-import com.shaun.spotonmusic.R
-import com.shaun.spotonmusic.di.DatastoreManager
+import com.spotify.android.appremote.api.ConnectionParams
+import com.spotify.android.appremote.api.Connector
+import com.spotify.android.appremote.api.SpotifyAppRemote
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kaaes.spotify.webapi.core.models.UserPrivate
 import kotlinx.coroutines.launch
 import net.openid.appauth.TokenResponse
+import javax.inject.Inject
 
 @AndroidEntryPoint
 abstract class BaseSpotifyActivity : ComponentActivity(), SpotifyAuthorizationCallback.Authorize,
@@ -26,6 +28,11 @@ abstract class BaseSpotifyActivity : ComponentActivity(), SpotifyAuthorizationCa
 
 
     lateinit var dataStoreManager: DatastoreManager
+
+
+
+    @Inject
+    lateinit var connectionParams: ConnectionParams
 
     companion object {
         const val EXTRA_USING_PENDING_INTENT = "EXTRA_USING_PENDING_INTENT"
@@ -58,6 +65,11 @@ abstract class BaseSpotifyActivity : ComponentActivity(), SpotifyAuthorizationCa
 
     override fun onStart() {
         super.onStart()
+
+
+
+
+
         spotifyAuthClient.onStart()
 
         val usingPendingIntent = intent?.getBooleanExtra(EXTRA_USING_PENDING_INTENT, false)

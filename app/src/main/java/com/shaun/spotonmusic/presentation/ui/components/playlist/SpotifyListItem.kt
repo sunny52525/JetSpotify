@@ -2,6 +2,7 @@ package com.shaun.spotonmusic.presentation.ui.components.playlist
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -15,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -35,14 +37,22 @@ fun SpotifySongListItem(
     imageUrl: String = "",
     showImage: Boolean = true,
     liked: Boolean = false,
-    count: Int = 0
+    count: Int = 0,
+    onSongClicked: () -> Unit={}
 ) {
 
 
     Row(
         modifier = Modifier
             .background(spotifyDarkBlack)
-            .padding(start = 8.dp, bottom = 5.dp),
+            .padding(start = 8.dp, bottom = 5.dp)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = {
+                        onSongClicked()
+                    }
+                )
+            },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (showImage) {

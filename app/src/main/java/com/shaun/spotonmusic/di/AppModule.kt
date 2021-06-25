@@ -31,15 +31,6 @@ import javax.inject.Singleton
 object AppModule {
 
 
-    private val gson: Gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
-        .setLenient().create()
-
-    val interceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
-    }
-//    val client = OkHttpClient.Builder().addInterceptor(interceptor)
-//        .build()
-
 
     //    @Singleton
     @Provides
@@ -52,76 +43,7 @@ object AppModule {
 //    fun dataStoreManager(@ApplicationContext appContext: Context): DatastoreManager =
 //        DatastoreManager(appContext)
 
-    @Provides
-//    @Singleton
-    fun spotifyService(@ApplicationContext context: Context): SpotifyAppService {
 
-
-
-        val cacheSpotify = Cache(context.cacheDir, AppConstants.CACHE_SIZE)
-
-        val okHttpClient = OkHttpClient.Builder().cache(cacheSpotify)
-            .addInterceptor { chain ->
-                var request = chain.request()
-                request = if (hasInternetConnection(context = context)) {
-                    Log.d("TAG", "spotifyService: Here")
-                    request.newBuilder().header("Cache-Control", "public, max-age=" + 60)
-                        .removeHeader("Pragma")
-                        .build()
-                } else
-                    request.newBuilder().header(
-                        "Cache-Control",
-                        "public, only-if-cached, max-stale=" + 60 * 60 * 24 * 7
-                    ).removeHeader("Pragma")
-                        .build()
-
-
-                chain.proceed(request = request)
-            }
-//            .addInterceptor(
-//                interceptor
-//            )
-            .build()
-
-        return Retrofit.Builder()
-            .baseUrl(BASEURL).addConverterFactory(GsonConverterFactory.create(gson))
-            .client(okHttpClient)
-            .build().create(SpotifyAppService::class.java)
-    }
-
-    @Provides
-    fun hasInternetConnection(@ApplicationContext context: Context): Boolean {
-
-        var result = false
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val networkCapabilities = connectivityManager.activeNetwork ?: return false
-            val actNw =
-                connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
-            result = when {
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-                else -> false
-            }
-        } else {
-            connectivityManager.run {
-                connectivityManager.activeNetworkInfo?.run {
-                    result = when (type) {
-                        ConnectivityManager.TYPE_WIFI -> true
-                        ConnectivityManager.TYPE_MOBILE -> true
-                        ConnectivityManager.TYPE_ETHERNET -> true
-                        else -> false
-                    }
-
-                }
-            }
-        }
-
-        return result
-
-    }
 
 
 

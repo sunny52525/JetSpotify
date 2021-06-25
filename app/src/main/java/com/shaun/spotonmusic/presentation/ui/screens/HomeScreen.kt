@@ -8,7 +8,8 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.animation.*
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,7 +19,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -34,10 +34,12 @@ import androidx.navigation.compose.rememberNavController
 import com.shaun.spotonmusic.navigation.BottomNavRoutes
 import com.shaun.spotonmusic.navigation.Routes
 import com.shaun.spotonmusic.presentation.ui.activity.HomeActivity
+import com.shaun.spotonmusic.presentation.ui.animation.SlideInEnterAnimation
 import com.shaun.spotonmusic.presentation.ui.components.library.LibraryBottomSheet
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.spotifyGray
 import com.shaun.spotonmusic.viewmodel.*
+import com.spotify.android.appremote.api.SpotifyAppRemote
 import kaaes.spotify.webapi.android.models.UserPrivate
 import kotlinx.coroutines.CoroutineScope
 
@@ -47,13 +49,14 @@ import kotlinx.coroutines.CoroutineScope
 @ExperimentalAnimationApi
 @Composable
 fun HomeScreen(
-    context: HomeActivity
+    context: HomeActivity,
+    homeViewModel: SharedViewModel
 ) {
 
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
 
-    val homeViewModel: SharedViewModel = viewModel()
+
     val libraryViewModel: LibraryViewModel = viewModel()
 
 
@@ -116,7 +119,7 @@ fun HomeScreen(
 
                 HomeScreenNavigationConfiguration(
                     navHostController = navController,
-                    viewModel = homeViewModel,
+                    sharedViewModel = homeViewModel,
                     tokenExpired = {
                         context.spotifyAuthClient.refreshAccessToken()
                         Handler(Looper.getMainLooper()).postDelayed({
@@ -125,7 +128,7 @@ fun HomeScreen(
                     },
                     modalBottomSheetState = state,
                     libraryViewModel = libraryViewModel,
-                    scope = scope
+                    scope = scope,
                 )
             }
 
@@ -163,7 +166,6 @@ fun BottomNavigationSpotOnMusic(
                     selected = currentRoute == it.route, onClick = {
 
                         navController.navigate(it.route) {
-
                             launchSingleTop = true
                         }
 
@@ -208,13 +210,14 @@ fun BottomNavigationSpotOnMusic(
 @ExperimentalAnimationApi
 @Composable
 fun HomeScreenNavigationConfiguration(
-    navHostController: NavHostController, viewModel: SharedViewModel,
+    navHostController: NavHostController,
+    sharedViewModel: SharedViewModel,
     tokenExpired: () -> Unit,
     modalBottomSheetState: ModalBottomSheetState,
     libraryViewModel: LibraryViewModel,
-    scope: CoroutineScope
+    scope: CoroutineScope,
 
-) {
+    ) {
     val listState = rememberLazyListState()
     val listStateLibrary = rememberLazyListState()
 
@@ -232,8 +235,8 @@ fun HomeScreenNavigationConfiguration(
 
         composable(BottomNavRoutes.Home.route) {
 
-            EnterAnimation {
-                Home(viewModel = viewModel, listState = listState, tokenExpired = {
+            SlideInEnterAnimation {
+                Home(viewModel = sharedViewModel, listState = listState, tokenExpired = {
                     tokenExpired()
                 }, onPlayListClicked = {
                     Log.d("", "MOODD: $it")
@@ -246,9 +249,9 @@ fun HomeScreenNavigationConfiguration(
             }
         }
         composable(BottomNavRoutes.Search.route) {
-            EnterAnimation {
+            SlideInEnterAnimation {
 
-                Search(viewModel, onSearchClicked = {
+                Search(sharedViewModel, onSearchClicked = {
 
 
                 }, onCategoryClicked = { id, color ->
@@ -265,10 +268,10 @@ fun HomeScreenNavigationConfiguration(
         }
         composable(BottomNavRoutes.Library.route) {
 
-            EnterAnimation {
+            SlideInEnterAnimation {
 
                 Library(
-                    viewModel = viewModel,
+                    viewModel = sharedViewModel,
                     modalBottomSheetState = modalBottomSheetState,
                     libraryViewModel,
                     scope = scope,
@@ -289,22 +292,26 @@ fun HomeScreenNavigationConfiguration(
             val id = it.arguments?.getString("id")
             val playlistDetailViewModel = hiltViewModel<PlaylistDetailViewModel>()
 
-//            id?.let { id -> playlistDetailViewModel.newPlaylist(id) }
 
-            val myDetails: UserPrivate by viewModel.myDetails.observeAsState(UserPrivate())
+            val myDetails: UserPrivate by sharedViewModel.myDetails.observeAsState(UserPrivate())
 
-            myDetails?.id.let { userId ->
-//                playlistDetailViewModel.userId.postValue(userId)
+            myDetails.id.let { userId ->
                 if (userId != null)
                     playlistDetailViewModel.setUserId(id.toString(), userId = userId)
             }
-            EnterAnimation {
+            SlideInEnterAnimation {
                 PlaylistDetail(
                     id,
                     updatePlaylist = {
                         libraryViewModel.getLibraryItems()
                     },
-                    viewModel = playlistDetailViewModel
+                    viewModel = playlistDetailViewModel,
+                    onShufflePlayListClicked = {
+                        playSpotifyMedia(sharedViewModel.spotifyRemote.value, it)
+                    },
+                    onSongClicked = {
+                        playSpotifyMedia(sharedViewModel.spotifyRemote.value, it)
+                    }
                 )
 
             }
@@ -317,9 +324,16 @@ fun HomeScreenNavigationConfiguration(
             albumDetailViewModel.setUserId(id.toString())
 
 
-            EnterAnimation {
+            SlideInEnterAnimation {
 
-                AlbumDetail(id = id, viewModel = albumDetailViewModel)
+                AlbumDetail(
+                    id = id,
+                    viewModel = albumDetailViewModel,
+                    onAlbumPlayed = {
+                        playSpotifyMedia(sharedViewModel.spotifyRemote.value, it)
+                    }) {
+                    playSpotifyMedia(sharedViewModel.spotifyRemote.value, it)
+                }
             }
         }
 
@@ -327,12 +341,11 @@ fun HomeScreenNavigationConfiguration(
             val id = it.arguments?.getString("id")
             val playlistGridViewModel = hiltViewModel<PlaylistGridViewModel>()
 
-            Log.d("TAG", "HomeScreenNavigationConfiguration: $id")
             playlistGridViewModel.setCategory(id.toString())
 
             val color = navHostController.previousBackStackEntry?.arguments?.getInt("color")
-            Log.d("TAG", "HomeScreenNavigationConfiguration: $color")
-            EnterAnimation {
+
+            SlideInEnterAnimation {
                 PlaylistGridScreen(
                     id = id,
                     color = color ?: 0,
@@ -347,21 +360,13 @@ fun HomeScreenNavigationConfiguration(
     }
 }
 
-@ExperimentalAnimationApi
-@Composable
-fun EnterAnimation(content: @Composable () -> Unit) {
 
+fun playSpotifyMedia(spotifyAppRemote: SpotifyAppRemote?, spotifyUri: String?) {
 
-    AnimatedVisibility(
-        visible = true,
-        enter = slideInVertically(
-            initialOffsetY = { -40 }
-        ) + expandVertically(
-            expandFrom = Alignment.Top
-        ) + fadeIn(initialAlpha = 0.3f),
-        exit = slideOutVertically() + shrinkVertically() + fadeOut(),
-        content = content,
-        initiallyVisible = false
-    )
+    println(spotifyUri)
+    println(spotifyAppRemote)
+    spotifyUri?.let {
+        spotifyAppRemote?.playerApi?.play(it)
+    }
 
 }

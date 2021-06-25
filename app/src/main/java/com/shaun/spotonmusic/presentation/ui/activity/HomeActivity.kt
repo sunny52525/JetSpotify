@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.annotation.MainThread
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -14,6 +15,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.shaun.spotonmusic.R
 import com.shaun.spotonmusic.presentation.ui.screens.HomeScreen
 import com.shaun.spotonmusic.ui.theme.SpotOnMusicTheme
+import com.shaun.spotonmusic.viewmodel.SharedViewModel
+import com.spotify.android.appremote.api.Connector
+import com.spotify.android.appremote.api.SpotifyAppRemote
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kaaes.spotify.webapi.core.models.UserPrivate
 import net.openid.appauth.TokenResponse
@@ -22,13 +26,16 @@ import net.openid.appauth.TokenResponse
 @AndroidEntryPoint
 class HomeActivity : BaseSpotifyActivity() {
 
+    var spotifyAppRemote: SpotifyAppRemote? = null
+
+    private val homeViewModel: SharedViewModel by viewModels()
+
     @ExperimentalMaterialApi
     @ExperimentalFoundationApi
     @ExperimentalComposeUiApi
     @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
 
 
@@ -41,7 +48,8 @@ class HomeActivity : BaseSpotifyActivity() {
         setContent {
             SpotOnMusicTheme(darkTheme = true) {
                 HomeScreen(
-                    this
+                    this,
+                    homeViewModel
                 )
             }
 
@@ -52,6 +60,20 @@ class HomeActivity : BaseSpotifyActivity() {
 
     override fun onStart() {
         super.onStart()
+
+        SpotifyAppRemote.connect(this, connectionParams, object : Connector.ConnectionListener {
+            override fun onConnected(spotifyAppRemote: SpotifyAppRemote?) {
+                Log.d(TAG, "onConnected: Connected")
+                this@HomeActivity.spotifyAppRemote = spotifyAppRemote
+                homeViewModel.setSpotifyRemote(spotifyAppRemote = spotifyAppRemote)
+            }
+
+            override fun onFailure(throwable: Throwable?) {
+
+                Log.e("MainActivity", throwable?.message, throwable);
+            }
+
+        })
 
         if (spotifyAuthClient.isAuthorized()) {
             if (spotifyAuthClient.getNeedsTokenRefresh()) {
@@ -105,4 +127,8 @@ class HomeActivity : BaseSpotifyActivity() {
     }
 
 
+    override fun onDestroy() {
+        super.onDestroy()
+        SpotifyAppRemote.disconnect(spotifyAppRemote)
+    }
 }

@@ -33,7 +33,9 @@ private const val TAG: String = "PlayListDetail"
 fun PlaylistDetail(
     id: String?,
     updatePlaylist: () -> Unit,
-    viewModel: PlaylistDetailViewModel
+    viewModel: PlaylistDetailViewModel,
+    onShufflePlayListClicked: (String?) -> Unit,
+    onSongClicked: (String) -> Unit
 ) {
 
     val follow by viewModel.follows.observeAsState(false)
@@ -93,14 +95,13 @@ fun PlaylistDetail(
 
                     )
             }
+
             TopSectionOverlay(scrollState = scrollState)
             SongList(
                 scrollState = scrollState,
 
                 tracks = currentPlaylist?.tracks,
                 onFollowClicked = {
-
-
                     viewModel.follows.value = !follow
 
                     if (follow)
@@ -121,6 +122,12 @@ fun PlaylistDetail(
 
                 },
                 viewModel = viewModel,
+                shuffleClicked = {
+                    onShufflePlayListClicked(currentPlaylist?.uri)
+                },
+                onSongClicked = {
+                    onSongClicked(it)
+                }
             )
             AnimatedToolBar(
                 album = currentPlaylist?.name ?: "",

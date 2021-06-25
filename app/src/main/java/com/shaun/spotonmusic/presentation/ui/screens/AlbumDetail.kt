@@ -25,7 +25,11 @@ private const val TAG = "ALbumDETAIL"
 
 @ExperimentalMaterialApi
 @Composable
-fun AlbumDetail(id: String?, viewModel: AlbumDetailViewModel) {
+fun AlbumDetail(
+    id: String?, viewModel: AlbumDetailViewModel,
+    onAlbumPlayed: (String?) -> Unit,
+    onSongPlayed: (String) -> Unit
+) {
 
 
     val liked by viewModel.liked.observeAsState(initial = false)
@@ -77,7 +81,11 @@ fun AlbumDetail(id: String?, viewModel: AlbumDetailViewModel) {
                 liked = liked ?: false
             )
 
-            AlbumSongList(currentAlbum, colors.value)
+            AlbumSongList(currentAlbum, colors.value, onSongClicked = {
+                onSongPlayed(it)
+            }, onShuffleClicked = {
+                onAlbumPlayed(currentAlbum?.uri)
+            })
         }
     } else {
         Column(

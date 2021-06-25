@@ -7,10 +7,11 @@ import androidx.lifecycle.ViewModel
 import com.shaun.spotonmusic.SpotOnApplication
 import com.shaun.spotonmusic.database.model.SpotOnMusicModel
 import com.shaun.spotonmusic.di.DatastoreManager
-import com.shaun.spotonmusic.network.api.SpotifyAppService
 import com.shaun.spotonmusic.navigation.BottomNavRoutes
+import com.shaun.spotonmusic.network.api.SpotifyAppService
 import com.shaun.spotonmusic.repository.HomeScreenRepositoryImpl
 import com.shaun.spotonmusic.utils.TypeConverters.Companion.toSpotOnMusicModel
+import com.spotify.android.appremote.api.SpotifyAppRemote
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kaaes.spotify.webapi.android.models.Album
 import kaaes.spotify.webapi.android.models.Pager
@@ -60,6 +61,9 @@ class SharedViewModel @Inject constructor(
     var categoriesPager = MutableLiveData<List<SpotOnMusicModel>>()
 
 
+    var spotifyRemote = MutableLiveData<SpotifyAppRemote>()
+
+
     var myDetails = MutableLiveData<UserPrivate>()
 
     init {
@@ -99,13 +103,14 @@ class SharedViewModel @Inject constructor(
     }
 
     fun getAccessToken() {
-
-//        val value = datastoreManager.accessToken
-//
-//        Log.d(TAG, "getAccessToken: $value")
-//        accessToken.postValue(value)
         setToken()
     }
+
+
+    fun setSpotifyRemote(spotifyAppRemote: SpotifyAppRemote?) {
+        this.spotifyRemote.postValue(spotifyAppRemote)
+    }
+
 
     fun getAlbum(albumId: String) {
         repo.getAlbum(albumID = albumId)

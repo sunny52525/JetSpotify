@@ -22,7 +22,12 @@ import java.util.*
 
 @ExperimentalMaterialApi
 @Composable
-fun AlbumSongList(currentAlbum: Album?, colors: ArrayList<Color>?) {
+fun AlbumSongList(
+    currentAlbum: Album?,
+    colors: ArrayList<Color>?,
+    onShuffleClicked: () -> Unit,
+    onSongClicked: (String) -> Unit
+) {
 
 
     currentAlbum?.let {
@@ -34,7 +39,10 @@ fun AlbumSongList(currentAlbum: Album?, colors: ArrayList<Color>?) {
                     title = currentAlbum.name,
                     owner = getArtistName(currentAlbum.artists),
                     year = currentAlbum.release_date.substring(0, 3),
-                    colorShaded = colors
+                    colorShaded = colors,
+                    shuffleClicked = {
+                        onShuffleClicked()
+                    }
                 )
 
             }
@@ -45,6 +53,9 @@ fun AlbumSongList(currentAlbum: Album?, colors: ArrayList<Color>?) {
                     explicit = it.explicit,
                     singer = it.artists,
                     showImage = false,
+                    onSongClicked = {
+                        onSongClicked(it.uri)
+                    }
                 )
 
                 Spacer(

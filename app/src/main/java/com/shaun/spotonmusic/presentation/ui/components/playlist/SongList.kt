@@ -30,8 +30,9 @@ fun SongList(
     tracks: Pager<PlaylistTrack?>?,
     onFollowClicked: () -> Unit,
     viewModel: PlaylistDetailViewModel,
-
-    ) {
+    shuffleClicked: () -> Unit,
+    onSongClicked: (String) -> Unit
+) {
 
 //
 //    val hasLiked by remember {
@@ -71,7 +72,9 @@ fun SongList(
                     .fillMaxWidth()
 
             ) {
-                ShuffleButton()
+                ShuffleButton(shuffleClicked = {
+                    shuffleClicked()
+                })
             }
         }
         tracks?.let { tracksPager ->
@@ -104,7 +107,9 @@ fun SongList(
                             url.url
                         }, 0),
 //                        count = count
-
+                        onSongClicked = {
+                            onSongClicked(it.track.uri)
+                        }
                     )
 
                 }
