@@ -171,6 +171,9 @@ fun BottomNavigationSpotOnMusic(
         spotifyAppRemote = it
     }
 
+
+
+
     Surface(
         modifier = Modifier
 
@@ -360,10 +363,16 @@ fun HomeScreenNavigationConfiguration(
                     tokenExpired()
                 }, onPlayListClicked = {
                     Log.d("", "MOODD: $it")
-                    navHostController.navigate(Routes.PlaylistDetail.route + "/$it")
+                    navHostController.navigate(Routes.PlaylistDetail.route + "/$it"){
+                     restoreState=true
+
+                    }
                 }, onAlbumClicked = {
                     navHostController.navigate(Routes.AlbumDetail.route + "/$it")
+                    {
+                        restoreState=true
 
+                    }
                 }
                 )
             }
@@ -380,7 +389,10 @@ fun HomeScreenNavigationConfiguration(
 
                     }
 
-                    navHostController.navigate(Routes.PlaylistGrid.route + "/$id")
+                    navHostController.navigate(Routes.PlaylistGrid.route + "/$id"){
+                        restoreState=true
+
+                    }
                 })
 
             }
@@ -397,9 +409,15 @@ fun HomeScreenNavigationConfiguration(
                     scope = scope,
                     listStateLibrary = listStateLibrary, onPlaylistClicked = {
                         Log.d("", "MOODD: $it")
-                        navHostController.navigate(Routes.PlaylistDetail.route + "/$it")
+                        navHostController.navigate(Routes.PlaylistDetail.route + "/$it"){
+                            restoreState=true
+
+                        }
                     }, onAlbumClicked = {
-                        navHostController.navigate(Routes.AlbumDetail.route + "/$it")
+                        navHostController.navigate(Routes.AlbumDetail.route + "/$it"){
+                            restoreState=true
+
+                        }
 
 
                     }

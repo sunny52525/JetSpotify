@@ -77,6 +77,11 @@ class HomeActivity : BaseSpotifyActivity() {
                             val track: Track = playerState.track
 
 
+                            Log.d(
+                                TAG,
+                                "onConnected: ${playerState.playbackPosition / 1000} seconds"
+                            )
+
                             musicPlayerViewModel.isPlaying.postValue(!playerState.isPaused)
                             musicPlayerViewModel.setPlayerDetails(
                                 track.name, track.artist.name,

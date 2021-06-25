@@ -1,5 +1,6 @@
 package com.shaun.spotonmusic.presentation.ui.components.playlist
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -38,7 +39,7 @@ fun SpotifySongListItem(
     showImage: Boolean = true,
     liked: Boolean = false,
     count: Int = 0,
-    onSongClicked: () -> Unit={}
+    onSongClicked: () -> Unit = {}
 ) {
 
 
@@ -49,6 +50,7 @@ fun SpotifySongListItem(
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = {
+                        Log.d("TAG", "SpotifySongListItem: $album")
                         onSongClicked()
                     }
                 )
