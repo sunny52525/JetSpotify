@@ -13,6 +13,7 @@ class MusicPlayerViewModel : ViewModel() {
     val singerName = MutableLiveData<String>()
     val imageUrl = MutableLiveData<String>()
     val isPlaying = MutableLiveData(false)
+    val seekState = MutableLiveData(0.0f)
 
 
     fun setSpotifyRemote(spotifyAppRemote: SpotifyAppRemote?) {
@@ -27,6 +28,10 @@ class MusicPlayerViewModel : ViewModel() {
         this.imageUrl.postValue("https://i.scdn.co/image/${imageUrl.split(':')[2]}")
     }
 
+
+    fun updateSeekState(newPosition:Float){
+        seekState.postValue(newPosition)
+    }
     companion object {
         private const val TAG = "MusicPlayerViewModel"
     }

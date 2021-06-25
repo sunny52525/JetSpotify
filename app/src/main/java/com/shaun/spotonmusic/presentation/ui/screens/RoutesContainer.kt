@@ -162,7 +162,7 @@ fun BottomNavigationSpotOnMusic(
     val trackName: String by musicPlayerViewModel.trackName.observeAsState(initial = "")
     val artistName: String by musicPlayerViewModel.singerName.observeAsState(initial = "")
     val imageUrl: String by musicPlayerViewModel.imageUrl.observeAsState(initial = "")
-
+    val seekState: Float by musicPlayerViewModel.seekState.observeAsState(0.0f)
     var spotifyAppRemote: SpotifyAppRemote? = null
 
     val isPlaying by musicPlayerViewModel.isPlaying.observeAsState(initial = false)
@@ -180,6 +180,22 @@ fun BottomNavigationSpotOnMusic(
     ) {
 
         Column {
+            Column(
+                Modifier
+                    .height(1.dp)
+                    .fillMaxWidth()
+                    .background(spotifyGray)
+            ) {
+                Row(
+                    Modifier
+                        .fillMaxHeight()
+                        .background(Color.White)
+                        .fillMaxWidth(seekState)
+                        .animateContentSize()
+                ) {
+
+                }
+            }
             Row(
                 Modifier
                     .fillMaxWidth()
@@ -363,14 +379,14 @@ fun HomeScreenNavigationConfiguration(
                     tokenExpired()
                 }, onPlayListClicked = {
                     Log.d("", "MOODD: $it")
-                    navHostController.navigate(Routes.PlaylistDetail.route + "/$it"){
-                     restoreState=true
+                    navHostController.navigate(Routes.PlaylistDetail.route + "/$it") {
+                        restoreState = true
 
                     }
                 }, onAlbumClicked = {
                     navHostController.navigate(Routes.AlbumDetail.route + "/$it")
                     {
-                        restoreState=true
+                        restoreState = true
 
                     }
                 }
@@ -389,8 +405,8 @@ fun HomeScreenNavigationConfiguration(
 
                     }
 
-                    navHostController.navigate(Routes.PlaylistGrid.route + "/$id"){
-                        restoreState=true
+                    navHostController.navigate(Routes.PlaylistGrid.route + "/$id") {
+                        restoreState = true
 
                     }
                 })
@@ -409,13 +425,13 @@ fun HomeScreenNavigationConfiguration(
                     scope = scope,
                     listStateLibrary = listStateLibrary, onPlaylistClicked = {
                         Log.d("", "MOODD: $it")
-                        navHostController.navigate(Routes.PlaylistDetail.route + "/$it"){
-                            restoreState=true
+                        navHostController.navigate(Routes.PlaylistDetail.route + "/$it") {
+                            restoreState = true
 
                         }
                     }, onAlbumClicked = {
-                        navHostController.navigate(Routes.AlbumDetail.route + "/$it"){
-                            restoreState=true
+                        navHostController.navigate(Routes.AlbumDetail.route + "/$it") {
+                            restoreState = true
 
                         }
 

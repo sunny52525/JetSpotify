@@ -19,13 +19,14 @@ import com.shaun.spotonmusic.viewmodel.MusicPlayerViewModel
 import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
 import com.spotify.protocol.types.Track
+import com.yashovardhan99.timeit.Stopwatch
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kaaes.spotify.webapi.core.models.UserPrivate
 import net.openid.appauth.TokenResponse
 
 
 @AndroidEntryPoint
-class HomeActivity : BaseSpotifyActivity() {
+class HomeActivity : BaseSpotifyActivity(), Stopwatch.OnTickListener {
 
     var spotifyAppRemote: SpotifyAppRemote? = null
 
@@ -38,7 +39,9 @@ class HomeActivity : BaseSpotifyActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
+        val stopwatch = Stopwatch()
+        stopwatch.setOnTickListener(this)
+        stopwatch.start()
 
         if (spotifyAuthClient.hasConfigurationChanged()) {
             Toast.makeText(this, "Configuration change detected", Toast.LENGTH_SHORT).show()
@@ -81,6 +84,11 @@ class HomeActivity : BaseSpotifyActivity() {
                                 TAG,
                                 "onConnected: ${playerState.playbackPosition / 1000} seconds"
                             )
+
+
+                            Log.d(TAG, "onConnected: ${(track.duration / 1000).toFloat()}")
+                            Log.d(TAG, "onConnected: ${playerState.playbackPosition / 1000}")
+                            musicPlayerViewModel.updateSeekState((playerState.playbackPosition / 1000) / (track.duration / 1000).toFloat())
 
                             musicPlayerViewModel.isPlaying.postValue(!playerState.isPaused)
                             musicPlayerViewModel.setPlayerDetails(
@@ -155,5 +163,18 @@ class HomeActivity : BaseSpotifyActivity() {
     override fun onDestroy() {
         super.onDestroy()
         SpotifyAppRemote.disconnect(spotifyAppRemote)
+    }
+
+    override fun onTick(stopwatch: Stopwatch?) {
+        spotifyAppRemote?.let {
+            it.playerApi.subscribeToPlayerState()
+                .setEventCallback { playerState ->
+                    val track: Track = playerState.track
+                    musicPlayerViewModel.updateSeekState((playerState.playbackPosition / 1000) / (track.duration / 1000).toFloat())
+
+                }
+        }
+
+
     }
 }
