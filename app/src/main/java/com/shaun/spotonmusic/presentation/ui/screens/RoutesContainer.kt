@@ -55,15 +55,16 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun HomeScreen(
     context: HomeActivity,
-    homeViewModel: SharedViewModel
+    musicPlayerViewModel: MusicPlayerViewModel
 ) {
+
 
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
 
 
     val libraryViewModel: LibraryViewModel = viewModel()
-
+    val homeViewModel: SharedViewModel = viewModel()
 
     libraryViewModel.tokenExpired.observeForever {
         if (it == true) {
@@ -134,7 +135,8 @@ fun HomeScreen(
                     modalBottomSheetState = state,
                     libraryViewModel = libraryViewModel,
                     scope = scope,
-                    paddingValues = it
+                    paddingValues = it,
+                    musicPlayerViewModel = musicPlayerViewModel
                 )
 
 
@@ -303,6 +305,7 @@ fun HomeScreenNavigationConfiguration(
     libraryViewModel: LibraryViewModel,
     scope: CoroutineScope,
     paddingValues: PaddingValues,
+    musicPlayerViewModel: MusicPlayerViewModel,
 
     ) {
     val listState = rememberLazyListState()
@@ -397,10 +400,10 @@ fun HomeScreenNavigationConfiguration(
                     },
                     viewModel = playlistDetailViewModel,
                     onShufflePlayListClicked = {
-                        playSpotifyMedia(sharedViewModel.spotifyRemote.value, it)
+                        playSpotifyMedia(musicPlayerViewModel.spotifyRemote.value, it)
                     },
                     onSongClicked = {
-                        playSpotifyMedia(sharedViewModel.spotifyRemote.value, it)
+                        playSpotifyMedia(musicPlayerViewModel.spotifyRemote.value, it)
                     }
                 )
 
@@ -420,9 +423,9 @@ fun HomeScreenNavigationConfiguration(
                     id = id,
                     viewModel = albumDetailViewModel,
                     onAlbumPlayed = {
-                        playSpotifyMedia(sharedViewModel.spotifyRemote.value, it)
+                        playSpotifyMedia(musicPlayerViewModel.spotifyRemote.value, it)
                     }) {
-                    playSpotifyMedia(sharedViewModel.spotifyRemote.value, it)
+                    playSpotifyMedia(musicPlayerViewModel.spotifyRemote.value, it)
                 }
             }
         }

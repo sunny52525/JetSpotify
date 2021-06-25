@@ -15,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.shaun.spotonmusic.R
 import com.shaun.spotonmusic.presentation.ui.screens.HomeScreen
 import com.shaun.spotonmusic.ui.theme.SpotOnMusicTheme
+import com.shaun.spotonmusic.viewmodel.MusicPlayerViewModel
 import com.shaun.spotonmusic.viewmodel.SharedViewModel
 import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
@@ -28,7 +29,7 @@ class HomeActivity : BaseSpotifyActivity() {
 
     var spotifyAppRemote: SpotifyAppRemote? = null
 
-    private val homeViewModel: SharedViewModel by viewModels()
+    private val musicPlayerViewModel: MusicPlayerViewModel by viewModels()
 
     @ExperimentalMaterialApi
     @ExperimentalFoundationApi
@@ -49,7 +50,7 @@ class HomeActivity : BaseSpotifyActivity() {
             SpotOnMusicTheme(darkTheme = true) {
                 HomeScreen(
                     this,
-                    homeViewModel
+                    musicPlayerViewModel
                 )
             }
 
@@ -65,7 +66,7 @@ class HomeActivity : BaseSpotifyActivity() {
             override fun onConnected(spotifyAppRemote: SpotifyAppRemote?) {
                 Log.d(TAG, "onConnected: Connected")
                 this@HomeActivity.spotifyAppRemote = spotifyAppRemote
-                homeViewModel.setSpotifyRemote(spotifyAppRemote = spotifyAppRemote)
+                musicPlayerViewModel.setSpotifyRemote(spotifyAppRemote = spotifyAppRemote)
             }
 
             override fun onFailure(throwable: Throwable?) {

@@ -61,7 +61,6 @@ class SharedViewModel @Inject constructor(
     var categoriesPager = MutableLiveData<List<SpotOnMusicModel>>()
 
 
-    var spotifyRemote = MutableLiveData<SpotifyAppRemote>()
 
 
     var myDetails = MutableLiveData<UserPrivate>()
@@ -107,9 +106,6 @@ class SharedViewModel @Inject constructor(
     }
 
 
-    fun setSpotifyRemote(spotifyAppRemote: SpotifyAppRemote?) {
-        this.spotifyRemote.postValue(spotifyAppRemote)
-    }
 
 
     fun getAlbum(albumId: String) {
