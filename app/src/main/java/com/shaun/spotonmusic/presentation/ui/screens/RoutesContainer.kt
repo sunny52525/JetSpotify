@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.font.FontWeight.Companion.Normal
@@ -40,6 +41,7 @@ import com.shaun.spotonmusic.presentation.ui.activity.HomeActivity
 import com.shaun.spotonmusic.presentation.ui.animation.SlideInEnterAnimation
 import com.shaun.spotonmusic.presentation.ui.components.library.LibraryBottomSheet
 import com.shaun.spotonmusic.ui.theme.black
+import com.shaun.spotonmusic.ui.theme.green
 import com.shaun.spotonmusic.ui.theme.spotifyGray
 import com.shaun.spotonmusic.viewmodel.*
 import com.spotify.android.appremote.api.SpotifyAppRemote
@@ -189,20 +191,38 @@ fun BottomNavigationSpotOnMusic(
                         fontSize = 13.sp
                     )
                 }
-                Box(contentAlignment = Alignment.CenterEnd, modifier = Modifier.fillMaxWidth()) {
+                Box(
+                    contentAlignment = Alignment.CenterEnd,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                ) {
 
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_cast),
-                        contentDescription = "Cast"
-                    )
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_heart),
-                        contentDescription = "Like"
-                    )
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_heart),
-                        contentDescription = "Like"
-                    )
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier
+                            .width(150.dp)
+                            .padding(end = 10.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_cast),
+                            contentDescription = "Cast",
+                            modifier = Modifier.size(32.dp),
+                            colorFilter = ColorFilter.tint(Color.Gray)
+                        )
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_like),
+                            contentDescription = "Like",
+                            modifier = Modifier.size(32.dp),
+                            colorFilter = ColorFilter.tint(green)
+                        )
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_pause),
+                            contentDescription = "Like",
+                            modifier = Modifier.size(32.dp),
+                            colorFilter = ColorFilter.tint(Color.White),
+                        )
+                    }
                 }
             }
 
@@ -300,7 +320,7 @@ fun HomeScreenNavigationConfiguration(
             .background(
                 black
             )
-            .padding(bottom = paddingValues.calculateBottomPadding())
+            .padding(paddingValues)
     ) {
 
         composable(BottomNavRoutes.Home.route) {
