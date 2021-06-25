@@ -16,9 +16,9 @@ import com.shaun.spotonmusic.R
 import com.shaun.spotonmusic.presentation.ui.screens.HomeScreen
 import com.shaun.spotonmusic.ui.theme.SpotOnMusicTheme
 import com.shaun.spotonmusic.viewmodel.MusicPlayerViewModel
-import com.shaun.spotonmusic.viewmodel.SharedViewModel
 import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
+import com.spotify.protocol.types.Track
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kaaes.spotify.webapi.core.models.UserPrivate
 import net.openid.appauth.TokenResponse
@@ -67,6 +67,25 @@ class HomeActivity : BaseSpotifyActivity() {
                 Log.d(TAG, "onConnected: Connected")
                 this@HomeActivity.spotifyAppRemote = spotifyAppRemote
                 musicPlayerViewModel.setSpotifyRemote(spotifyAppRemote = spotifyAppRemote)
+
+
+
+                spotifyAppRemote?.let { _ ->
+                    spotifyAppRemote.playerApi.subscribeToPlayerState()
+                        .setEventCallback { playerState ->
+
+                            val track: Track = playerState.track
+
+
+                            musicPlayerViewModel.isPlaying.postValue(!playerState.isPaused)
+                            musicPlayerViewModel.setPlayerDetails(
+                                track.name, track.artist.name,
+                                track.imageUri.raw ?: ""
+                            )
+                        }
+                }
+
+
             }
 
             override fun onFailure(throwable: Throwable?) {

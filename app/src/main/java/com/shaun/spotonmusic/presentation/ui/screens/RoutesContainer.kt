@@ -11,6 +11,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
@@ -34,6 +35,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.glide.rememberGlidePainter
 import com.shaun.spotonmusic.R
 import com.shaun.spotonmusic.navigation.BottomNavRoutes
 import com.shaun.spotonmusic.navigation.Routes
@@ -116,7 +118,8 @@ fun HomeScreen(
                 if (currentScreen is BottomNavRoutes.Home)
                     BottomNavigationSpotOnMusic(
                         navController = navController,
-                        items = bottomNavItems
+                        items = bottomNavItems,
+                        musicPlayerViewModel = musicPlayerViewModel
                     )
 
             },
@@ -152,8 +155,22 @@ fun HomeScreen(
 @Composable
 fun BottomNavigationSpotOnMusic(
     navController: NavController,
-    items: List<BottomNavRoutes>
+    items: List<BottomNavRoutes>,
+    musicPlayerViewModel: MusicPlayerViewModel
 ) {
+
+    val trackName: String by musicPlayerViewModel.trackName.observeAsState(initial = "")
+    val artistName: String by musicPlayerViewModel.singerName.observeAsState(initial = "")
+    val imageUrl: String by musicPlayerViewModel.imageUrl.observeAsState(initial = "")
+
+    var spotifyAppRemote: SpotifyAppRemote? = null
+
+    val isPlaying by musicPlayerViewModel.isPlaying.observeAsState(initial = false)
+
+    musicPlayerViewModel.spotifyRemote.observeForever {
+        spotifyAppRemote = it
+    }
+
     Surface(
         modifier = Modifier
 
@@ -168,7 +185,7 @@ fun BottomNavigationSpotOnMusic(
             ) {
 
                 Image(
-                    painter = painterResource(id = R.drawable.spotify_liked),
+                    painter = rememberGlidePainter(request = imageUrl),
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxHeight()
@@ -181,13 +198,13 @@ fun BottomNavigationSpotOnMusic(
                         .align(Alignment.CenterVertically)
                 ) {
                     Text(
-                        text = "Song Name",
+                        text = trackName,
                         color = Color.White,
                         fontWeight = Bold,
                         fontSize = 15.sp
                     )
                     Text(
-                        text = "Artist Name",
+                        text = artistName,
                         color = Color.Gray,
                         fontWeight = Normal,
                         fontSize = 13.sp
@@ -219,9 +236,19 @@ fun BottomNavigationSpotOnMusic(
                             colorFilter = ColorFilter.tint(green)
                         )
                         Image(
-                            painter = painterResource(id = R.drawable.ic_pause),
+                            painter = if (isPlaying) painterResource(id = R.drawable.ic_pause) else painterResource(
+                                id = R.drawable.ic_play
+                            ),
                             contentDescription = "Like",
-                            modifier = Modifier.size(32.dp),
+                            modifier = Modifier
+                                .size(32.dp)
+                                .clickable {
+                                    if (isPlaying)
+                                        spotifyAppRemote?.playerApi?.pause()
+                                    else
+                                        spotifyAppRemote?.playerApi?.resume()
+
+                                },
                             colorFilter = ColorFilter.tint(Color.White),
                         )
                     }
