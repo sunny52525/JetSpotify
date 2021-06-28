@@ -20,10 +20,8 @@ JetSpotify is a Spotify App (made in Jetpack Compose) and functionalites (using 
 * All functionalities from Spotify APP
 * Unit Testing
 
-### DEMO
-   * <img src="https://drive.google.com/uc?id=1gzlbxJS-KFUn6vIw8X66USmOgbe1goWC&export=download" width="200" height="400" />
-
-
+### [DEMO](https://drive.google.com/file/d/1i2H3RXwlgeDhb52lWR-HHWy6PcmXxSIT/view?usp=drivesdk)
+   
 
 ### Special Thanks to [Kaaes](https://github.com/kaaes/spotify-web-api-android) 
     for creating Spotify webapi wrapper
