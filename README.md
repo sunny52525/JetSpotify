@@ -12,11 +12,11 @@ JetSpotify is a Spotify App (made in Jetpack Compose) and functionalites (using 
 * Coroutines
 * Compose Navigation
 * Jetpack Datastore
+* Remote player using Spotify SDK
 
 
 ## Whats I'll be doing in next few days
 * Caching using room
-* Remote player using Spotify SDK
 * All functionalities from Spotify APP
 * Unit Testing
 
