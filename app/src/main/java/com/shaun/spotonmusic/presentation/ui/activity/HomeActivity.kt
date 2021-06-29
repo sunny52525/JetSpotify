@@ -29,7 +29,7 @@ import net.openid.appauth.TokenResponse
 class HomeActivity : BaseSpotifyActivity(), Stopwatch.OnTickListener {
 
     var spotifyAppRemote: SpotifyAppRemote? = null
-
+    private val stopwatch = Stopwatch()
     private val musicPlayerViewModel: MusicPlayerViewModel by viewModels()
 
     @ExperimentalMaterialApi
@@ -39,10 +39,15 @@ class HomeActivity : BaseSpotifyActivity(), Stopwatch.OnTickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val stopwatch = Stopwatch()
-        stopwatch.setOnTickListener(this)
-        stopwatch.clockDelay = 500
-        stopwatch.start()
+
+        stopwatch.apply {
+            setOnTickListener(this@HomeActivity)
+            clockDelay = 500
+            start()
+        }
+
+
+
 
         if (spotifyAuthClient.hasConfigurationChanged()) {
             Toast.makeText(this, "Configuration change detected", Toast.LENGTH_SHORT).show()
@@ -81,17 +86,15 @@ class HomeActivity : BaseSpotifyActivity(), Stopwatch.OnTickListener {
                             val track: Track = playerState.track
 
 
-                            Log.d(
-                                TAG,
-                                "onConnected: ${playerState.playbackPosition / 1000} seconds"
-                            )
-
-
-                            Log.d(TAG, "onConnected: ${(track.duration / 1000).toFloat()}")
-                            Log.d(TAG, "onConnected: ${playerState.playbackPosition / 1000}")
                             musicPlayerViewModel.updateSeekState((playerState.playbackPosition / 1000) / (track.duration / 1000).toFloat())
-
                             musicPlayerViewModel.isPlaying.postValue(!playerState.isPaused)
+
+//                            if (playerState.isPaused)
+//                                stopwatch.stop()
+//                            else
+//                                stopwatch.start()
+
+
                             musicPlayerViewModel.setPlayerDetails(
                                 track.name, track.artist.name,
                                 track.imageUri.raw ?: ""
@@ -173,7 +176,10 @@ class HomeActivity : BaseSpotifyActivity(), Stopwatch.OnTickListener {
                     val track: Track = playerState.track
                     musicPlayerViewModel.updateSeekState((playerState.playbackPosition / 1000) / (track.duration / 1000).toFloat())
 
+
                 }
+
+
         }
 
 

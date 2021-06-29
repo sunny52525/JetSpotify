@@ -23,11 +23,9 @@ class PaletteExtractor() {
 
     fun getColorFromSwatch(imageUrl: String): MutableLiveData<Color> {
 
-        Log.d(TAG, "getColorFromSwatch: $imageUrl")
 
         val color = MutableLiveData<Color>()
         if (imageUrl.isEmpty()) {
-            Log.d(TAG, "getColorFromSwatch: why")
             color.postValue(green)
         } else {
             GlobalScope.launch {
@@ -37,12 +35,10 @@ class PaletteExtractor() {
                         val palette: Palette = Palette.from(bitmap).generate()
 
 
-
                         val dominant = palette.dominantSwatch?.rgb?.let { color ->
                             arrayListOf(color.red, color.green, color.blue)
 
                         }
-                        Log.d(TAG, "getColorFromSwatch: $dominant")
                         val composeColor =
                             dominant?.get(0)?.let { it1 ->
                                 Color(
@@ -51,7 +47,6 @@ class PaletteExtractor() {
                                     blue = dominant[2]
                                 )
                             }
-                        Log.d(TAG, "getColorFromSwatch: $composeColor")
                         if (composeColor != null)
                             color.postValue(composeColor)
                     }

@@ -9,18 +9,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-@Preview
 @Composable
-fun SeekBar(){
+fun SeekBar(seekPosition: Float) {
 
     Column(Modifier) {
         Card(
             shape = RoundedCornerShape(10.dp),
             backgroundColor = Color.Unspecified,
-            modifier = Modifier.padding(start=20.dp,end=20.dp,bottom=0.dp,top = 0.dp)
+            modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 0.dp, top = 0.dp)
         ) {
             Row(
                 Modifier
@@ -29,7 +27,7 @@ fun SeekBar(){
             ) {
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth(0.5f)
+                        .fillMaxWidth(seekPosition)
                         .background(Color.White)
                         .height(3.dp)
                 ) {

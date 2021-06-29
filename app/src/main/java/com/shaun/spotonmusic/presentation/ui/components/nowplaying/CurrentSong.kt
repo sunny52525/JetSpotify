@@ -18,7 +18,11 @@ import com.shaun.spotonmusic.ui.theme.green
 
 
 @Composable
-fun CurrentSong(){
+fun CurrentSong(
+    songName: String?,
+    singerName: String?,
+
+) {
     Row(
         Modifier
             .fillMaxWidth()
@@ -32,13 +36,13 @@ fun CurrentSong(){
 
         ) {
             Text(
-                text = "Song name",
+                text = songName ?: "",
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp
             )
 
-            Text(text = "Singer", color = Color.Gray)
+            Text(text = singerName ?: "", color = Color.Gray)
         }
 
         Image(

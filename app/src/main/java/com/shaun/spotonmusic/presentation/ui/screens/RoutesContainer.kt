@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -49,6 +50,7 @@ import com.shaun.spotonmusic.viewmodel.*
 import com.spotify.android.appremote.api.SpotifyAppRemote
 import kaaes.spotify.webapi.android.models.UserPrivate
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
@@ -94,58 +96,94 @@ fun HomeScreen(
 
     val state = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val scope = rememberCoroutineScope()
+
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
+    )
+
+
     var currentSort by remember {
         mutableStateOf("Recently Played")
     }
-    ModalBottomSheetLayout(
+
+
+    BottomSheetScaffold(
         sheetContent = {
-            LibraryBottomSheet(state, scope, currentSort, onSortItemClicked = {
-                currentSort = it
-            })
+            NowPlaying(musicPlayerViewModel)
         },
-        sheetState = state,
-        scrimColor = MaterialTheme.colors.onSurface.copy(alpha = 0.1f)
-    ) {
-        Scaffold(
+        sheetPeekHeight = 0.dp,
+        scaffoldState = bottomSheetScaffoldState,
 
-            modifier = Modifier
-                .fillMaxSize()
-                .background(black),
+        ) {
+
+        BackHandler {
+            if (bottomSheetScaffoldState.bottomSheetState.isExpanded) {
+                scope.launch {
+                    bottomSheetScaffoldState.bottomSheetState.collapse()
+                }
+            } else {
+//                navController.
+                //TODO
+            }
+        }
 
 
-            bottomBar = {
 
-                if (currentScreen is BottomNavRoutes.Home)
-                    BottomNavigationSpotOnMusic(
-                        navController = navController,
-                        items = bottomNavItems,
+        ModalBottomSheetLayout(
+            sheetContent = {
+                LibraryBottomSheet(state, scope, currentSort, onSortItemClicked = {
+                    currentSort = it
+                })
+            },
+            sheetState = state,
+            scrimColor = MaterialTheme.colors.onSurface.copy(alpha = 0.1f)
+        ) {
+            Scaffold(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(black),
+
+
+                bottomBar = {
+
+                    if (currentScreen is BottomNavRoutes.Home)
+                        BottomNavigationSpotOnMusic(
+                            navController = navController,
+                            items = bottomNavItems,
+                            musicPlayerViewModel = musicPlayerViewModel,
+                            nowPlayingClicked = {
+                                scope.launch {
+                                    bottomSheetScaffoldState.bottomSheetState.expand()
+                                }
+                            }
+                        )
+
+                },
+                scaffoldState = scaffoldState,
+                content = {
+
+                    HomeScreenNavigationConfiguration(
+                        navHostController = navController,
+                        sharedViewModel = homeViewModel,
+                        tokenExpired = {
+                            context.spotifyAuthClient.refreshAccessToken()
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                homeViewModel.getAccessToken()
+                            }, 1000)
+                        },
+                        modalBottomSheetState = state,
+                        libraryViewModel = libraryViewModel,
+                        scope = scope,
+                        paddingValues = it,
                         musicPlayerViewModel = musicPlayerViewModel
                     )
 
-            },
-            scaffoldState = scaffoldState,
-            content = {
 
-                HomeScreenNavigationConfiguration(
-                    navHostController = navController,
-                    sharedViewModel = homeViewModel,
-                    tokenExpired = {
-                        context.spotifyAuthClient.refreshAccessToken()
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            homeViewModel.getAccessToken()
-                        }, 1000)
-                    },
-                    modalBottomSheetState = state,
-                    libraryViewModel = libraryViewModel,
-                    scope = scope,
-                    paddingValues = it,
-                    musicPlayerViewModel = musicPlayerViewModel
-                )
+                }
 
+            )
+        }
 
-            }
-
-        )
     }
 
 
@@ -156,7 +194,8 @@ fun HomeScreen(
 fun BottomNavigationSpotOnMusic(
     navController: NavController,
     items: List<BottomNavRoutes>,
-    musicPlayerViewModel: MusicPlayerViewModel
+    musicPlayerViewModel: MusicPlayerViewModel,
+    nowPlayingClicked: () -> Unit
 ) {
 
     val trackName: String by musicPlayerViewModel.trackName.observeAsState(initial = "")
@@ -215,6 +254,9 @@ fun BottomNavigationSpotOnMusic(
                     Modifier
                         .padding(start = 10.dp)
                         .align(Alignment.CenterVertically)
+                        .clickable {
+                            nowPlayingClicked()
+                        }
                 ) {
                     Text(
                         text = trackName,
@@ -461,7 +503,11 @@ fun HomeScreenNavigationConfiguration(
                     },
                     viewModel = playlistDetailViewModel,
                     onShufflePlayListClicked = {
-                        playSpotifyMedia(musicPlayerViewModel.spotifyRemote.value, it)
+                        playSpotifyMedia(
+                            musicPlayerViewModel.spotifyRemote.value, it,
+                            shuffle = true,
+                            isPlaylist = true
+                        )
                     },
                     onSongClicked = {
                         playSpotifyMedia(musicPlayerViewModel.spotifyRemote.value, it)
@@ -515,11 +561,18 @@ fun HomeScreenNavigationConfiguration(
 }
 
 
-fun playSpotifyMedia(spotifyAppRemote: SpotifyAppRemote?, spotifyUri: String?) {
+fun playSpotifyMedia(
+    spotifyAppRemote: SpotifyAppRemote?,
+    spotifyUri: String?,
+    shuffle: Boolean = false,
+    isPlaylist: Boolean = false
+) {
 
     println(spotifyUri)
     println(spotifyAppRemote)
     spotifyUri?.let {
+        if (isPlaylist)
+            spotifyAppRemote?.playerApi?.setShuffle(shuffle)
         spotifyAppRemote?.playerApi?.play(it)
     }
 

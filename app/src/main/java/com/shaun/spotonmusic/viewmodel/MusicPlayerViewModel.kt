@@ -22,8 +22,7 @@ class MusicPlayerViewModel : ViewModel() {
 
     fun setPlayerDetails(songName: String, singerName: String, imageUrl: String) {
 
-        Log.d(TAG, "setPlayerDetails: $songName $singerName $imageUrl ")
-        this.trackName.postValue(songName)
+         this.trackName.postValue(songName)
         this.singerName.postValue(singerName)
         this.imageUrl.postValue("https://i.scdn.co/image/${imageUrl.split(':')[2]}")
     }
