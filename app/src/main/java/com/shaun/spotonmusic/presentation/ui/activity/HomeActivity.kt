@@ -41,6 +41,7 @@ class HomeActivity : BaseSpotifyActivity(), Stopwatch.OnTickListener {
 
         val stopwatch = Stopwatch()
         stopwatch.setOnTickListener(this)
+        stopwatch.clockDelay = 500
         stopwatch.start()
 
         if (spotifyAuthClient.hasConfigurationChanged()) {
