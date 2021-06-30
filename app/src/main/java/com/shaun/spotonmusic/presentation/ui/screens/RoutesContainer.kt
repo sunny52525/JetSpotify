@@ -1,6 +1,7 @@
 package com.shaun.spotonmusic.presentation.ui.screens
 
 
+import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -23,6 +24,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.font.FontWeight.Companion.Normal
@@ -59,14 +61,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     context: HomeActivity,
-    musicPlayerViewModel: MusicPlayerViewModel
+    musicPlayerViewModel: MusicPlayerViewModel,
 ) {
 
 
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
 
-
+    val activity = LocalContext.current as Activity
     val libraryViewModel: LibraryViewModel = viewModel()
     val homeViewModel: SharedViewModel = viewModel()
 
@@ -116,14 +118,9 @@ fun HomeScreen(
 
         ) {
 
-        BackHandler {
-            if (bottomSheetScaffoldState.bottomSheetState.isExpanded) {
+        BackHandler(bottomSheetScaffoldState.bottomSheetState.isExpanded) {
                 scope.launch {
                     bottomSheetScaffoldState.bottomSheetState.collapse()
-                }
-            } else {
-//                navController.
-                //TODO
             }
         }
 
