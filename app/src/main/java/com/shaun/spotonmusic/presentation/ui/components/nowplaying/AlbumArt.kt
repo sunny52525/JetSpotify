@@ -6,15 +6,11 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.glide.rememberGlidePainter
-import com.shaun.spotonmusic.R
 
 @Composable
 fun AlbumArt(albumArtLink: String?) {
@@ -29,7 +25,8 @@ fun AlbumArt(albumArtLink: String?) {
             contentDescription = null,
             Modifier
                 .padding(20.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .fillMaxHeight(0.7f),
             contentScale = ContentScale.Crop
         )
 

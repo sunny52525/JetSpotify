@@ -72,6 +72,7 @@ fun HomeScreen(
     val libraryViewModel: LibraryViewModel = viewModel()
     val homeViewModel: SharedViewModel = viewModel()
 
+
     libraryViewModel.tokenExpired.observeForever {
         if (it == true) {
             Toast.makeText(context, "Expired", Toast.LENGTH_SHORT).show()
@@ -104,6 +105,25 @@ fun HomeScreen(
     )
 
 
+    musicPlayerViewModel.isCollapsed.observeForever {
+        it?.let { collapsed ->
+
+            if (collapsed) {
+                scope.launch {
+                    bottomSheetScaffoldState.bottomSheetState.collapse()
+                }
+            } else {
+
+                scope.launch {
+                    bottomSheetScaffoldState.bottomSheetState.expand()
+
+                }
+
+            }
+        }
+    }
+
+
     var currentSort by remember {
         mutableStateOf("Recently Played")
     }
@@ -119,8 +139,8 @@ fun HomeScreen(
         ) {
 
         BackHandler(bottomSheetScaffoldState.bottomSheetState.isExpanded) {
-                scope.launch {
-                    bottomSheetScaffoldState.bottomSheetState.collapse()
+            scope.launch {
+                bottomSheetScaffoldState.bottomSheetState.collapse()
             }
         }
 
@@ -149,9 +169,7 @@ fun HomeScreen(
                             items = bottomNavItems,
                             musicPlayerViewModel = musicPlayerViewModel,
                             nowPlayingClicked = {
-                                scope.launch {
-                                    bottomSheetScaffoldState.bottomSheetState.expand()
-                                }
+                               musicPlayerViewModel.isCollapsed.postValue(false)
                             }
                         )
 
@@ -357,7 +375,8 @@ fun BottomNavigationSpotOnMusic(
                         icon = {
 
                             Icon(
-                                painter = painterResource(id = it.resId), contentDescription = "",
+                                painter = painterResource(id = it.resId),
+                                contentDescription = "",
                                 modifier = Modifier
                                     .width(dimension[it.index].dp)
                                     .height(dimension[it.index].dp)

@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.shaun.spotonmusic.R
@@ -19,6 +20,7 @@ import com.shaun.spotonmusic.R
 
 @Composable
 fun Controller(
+    repeatMode: Int?,
     isPaused: Boolean,
     onLiked: () -> Unit,
     onNext: () -> Unit,
@@ -35,12 +37,20 @@ fun Controller(
 
         ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_like), contentDescription = "",
-            modifier = Modifier.size(30.dp)
+            painter = getIcon(mode = repeatMode), contentDescription = "",
+            modifier = Modifier
+                .size(30.dp)
+                .clickable {
+                    onLiked()
+                }
         )
         Image(
             painter = painterResource(id = R.drawable.ic_previous), contentDescription = "",
-            modifier = Modifier.size(30.dp)
+            modifier = Modifier
+                .size(30.dp)
+                .clickable {
+                    onPrevious()
+                }
         )
         Card(
             onClick = { }, backgroundColor = Color.White, shape = CircleShape,
@@ -67,11 +77,27 @@ fun Controller(
         }
         Image(
             painter = painterResource(id = R.drawable.ic_next), contentDescription = "",
-            modifier = Modifier.size(30.dp)
+            modifier = Modifier
+                .size(30.dp)
+                .clickable {
+                    onNext()
+                }
         )
         Image(
             painter = painterResource(id = R.drawable.ic_negativ), contentDescription = "",
             modifier = Modifier.size(30.dp)
         )
     }
+}
+
+
+@Composable
+fun getIcon(mode: Int?): Painter {
+    if (mode == 0)
+        return painterResource(id = R.drawable.ic_repeat_off)
+    if (mode == 1)
+        return painterResource(id = R.drawable.ic_repeat_one)
+
+    return painterResource(id = R.drawable.ic_repeat_on)
+
 }

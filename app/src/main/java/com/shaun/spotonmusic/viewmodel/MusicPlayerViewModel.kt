@@ -1,6 +1,5 @@
 package com.shaun.spotonmusic.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.spotify.android.appremote.api.SpotifyAppRemote
@@ -15,6 +14,8 @@ class MusicPlayerViewModel : ViewModel() {
     val isPlaying = MutableLiveData(false)
     val seekState = MutableLiveData(0.0f)
 
+    val repeatMode = MutableLiveData<Int>(0)
+    val isCollapsed = MutableLiveData(true)
 
     fun setSpotifyRemote(spotifyAppRemote: SpotifyAppRemote?) {
         this.spotifyRemote.postValue(spotifyAppRemote)
@@ -22,15 +23,20 @@ class MusicPlayerViewModel : ViewModel() {
 
     fun setPlayerDetails(songName: String, singerName: String, imageUrl: String) {
 
-         this.trackName.postValue(songName)
+        this.trackName.postValue(songName)
         this.singerName.postValue(singerName)
         this.imageUrl.postValue("https://i.scdn.co/image/${imageUrl.split(':')[2]}")
     }
 
 
-    fun updateSeekState(newPosition:Float){
+    fun updateSeekState(newPosition: Float) {
         seekState.postValue(newPosition)
     }
+
+    fun updateRepeatMode(repeatMode: Int) {
+        this.repeatMode.postValue(repeatMode)
+    }
+
     companion object {
         private const val TAG = "MusicPlayerViewModel"
     }

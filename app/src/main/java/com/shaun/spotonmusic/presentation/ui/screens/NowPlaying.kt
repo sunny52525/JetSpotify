@@ -3,6 +3,7 @@ package com.shaun.spotonmusic.presentation.ui.screens
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.shaun.spotonmusic.presentation.ui.components.nowplaying.*
 import com.shaun.spotonmusic.ui.theme.black
@@ -30,7 +33,9 @@ fun NowPlaying(musicPlayerViewModel: MusicPlayerViewModel) {
 
     val scrollState = rememberScrollState()
 
-    val albumArtLink: String? by musicPlayerViewModel.imageUrl.observeAsState(initial = "")
+    val context = LocalContext.current
+
+    val albumArtLink by musicPlayerViewModel.imageUrl.observeAsState()
     val songName: String? by musicPlayerViewModel.trackName.observeAsState(initial = "")
     val singerName: String? by musicPlayerViewModel.singerName.observeAsState(initial = "")
     val seekPosition: Float by musicPlayerViewModel.seekState.observeAsState(initial = 0.0f)
@@ -39,6 +44,10 @@ fun NowPlaying(musicPlayerViewModel: MusicPlayerViewModel) {
     }
 
     val isPaused: Boolean by musicPlayerViewModel.isPlaying.observeAsState(initial = false)
+
+    val repeatMode by musicPlayerViewModel.repeatMode.observeAsState()
+
+
     val paletteExtractor = PaletteExtractor()
     albumArtLink?.let {
         val shade = paletteExtractor.getColorFromSwatch(it)
@@ -58,9 +67,19 @@ fun NowPlaying(musicPlayerViewModel: MusicPlayerViewModel) {
             .background(
                 Brush.linearGradient(colors = colors.value)
             )
+            .pointerInput(Unit) {
+
+                detectVerticalDragGestures { change, dragAmount ->
+                    if (change.position.y - change.previousPosition.y > 20f) {
+                        musicPlayerViewModel.isCollapsed.postValue(true)
+                    }
+                }
+            }
     ) {
 
-        Top()
+        Top {
+            musicPlayerViewModel.isCollapsed.postValue(true)
+        }
         AlbumArt(albumArtLink)
         CurrentSong(
             songName = songName,
@@ -68,10 +87,17 @@ fun NowPlaying(musicPlayerViewModel: MusicPlayerViewModel) {
         )
         SeekBar(seekPosition)
         Controller(
+            repeatMode,
             isPaused = isPaused,
-            onLiked = { /*TODO*/ },
-            onNext = { /*TODO*/ },
+            onLiked = {
+                musicPlayerViewModel.spotifyRemote.value?.playerApi?.toggleRepeat()
+
+            },
+            onNext = {
+                musicPlayerViewModel.spotifyRemote.value?.playerApi?.skipNext()
+            },
             onPrevious = {
+                musicPlayerViewModel.spotifyRemote.value?.playerApi?.skipPrevious()
 
             }) {
 

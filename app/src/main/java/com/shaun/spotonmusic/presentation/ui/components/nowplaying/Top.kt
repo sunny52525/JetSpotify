@@ -20,7 +20,7 @@ import com.shaun.spotonmusic.R
 import java.util.*
 
 @Composable
-fun Top (){
+fun Top (dropDown:()->Unit){
     Row(
         Modifier
             .fillMaxWidth()
@@ -33,7 +33,9 @@ fun Top (){
         Icon(
             painter = painterResource(id = R.drawable.ic_dropdown),
             contentDescription = "",
-            modifier = Modifier.size(30.dp)
+            modifier = Modifier.size(30.dp).clickable {
+                dropDown()
+            }
         )
 
         Column(Modifier.weight(0.8f)) {

@@ -85,10 +85,12 @@ class HomeActivity : BaseSpotifyActivity(), Stopwatch.OnTickListener {
 
                             val track: Track = playerState.track
 
-
+                            val repeatMode = playerState.playbackOptions.repeatMode
                             musicPlayerViewModel.updateSeekState((playerState.playbackPosition / 1000) / (track.duration / 1000).toFloat())
                             musicPlayerViewModel.isPlaying.postValue(!playerState.isPaused)
 
+
+                            musicPlayerViewModel.updateRepeatMode(repeatMode)
 //                            if (playerState.isPaused)
 //                                stopwatch.stop()
 //                            else
