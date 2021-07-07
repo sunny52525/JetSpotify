@@ -52,8 +52,10 @@ import com.shaun.spotonmusic.viewmodel.*
 import com.spotify.android.appremote.api.SpotifyAppRemote
 import kaaes.spotify.webapi.android.models.UserPrivate
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.launch
 
+@DelicateCoroutinesApi
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @ExperimentalComposeUiApi

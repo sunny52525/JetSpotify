@@ -46,7 +46,8 @@ fun LibraryItemRow(
     isGrid: Boolean,
     sortRowCLick: () -> Unit,
     onClick: (String, String) -> Unit,
-    chipSelected: (String, Boolean) -> Unit
+    chipSelected: (String, Boolean) -> Unit,
+    chipItemSelected:String?
 ) {
     var previousOffset = 0
 
@@ -88,7 +89,8 @@ fun LibraryItemRow(
                 LibraryChips(
                     chipSelected = { type, selected ->
                         chipSelected(type, selected)
-                    }
+                    },
+                    chipItemSelected
                 )
             }
         }

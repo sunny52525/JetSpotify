@@ -22,7 +22,9 @@ import com.shaun.spotonmusic.viewmodel.LibraryViewModel
 import com.shaun.spotonmusic.viewmodel.SharedViewModel
 import kaaes.spotify.webapi.android.models.UserPrivate
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 
+@DelicateCoroutinesApi
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
@@ -38,20 +40,6 @@ fun Library(
     onPlaylistClicked: (String) -> Unit = {}
 
 ) {
-//
-//    val libraryViewModel: LibraryViewModel =
-//        hiltViewModel()
-
-//    var items by remember {
-//        mutableStateOf(LibraryModel(arrayListOf()))
-//    }
-//    var sorted by remember {
-//        mutableStateOf(LibraryModel(arrayListOf()))
-//    }
-//
-//    var sortMode by remember {
-//        mutableStateOf(false)
-//    }
 
     val list: LibraryModel by libraryViewModel.libraryItemsList.observeAsState(
         initial = LibraryModel(
@@ -59,17 +47,10 @@ fun Library(
         )
     )
 
-    libraryViewModel.libraryItemsList.observeForever {
-        Log.d("TAG", "Library: CHanged")
-
-        it.items.forEach {
-            Log.d("TAG", "Library: ${it.title}")
-        }
-    }
 
     val isGrid by libraryViewModel.isGrid.observeAsState(initial = true)
     val userDetails by libraryViewModel.userDetails.observeAsState(initial = UserPrivate())
-
+    val chipItem by libraryViewModel.chipSelected.observeAsState()
     Column(
         Modifier
             .fillMaxSize()
@@ -97,22 +78,14 @@ fun Library(
                 }
 
             }, chipSelected = { type, sortModeBool ->
-//                Log.d("TAG", "Library: $type,$sortModeBool")
-//
-//                if (sortModeBool) {
-//                    sorted.items = items.items.filter {
-//                        it.type == type
-//                    } as ArrayList<LibraryItem>
-//
-//                    Log.d("TAG", "Library: $sorted")
-//                } else {
-//                    sorted = items
-//                    Log.d("TAG", "Library: $items")
-//
-//                }
-//                sortMode = sortModeBool
 
-            })
+
+                libraryViewModel.sortItems(type, isSort = sortModeBool)
+
+
+
+            }, chipItem
+        )
 
 
     }

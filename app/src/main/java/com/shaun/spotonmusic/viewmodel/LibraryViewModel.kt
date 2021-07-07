@@ -12,13 +12,11 @@ import com.shaun.spotonmusic.network.api.SpotifyAppService
 import com.shaun.spotonmusic.repository.LibraryRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kaaes.spotify.webapi.android.models.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 
+@DelicateCoroutinesApi
 @HiltViewModel
 class LibraryViewModel @Inject constructor(
     context: SpotOnApplication,
@@ -36,10 +34,13 @@ class LibraryViewModel @Inject constructor(
     val followedAlbums = MutableLiveData<Pager<SavedAlbum>?>()
 
     var libraryItemsList = MutableLiveData<LibraryModel>()
+    var libraryItemOriginal = MutableLiveData<LibraryModel>()
 
     var userDetails = MutableLiveData<UserPrivate>()
 
     var isGrid = MutableLiveData<Boolean>()
+
+    val chipSelected = MutableLiveData("")
 
 
     init {
@@ -60,10 +61,11 @@ class LibraryViewModel @Inject constructor(
     }
 
 
-     fun getLibraryItems() {
+    @DelicateCoroutinesApi
+    fun getLibraryItems() {
 
 
-         Log.d(TAG, "getLibraryItems: CAlled")
+        Log.d(TAG, "getLibraryItems: CAlled")
         GlobalScope.launch {
             var savedPlaylist: Pager<PlaylistSimple> = Pager()
             var followedArtist = ArtistsCursorPager()
@@ -134,6 +136,8 @@ class LibraryViewModel @Inject constructor(
 
                 libraryItemsList.postValue(LibraryModel(libraryList))
 
+                libraryItemOriginal.postValue(LibraryModel(libraryList))
+
 
                 libraryList.forEach {
                     Log.d(TAG, "getLibraryItems: ${it.title}")
@@ -145,6 +149,28 @@ class LibraryViewModel @Inject constructor(
 
     fun updateGrid() {
         isGrid.postValue(!isGrid.value!!)
+    }
+
+    fun sortItems(mode: String, isSort: Boolean) {
+
+        if (!isSort) {
+            libraryItemsList.postValue(libraryItemOriginal.value)
+            chipSelected.postValue("")
+            return
+        }
+
+
+
+        chipSelected.postValue(mode)
+
+        var allItems = libraryItemOriginal.value?.items
+
+        allItems = allItems?.filter {
+            it.type == mode
+        } as ArrayList<LibraryItem>?
+
+        libraryItemsList.postValue(allItems?.let { LibraryModel(it) })
+
     }
 
     companion object {
