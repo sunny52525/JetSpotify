@@ -14,5 +14,8 @@ sealed class Routes(val route: String) {
     object AlbumDetail : Routes("AlbumDetail")
     object PlaylistDetail : Routes("PlaylistDetail")
     object PlaylistGrid : Routes("SearchBoxDetail")
+    object SearchScreen : Routes("SearchScreen")
+    object SearchMain:Routes("SearchMain")
+
 
 }

@@ -38,6 +38,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import com.google.accompanist.glide.rememberGlidePainter
 import com.shaun.spotonmusic.R
 import com.shaun.spotonmusic.navigation.BottomNavRoutes
@@ -171,7 +172,7 @@ fun HomeScreen(
                             items = bottomNavItems,
                             musicPlayerViewModel = musicPlayerViewModel,
                             nowPlayingClicked = {
-                               musicPlayerViewModel.isCollapsed.postValue(false)
+                                musicPlayerViewModel.isCollapsed.postValue(false)
                             }
                         )
 
@@ -398,6 +399,7 @@ fun BottomNavigationSpotOnMusic(
 }
 
 
+@DelicateCoroutinesApi
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
@@ -453,28 +455,41 @@ fun HomeScreenNavigationConfiguration(
                 )
             }
         }
-        composable(BottomNavRoutes.Search.route) {
-            SlideInEnterAnimation {
 
-                Search(sharedViewModel, onSearchClicked = {
+        navigation(
+            startDestination = Routes.SearchMain.route,
+            route = BottomNavRoutes.Search.route
+        ) {
+            composable(Routes.SearchMain.route) {
+                SlideInEnterAnimation {
 
+                    Search(sharedViewModel, onSearchClicked = {
 
-                }, onCategoryClicked = { id, color ->
-                    navHostController.currentBackStackEntry?.arguments = Bundle().apply {
-                        putInt("color", color)
+                        navHostController.navigate(Routes.SearchScreen.route)
 
-                    }
+                    }, onCategoryClicked = { id, color ->
+                        navHostController.currentBackStackEntry?.arguments = Bundle().apply {
+                            putInt("color", color)
 
-                    navHostController.navigate(Routes.PlaylistGrid.route + "/$id") {
-                        restoreState = true
+                        }
 
-                    }
-                })
+                        navHostController.navigate(Routes.PlaylistGrid.route + "/$id") {
+                            restoreState = true
+
+                        }
+                    })
+
+                }
+
 
             }
+            composable(Routes.SearchScreen.route) {
 
+                SearchScreen()
+            }
         }
-        composable(BottomNavRoutes.Library.route) {
+
+        composable(route = BottomNavRoutes.Library.route) {
 
             SlideInEnterAnimation {
 
@@ -575,6 +590,8 @@ fun HomeScreenNavigationConfiguration(
                 )
             }
         }
+
+
     }
 }
 

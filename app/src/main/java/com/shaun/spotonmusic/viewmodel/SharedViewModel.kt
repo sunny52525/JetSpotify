@@ -11,7 +11,6 @@ import com.shaun.spotonmusic.navigation.BottomNavRoutes
 import com.shaun.spotonmusic.network.api.SpotifyAppService
 import com.shaun.spotonmusic.repository.HomeScreenRepositoryImpl
 import com.shaun.spotonmusic.utils.TypeConverters.Companion.toSpotOnMusicModel
-import com.spotify.android.appremote.api.SpotifyAppRemote
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kaaes.spotify.webapi.android.models.Album
 import kaaes.spotify.webapi.android.models.Pager
