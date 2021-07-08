@@ -11,6 +11,8 @@ val greenDark = Color(0xFF179B46)
 val lightGreen=Color(0xFF1ED760)
 val spotifyGray = Color(0xFF212121)
 
+val searchBarColor= Color(0xFF535353)
+val searchQueryGray= Color(0xFFc2c2c2)
 
 val blue = Color(0xFF4117b7)
 

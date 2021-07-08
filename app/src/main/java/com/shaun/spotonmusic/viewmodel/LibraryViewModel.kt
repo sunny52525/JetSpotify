@@ -17,9 +17,7 @@ import com.shaun.spotonmusic.repository.LibraryRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kaaes.spotify.webapi.android.models.*
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -69,9 +67,6 @@ class LibraryViewModel @Inject constructor(
 
 
     fun getLibraryItems() {
-
-
-        Log.d(TAG, "getLibraryItems: CAlled")
         viewModelScope.launch {
             var savedPlaylist = Playlists(listOf())
             var followedArtist = ArtistsArray()
@@ -87,69 +82,69 @@ class LibraryViewModel @Inject constructor(
                 Log.d(TAG, "getLibraryItems: ${e.message}")
 
             }
-            withContext(Dispatchers.Main) {
-
-                val libraryList = arrayListOf<LibraryItem>()
-                savedPlaylist.items.forEach {
-
-                    val libraryItem = LibraryItem(
-                        title = it.name,
-                        typeID = TYPE.PLAYLIST,
-                        type = "Playlist",
-                        owner = it.owner.display_name,
-                        id = it.id,
-                        imageUrl = it.images,
-                        recentlyPlayedTime = "",
-                        addedAt = "",
-                        creator = it.owner.display_name
-                    )
-                    libraryList.add(libraryItem)
-                }
 
 
-                followedArtist.artists.items.forEach {
+            val libraryList = arrayListOf<LibraryItem>()
+            savedPlaylist.items.forEach {
 
-                    val libraryItem = LibraryItem(
-                        title = it.name,
-                        type = "Artist",
-                        typeID = TYPE.ARTIST,
-                        owner = it.name,
-                        id = it.id,
-                        imageUrl = it.images,
-                        recentlyPlayedTime = "",
-                        addedAt = "",
-                        creator = it.name
-                    )
-
-                    libraryList.add(libraryItem)
-                }
-
-
-                savedAlbums?.items?.forEach { it ->
-                    val libraryItem = LibraryItem(
-                        title = it.album.name,
-                        typeID = TYPE.ALBUM,
-                        type = "Album",
-                        owner = it.album.artists[0].name,
-                        id = it.album.id,
-                        imageUrl = it.album.images,
-                        recentlyPlayedTime = "",
-                        addedAt = it.added_at,
-                        creator = it.album.artists[0].name
-                    )
-                    libraryList.add(libraryItem)
-                }
-
-
-                libraryItemsList.postValue(LibraryModel(libraryList))
-
-                libraryItemOriginal.postValue(LibraryModel(libraryList))
-
-
-                libraryList.forEach {
-                    Log.d(TAG, "getLibraryItems: ${it.title}")
-                }
+                val libraryItem = LibraryItem(
+                    title = it.name,
+                    typeID = TYPE.PLAYLIST,
+                    type = "Playlist",
+                    owner = it.owner.display_name,
+                    id = it.id,
+                    imageUrl = it.images,
+                    recentlyPlayedTime = "",
+                    addedAt = "",
+                    creator = it.owner.display_name
+                )
+                libraryList.add(libraryItem)
             }
+
+
+            followedArtist.artists.items.forEach {
+
+                val libraryItem = LibraryItem(
+                    title = it.name,
+                    type = "Artist",
+                    typeID = TYPE.ARTIST,
+                    owner = it.name,
+                    id = it.id,
+                    imageUrl = it.images,
+                    recentlyPlayedTime = "",
+                    addedAt = "",
+                    creator = it.name
+                )
+
+                libraryList.add(libraryItem)
+            }
+
+
+            savedAlbums?.items?.forEach { it ->
+                val libraryItem = LibraryItem(
+                    title = it.album.name,
+                    typeID = TYPE.ALBUM,
+                    type = "Album",
+                    owner = it.album.artists[0].name,
+                    id = it.album.id,
+                    imageUrl = it.album.images,
+                    recentlyPlayedTime = "",
+                    addedAt = it.added_at,
+                    creator = it.album.artists[0].name
+                )
+                libraryList.add(libraryItem)
+            }
+
+
+            libraryItemsList.postValue(LibraryModel(libraryList))
+
+            libraryItemOriginal.postValue(LibraryModel(libraryList))
+
+
+            libraryList.forEach {
+                Log.d(TAG, "getLibraryItems: ${it.title}")
+            }
+
         }
     }
 
