@@ -1,6 +1,10 @@
 package com.shaun.spotonmusic.network.api
 
+import com.shaun.spotonmusic.network.model.ArtistsArray
+import com.shaun.spotonmusic.network.model.Playlists
 import com.shaun.spotonmusic.network.model.RecentlyPlayed
+import com.shaun.spotonmusic.network.model.SavedAlbums
+import kaaes.spotify.webapi.android.models.Artists
 import kaaes.spotify.webapi.android.models.Playlist
 import retrofit2.Call
 import retrofit2.http.*
@@ -47,10 +51,35 @@ interface SpotifyAppService {
         @Header("Authorization") authorization: String
 
     ): Call<BooleanArray>
-//    @GET("/v1/browse/categories/{category_id}/playlists")
-//    fun getCategoryPlaylist(
-//        @Path("category_id ") category_id:String,
-//
-//    )
+
+
+    @GET("/v1/playlists/{playlist_id}")
+    suspend fun getOnePlayList(
+        @Path("playlist_id") playList_id: String,
+        @Query("market") market: String = "IN",
+        @Header("Authorization") authorization: String
+    )
+            : Playlist
+
+    @GET("/v1/me/playlists")
+    suspend fun getMyPlaylist(
+        @Header("Authorization") authorization: String,
+        @Query("limit") limit: Int = 50
+    ): Playlists
+
+
+    @GET("/v1/me/following")
+    suspend fun getFollowedArtists(
+        @Query("type") type: String="artist",
+        @Query("limit") limit: Int=50,
+        @Header("Authorization") authorization: String,
+    ): ArtistsArray
+
+
+    @GET("v1/me/albums")
+    suspend fun getSavedAlbum(
+        @Query("limit") limit: Int=50,
+        @Header("Authorization") authorization: String,
+    ):SavedAlbums
 
 }

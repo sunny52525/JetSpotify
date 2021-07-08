@@ -79,23 +79,7 @@ fun SongList(
         }
         tracks?.let { tracksPager ->
             items(tracksPager.items) {
-                //TODO(DO SOMETHING ABOUT IT)
 
-
-//                val trackId = it?.track?.id
-//
-//                viewModel.hasLikedThisSong(trackId.toString()).observeForever { like ->
-//                    like?.let {
-//                        if (like) {
-//                            trackId?.let {
-//
-//                                hasLiked.put(trackId, like)
-//                                count++
-//
-//                            }
-//                        }
-//                    }
-//                }
                 if (it != null) {
                     Log.d("TAG", "SongList: ${it.track.id}, ${it.track.name}")
                     SpotifySongListItem(

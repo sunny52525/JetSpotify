@@ -6,8 +6,8 @@ import com.shaun.spotonmusic.database.model.SpotOnMusicModel
 import com.shaun.spotonmusic.network.api.RetrofitEnqueue.Companion.Result
 import com.shaun.spotonmusic.network.api.RetrofitEnqueue.Companion.enqueue
 import com.shaun.spotonmusic.network.api.SpotifyAppService
-import com.shaun.spotonmusic.utils.TypeConverters.Companion.toListString
-import com.shaun.spotonmusic.utils.TypeConverters.Companion.toSpotOnMusicModel
+import com.shaun.spotonmusic.utils.TypeConverters.toListString
+import com.shaun.spotonmusic.utils.TypeConverters.toSpotOnMusicModel
 import kaaes.spotify.webapi.android.SpotifyApi
 import kaaes.spotify.webapi.android.models.*
 import retrofit.Callback
@@ -262,6 +262,14 @@ class HomeScreenRepositoryImpl @Inject constructor(
             .execute()
     }
 
+    suspend fun getAPlaylist(playlistId: String): Playlist {
+        return retrofit.getOnePlayList(
+            playList_id = playlistId,
+            "IN",
+            "Authorization: Bearer $accessToken"
+        )
+    }
+
     override fun getPlaylistAsync(playlistId: String): MutableLiveData<Playlist> {
 
         val result = MutableLiveData<Playlist>()
@@ -395,7 +403,7 @@ class HomeScreenRepositoryImpl @Inject constructor(
 
 
     fun getUserDetail(): MutableLiveData<UserPrivate> {
-        val result=MutableLiveData<UserPrivate>()
+        val result = MutableLiveData<UserPrivate>()
         spotify.getMe(object : Callback<UserPrivate> {
             override fun success(t: UserPrivate?, response: Response?) {
                 result.postValue(t)

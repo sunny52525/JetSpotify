@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.glide.rememberGlidePainter
 import com.shaun.spotonmusic.R
 import com.shaun.spotonmusic.database.model.LibraryModel
-import com.shaun.spotonmusic.utils.TypeConverters.Companion.toListString
+import com.shaun.spotonmusic.utils.TypeConverters.toListString
 import com.shaun.spotonmusic.utils.getImageUrl
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect

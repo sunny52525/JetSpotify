@@ -3,16 +3,23 @@ package com.shaun.spotonmusic.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.shaun.spotonmusic.SpotOnApplication
 import com.shaun.spotonmusic.database.model.LibraryItem
 import com.shaun.spotonmusic.database.model.LibraryModel
 import com.shaun.spotonmusic.database.model.TYPE
 import com.shaun.spotonmusic.di.DatastoreManager
 import com.shaun.spotonmusic.network.api.SpotifyAppService
+import com.shaun.spotonmusic.network.model.ArtistsArray
+import com.shaun.spotonmusic.network.model.Playlists
+import com.shaun.spotonmusic.network.model.SavedAlbums
 import com.shaun.spotonmusic.repository.LibraryRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kaaes.spotify.webapi.android.models.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -61,15 +68,14 @@ class LibraryViewModel @Inject constructor(
     }
 
 
-    @DelicateCoroutinesApi
     fun getLibraryItems() {
 
 
         Log.d(TAG, "getLibraryItems: CAlled")
-        GlobalScope.launch {
-            var savedPlaylist: Pager<PlaylistSimple> = Pager()
-            var followedArtist = ArtistsCursorPager()
-            var savedAlbums: Pager<SavedAlbum> = Pager()
+        viewModelScope.launch {
+            var savedPlaylist = Playlists(listOf())
+            var followedArtist = ArtistsArray()
+            var savedAlbums = SavedAlbums(listOf())
 
             try {
                 savedPlaylist = repo.getSavedPlaylistSynchronously()
@@ -78,13 +84,13 @@ class LibraryViewModel @Inject constructor(
 
             } catch (e: Exception) {
 
-                Log.d(TAG, "getLibraryItems: $e")
+                Log.d(TAG, "getLibraryItems: ${e.message}")
 
             }
             withContext(Dispatchers.Main) {
 
                 val libraryList = arrayListOf<LibraryItem>()
-                savedPlaylist?.items?.forEach {
+                savedPlaylist.items.forEach {
 
                     val libraryItem = LibraryItem(
                         title = it.name,
@@ -100,7 +106,8 @@ class LibraryViewModel @Inject constructor(
                     libraryList.add(libraryItem)
                 }
 
-                followedArtist?.artists?.items?.forEach {
+
+                followedArtist.artists.items.forEach {
 
                     val libraryItem = LibraryItem(
                         title = it.name,

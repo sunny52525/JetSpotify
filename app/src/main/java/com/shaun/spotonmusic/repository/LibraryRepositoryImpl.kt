@@ -3,12 +3,14 @@ package com.shaun.spotonmusic.repository
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.shaun.spotonmusic.network.api.SpotifyAppService
+import com.shaun.spotonmusic.network.model.ArtistsArray
+import com.shaun.spotonmusic.network.model.Playlists
+import com.shaun.spotonmusic.network.model.SavedAlbums
 import kaaes.spotify.webapi.android.SpotifyApi
 import kaaes.spotify.webapi.android.models.*
 import retrofit.Callback
 import retrofit.RetrofitError
 import retrofit.client.Response
-import retrofit2.Call
 import javax.inject.Inject
 
 class LibraryRepositoryImpl @Inject constructor(
@@ -17,6 +19,7 @@ class LibraryRepositoryImpl @Inject constructor(
 ) {
     private var api = SpotifyApi()
     private var spotify: kaaes.spotify.webapi.android.SpotifyService
+    private val auth = "Authorization: Bearer $accessToken"
 
     init {
 
@@ -26,8 +29,8 @@ class LibraryRepositoryImpl @Inject constructor(
     }
 
 
-    fun getSavedPlaylistSynchronously(): Pager<PlaylistSimple> =
-        spotify.getMyPlaylists(mapOf("limit" to 50))
+    suspend fun getSavedPlaylistSynchronously(): Playlists =
+        retrofit.getMyPlaylist(authorization = auth)
 
     fun getSavedPlaylist(): MutableLiveData<Pager<PlaylistSimple>?> {
 
@@ -47,7 +50,10 @@ class LibraryRepositoryImpl @Inject constructor(
         return result
     }
 
-    fun getFollowedArtistsSynchronously(): ArtistsCursorPager =spotify.followedArtists
+    suspend fun getFollowedArtistsSynchronously(): ArtistsArray = retrofit.getFollowedArtists(
+        authorization = auth
+    )
+
 
     fun getFollowedArtists(): MutableLiveData<ArtistsCursorPager?> {
         val result = MutableLiveData<ArtistsCursorPager?>()
@@ -66,8 +72,8 @@ class LibraryRepositoryImpl @Inject constructor(
     }
 
 
-
-    fun getSavedAlbumSynchronously(): Pager<SavedAlbum> =spotify.getMySavedAlbums(mapOf("limit" to 50))
+   suspend fun getSavedAlbumSynchronously(): SavedAlbums =
+        retrofit.getSavedAlbum(authorization = auth)
 
     fun getSavedAlbum(): MutableLiveData<Pager<SavedAlbum>?> {
 
@@ -90,10 +96,10 @@ class LibraryRepositoryImpl @Inject constructor(
 
     fun getUserDetails(): MutableLiveData<UserPrivate> {
 
-        val result=MutableLiveData<UserPrivate>()
-        spotify.getMe(object :Callback<UserPrivate>{
+        val result = MutableLiveData<UserPrivate>()
+        spotify.getMe(object : Callback<UserPrivate> {
             override fun success(t: UserPrivate?, response: Response?) {
-              result.postValue(t)
+                result.postValue(t)
             }
 
             override fun failure(error: RetrofitError?) {
@@ -103,7 +109,6 @@ class LibraryRepositoryImpl @Inject constructor(
         })
         return result
     }
-
 
 
     companion object {
