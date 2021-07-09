@@ -275,12 +275,14 @@ fun BottomNavigationSpotOnMusic(
                         .clickable {
                             nowPlayingClicked()
                         }
+                        .fillMaxWidth(0.7f)
                 ) {
                     Text(
                         text = trackName,
                         color = Color.White,
                         fontWeight = Bold,
-                        fontSize = 15.sp
+                        fontSize = 15.sp,
+                        maxLines = 1
                     )
                     Text(
                         text = artistName,

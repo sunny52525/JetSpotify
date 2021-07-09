@@ -125,7 +125,7 @@ fun Home(
                     Greeting(onClick = {
 
                     })
-                    RecentHeardBlock(recentlyPlayed,onCardClicked = {
+                    RecentHeardBlock(recentlyPlayed, onCardClicked = {
                         onAlbumClicked(it)
                     })
                 }
@@ -235,7 +235,8 @@ fun Home(
             item {
                 SuggestionsRow(
                     title = "Your Favourites",
-                    data = favouriteArtists
+                    data = favouriteArtists,
+                    cornerRadius = 50
                 ) {
                     onArtistClicked(it)
                 }
@@ -250,9 +251,6 @@ fun Home(
                     onAlbumClicked(it)
                 }
             }
-
-
-
 
 
         }

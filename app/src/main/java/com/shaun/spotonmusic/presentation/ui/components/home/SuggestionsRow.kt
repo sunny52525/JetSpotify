@@ -5,9 +5,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -25,7 +26,8 @@ private const val TAG = "SuggestionsRow"
 fun SuggestionsRow(
     title: String, data: List<SpotOnMusicModel>,
     size: Int = 170,
-    onCardClicked: (String) -> Unit
+    cornerRadius: Int = 0,
+    onCardClicked: (String) -> Unit,
 ) {
 
 
@@ -50,7 +52,7 @@ fun SuggestionsRow(
                 itemsIndexed(it) { index, item ->
 
                     SuggestionCard(
-                        0,
+                        cornerRadius = cornerRadius,
                         imageUrl = getImageUrl(item.imageUrls, 1),
                         item.title,
                         paddingValues = if (index == 0) 20 else 10,
@@ -92,10 +94,11 @@ fun SuggestionCard(
 
 
     ) {
-        Box(
+        Card(
 
             modifier = modifier
-                .size((size).dp), contentAlignment = Alignment.Center
+                .size((size).dp),
+            shape = RoundedCornerShape(percent = cornerRadius)
         ) {
 
 
@@ -109,7 +112,7 @@ fun SuggestionCard(
         Text(
             text = title,
             color = Color.Gray,
-            textAlign = TextAlign.Left,
+            textAlign = if (cornerRadius == 0) TextAlign.Left else TextAlign.Center,
             fontSize = 13.sp,
             modifier = Modifier.width(size.dp)
         )
