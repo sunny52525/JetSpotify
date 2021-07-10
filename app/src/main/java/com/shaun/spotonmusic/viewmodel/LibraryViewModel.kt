@@ -39,7 +39,7 @@ class LibraryViewModel @Inject constructor(
     var followedArtists = MutableLiveData<ArtistsCursorPager?>()
     val followedAlbums = MutableLiveData<Pager<SavedAlbum>?>()
 
-    var likedSongs=MutableLiveData<LikedSongs>()
+    var likedSongs = MutableLiveData<LikedSongs>()
 
     var libraryItemsList = MutableLiveData<LibraryModel>()
     var libraryItemOriginal = MutableLiveData<LibraryModel>()
@@ -61,7 +61,7 @@ class LibraryViewModel @Inject constructor(
         repo = LibraryRepositoryImpl(accessToken.toString(), retrofit)
 
         userDetails = repo.getUserDetails()
-        likedSongs=repo.getLikedSongs()
+        likedSongs = repo.getLikedSongs()
         getLibraryItems()
     }
 
@@ -71,6 +71,8 @@ class LibraryViewModel @Inject constructor(
 
 
     fun getLibraryItems() {
+        chipSelected.postValue("")
+
         viewModelScope.launch {
             var savedPlaylist = Playlists(listOf())
             var followedArtist = ArtistsArray()

@@ -287,6 +287,63 @@ class MusicDetailRepositoryImpl(
         return result
     }
 
+
+    fun followArtist(id: String, onFollowed: () -> Unit) {
+
+        retrofit.followArtist(ids = id, authorization = header)
+            .enqueue {
+                when (it) {
+                    is Result.Success -> {
+                        Log.d(TAG, "followArtist: Success")
+                        onFollowed()
+
+                    }
+                    is Result.Failure -> {
+                        Log.d(TAG, "followArtist: ${it.error.message}")
+                    }
+                }
+            }
+    }
+
+    fun unFollowArtist(id: String, onUnFollowed: () -> Unit) {
+
+        retrofit.unFollowArtist(ids = id, authorization = header)
+            .enqueue {
+                when (it) {
+                    is Result.Success -> {
+                        Log.d(TAG, "unfollowArtist: Success")
+                        onUnFollowed()
+
+                    }
+                    is Result.Failure -> {
+                        Log.d(TAG, "unfollowArtist: ${it.error.message}")
+                    }
+                }
+            }
+    }
+
+
+    fun followsArtist(id: String): MutableLiveData<BooleanArray> {
+
+
+        val result = MutableLiveData<BooleanArray>()
+
+        retrofit.follows(ids = id, authorization = header).enqueue {
+            when (it) {
+                is Result.Success -> {
+                    result.postValue(it.response.body())
+
+                }
+                is Result.Failure -> {
+                    Log.d(TAG, "followsArtist: ${it.error.message}")
+                }
+            }
+        }
+
+        return result
+
+    }
+
     companion object {
         private const val TAG = "AlbumDetailRepos"
     }

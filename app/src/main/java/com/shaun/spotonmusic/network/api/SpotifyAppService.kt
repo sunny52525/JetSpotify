@@ -93,4 +93,27 @@ interface SpotifyAppService {
         @Query("offset") offset: Int = 0,
         @Header("Authorization") authorization: String
     ): Call<LikedSongs>
+
+
+    @PUT("v1/me/following")
+    fun followArtist(
+        @Query("ids") ids:String,
+        @Query("type") type: String="artist",
+        @Header("Authorization") authorization: String
+    ):Call<Void>
+
+    @DELETE("v1/me/following")
+    fun unFollowArtist(
+        @Query("ids") ids:String,
+        @Query("type") type: String="artist",
+        @Header("Authorization") authorization: String
+    ):Call<Void>
+
+
+    @GET("v1/me/following/contains")
+    fun follows(
+        @Query("type") type:String="artist",
+        @Query("ids") ids: String,
+        @Header("Authorization") authorization: String
+    ):Call<BooleanArray>
 }

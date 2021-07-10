@@ -612,17 +612,25 @@ fun HomeScreenNavigationConfiguration(
 
             val artist by albumDetailViewModel.artist.observeAsState()
             SlideInEnterAnimation {
-                ArtistPage(artist, albumDetailViewModel, onAlbumClicked = {
-                    navHostController.navigate(Routes.AlbumDetail.route + "/$it") {
-                        restoreState = true
-                    }
-                }, onSongClicked = { id ->
-                    playSpotifyMedia(musicPlayerViewModel.spotifyRemote.value, id)
-                }, likedSongs?.items) {artist->
-                    navHostController.navigate(Routes.Artist.route + "/$artist") {
-                        restoreState = true
-                    }
-                }
+                ArtistPage(artist = artist,
+                    albumDetailViewModel,
+                    onAlbumClicked = {
+                        navHostController.navigate(Routes.AlbumDetail.route + "/$it") {
+                            restoreState = true
+                        }
+                    },
+                    onSongClicked = { id ->
+                        playSpotifyMedia(musicPlayerViewModel.spotifyRemote.value, id)
+                    },
+                    items = likedSongs?.items,
+                    updatePlaylist = {
+                        libraryViewModel.getLibraryItems()
+                    },
+                    onArtistClicked = { artist ->
+                        navHostController.navigate(Routes.Artist.route + "/$artist") {
+                            restoreState = true
+                        }
+                    })
             }
 
         }

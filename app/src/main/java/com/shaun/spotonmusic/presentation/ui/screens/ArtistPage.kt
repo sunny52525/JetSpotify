@@ -9,8 +9,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -33,27 +31,27 @@ import kaaes.spotify.webapi.android.models.Artist
 @Composable
 fun ArtistPage(
     artist: Artist?,
-    albumDetailViewModel: ArtistDetailViewModel,
+    artistDetailViewModel: ArtistDetailViewModel,
     onAlbumClicked: (String) -> Unit,
     onSongClicked: (String) -> Unit,
     items: ArrayList<LikedSongsTrack>?,
-    onArtistClicked: (String) -> Unit
+
+    updatePlaylist: () -> Unit,
+    onArtistClicked: (String) -> Unit,
 ) {
 
-    val follows = remember {
-        mutableStateOf(false)
-    }
+    val follows by artistDetailViewModel.followed.observeAsState()
 
     val likeCount = items?.count {
         it.track.artists[0].id == artist?.id
     }
 
-    val topArtistTracks by albumDetailViewModel.artistTopTracks.observeAsState()
+    val topArtistTracks by artistDetailViewModel.artistTopTracks.observeAsState()
 
-    val relatedArtist by albumDetailViewModel.relatedArtist.observeAsState()
-    val appearsOn by albumDetailViewModel.getAppearsOn.observeAsState()
+    val relatedArtist by artistDetailViewModel.relatedArtist.observeAsState()
+    val appearsOn by artistDetailViewModel.getAppearsOn.observeAsState()
 
-    val topAlbums by albumDetailViewModel.topAlbums.observeAsState()
+    val topAlbums by artistDetailViewModel.topAlbums.observeAsState()
     artist?.let {
         Column(
             Modifier
@@ -67,10 +65,18 @@ fun ArtistPage(
                     TopSpace(
                         artistName = it.name,
                         followers = it.followers.total,
-                        isFollowing = follows.value,
+                        isFollowing = follows?.get(0)?: false,
                         imageUrl = getImageUrl(artist.images.map { it.url }, 2)
                     ) {
-                        follows.value = !follows.value
+
+                        if (follows?.get(0) == false)
+                            artistDetailViewModel.followArtist(artist.id, onFollowed = {
+                                updatePlaylist()
+                            })
+                        else
+                            artistDetailViewModel.unFollowArtist(artist.id, onUnFollowed = {
+                                updatePlaylist()
+                            })
                     }
                 }
                 likeCount?.let {

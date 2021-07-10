@@ -61,17 +61,7 @@ class PlaylistDetailViewModel @Inject constructor(
         return repository.hasLikedThisSong(songId)
     }
 
-//    fun followsPlaylist(playlistId: String, userId: String): MutableLiveData<Boolean> {
-//
-//        Log.d(TAG, "followsPlaylist: ${follows.value}")
-//        if (this.id.value == playlistId && userId == this.userId.value)
-//            return follows
-//
-//        this.userId.postValue(userId)
-//        follows = repository.followsPlayList(playList = playlistId, userId = userId)
-//
-//        return follows
-//    }
+
 
 
     fun followAPlaylist(playlistId: String, onFollowed: () -> Unit) {

@@ -44,9 +44,30 @@ class ArtistDetailViewModel @Inject constructor(
     }
 
 
-    var followed = MutableLiveData(true)
+    var followed = MutableLiveData(booleanArrayOf(false))
 
     fun setArtist(id: String) {
         this.id.postValue(id)
+
+        followed=repository.followsArtist(id = id)
+    }
+
+
+    fun followArtist(id: String, onFollowed: () -> Unit) {
+
+        followed.postValue(booleanArrayOf(true))
+        repository.followArtist(id) {
+
+            onFollowed()
+        }
+
+    }
+
+    fun unFollowArtist(id: String, onUnFollowed: () -> Unit) {
+        followed.postValue(booleanArrayOf(false))
+        repository.unFollowArtist(id) {
+            onUnFollowed()
+        }
+
     }
 }
