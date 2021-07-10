@@ -618,7 +618,11 @@ fun HomeScreenNavigationConfiguration(
                     }
                 }, onSongClicked = { id ->
                     playSpotifyMedia(musicPlayerViewModel.spotifyRemote.value, id)
-                },likedSongs?.items)
+                }, likedSongs?.items) {artist->
+                    navHostController.navigate(Routes.Artist.route + "/$artist") {
+                        restoreState = true
+                    }
+                }
             }
 
         }

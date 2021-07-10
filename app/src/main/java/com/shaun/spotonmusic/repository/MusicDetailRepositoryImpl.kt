@@ -2,9 +2,11 @@ package com.shaun.spotonmusic.repository
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.shaun.spotonmusic.database.model.SpotOnMusicModel
 import com.shaun.spotonmusic.network.api.RetrofitEnqueue.Companion.Result
 import com.shaun.spotonmusic.network.api.RetrofitEnqueue.Companion.enqueue
 import com.shaun.spotonmusic.network.api.SpotifyAppService
+import com.shaun.spotonmusic.utils.TypeConverters.toSpotOnMusicModel
 import kaaes.spotify.webapi.android.SpotifyApi
 import kaaes.spotify.webapi.android.models.*
 import retrofit.Callback
@@ -246,6 +248,42 @@ class MusicDetailRepositoryImpl(
             }
 
         })
+        return result
+    }
+
+    fun getRelatedArtist(id: String): MutableLiveData<List<SpotOnMusicModel>> {
+        val result = MutableLiveData<List<SpotOnMusicModel>>()
+        spotify.getRelatedArtists(id, object : Callback<Artists> {
+            override fun success(t: Artists?, response: Response?) {
+                result.postValue(t?.toSpotOnMusicModel())
+            }
+
+            override fun failure(error: RetrofitError?) {
+                Log.d(TAG, "failure: ${error?.message}")
+            }
+
+        })
+        return result
+    }
+
+
+    fun getAppearsOn(id: String): MutableLiveData<List<SpotOnMusicModel>> {
+
+        val result = MutableLiveData<List<SpotOnMusicModel>>()
+
+        spotify.getArtistAlbums(
+            id,
+            mapOf("include_groups" to "appears_on"),
+            object : Callback<Pager<Album>> {
+                override fun success(t: Pager<Album>?, response: Response?) {
+                    result.postValue(t?.toSpotOnMusicModel())
+                }
+
+                override fun failure(error: RetrofitError?) {
+                    Log.d(TAG, "failure: ${error?.message}")
+                }
+
+            })
         return result
     }
 

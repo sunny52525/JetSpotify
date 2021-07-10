@@ -21,6 +21,7 @@ import com.shaun.spotonmusic.presentation.ui.components.LikedSongCount
 import com.shaun.spotonmusic.presentation.ui.components.SongListItemWithNumber
 import com.shaun.spotonmusic.presentation.ui.components.TopSpace
 import com.shaun.spotonmusic.presentation.ui.components.album.TopBar
+import com.shaun.spotonmusic.presentation.ui.components.home.SuggestionsRow
 import com.shaun.spotonmusic.presentation.ui.components.playlist.SpotifySongListItem
 import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
 import com.shaun.spotonmusic.utils.getArtistName
@@ -36,6 +37,7 @@ fun ArtistPage(
     onAlbumClicked: (String) -> Unit,
     onSongClicked: (String) -> Unit,
     items: ArrayList<LikedSongsTrack>?,
+    onArtistClicked: (String) -> Unit
 ) {
 
     val follows = remember {
@@ -47,6 +49,9 @@ fun ArtistPage(
     }
 
     val topArtistTracks by albumDetailViewModel.artistTopTracks.observeAsState()
+
+    val relatedArtist by albumDetailViewModel.relatedArtist.observeAsState()
+    val appearsOn by albumDetailViewModel.getAppearsOn.observeAsState()
 
     val topAlbums by albumDetailViewModel.topAlbums.observeAsState()
     artist?.let {
@@ -69,14 +74,14 @@ fun ArtistPage(
                     }
                 }
                 likeCount?.let {
-                    if (it>0)
-                    item {
-                        LikedSongCount(
-                            imageUrl = getImageUrl(artist.images.toListString(), 0),
-                            likeCount = it,
-                            artistName = artist.name
-                        )
-                    }
+                    if (it > 0)
+                        item {
+                            LikedSongCount(
+                                imageUrl = getImageUrl(artist.images.toListString(), 0),
+                                likeCount = it,
+                                artistName = artist.name
+                            )
+                        }
                 }
 
                 topArtistTracks?.tracks?.forEachIndexed { index, track ->
@@ -119,6 +124,33 @@ fun ArtistPage(
                         )
 
                     }
+                }
+                item {
+
+                    relatedArtist?.let { it1 ->
+                        SuggestionsRow(
+                            title = "Fans also like",
+                            data = it1,
+                            cornerRadius = 50
+                        ) {
+                            onArtistClicked(it)
+
+                        }
+                    }
+
+                }
+                item {
+
+                    appearsOn?.let { it1 ->
+                        SuggestionsRow(
+                            title = "Appears On",
+                            data = it1
+                        ) {
+                            onAlbumClicked(it)
+
+                        }
+                    }
+
                 }
             }
 

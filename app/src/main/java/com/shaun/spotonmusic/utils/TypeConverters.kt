@@ -173,6 +173,18 @@ object TypeConverters {
         }
     }
 
+    fun Artists.toSpotOnMusicModel():List<SpotOnMusicModel> {
+        return  this.artists.map {
+            SpotOnMusicModel(
+                id = it.id,
+                imageUrls = it.images.toListString(),
+                title = it.name,
+                type = "artist"
+            )
+        }
+
+    }
+
     fun List<Image>.toListString(): List<String> {
         return this.map {
             it.url

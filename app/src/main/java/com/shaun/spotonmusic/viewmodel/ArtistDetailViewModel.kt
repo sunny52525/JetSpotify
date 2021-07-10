@@ -35,6 +35,15 @@ class ArtistDetailViewModel @Inject constructor(
         repository.getArtistTopAlbums(it)
     }
 
+    val relatedArtist = Transformations.switchMap(id) {
+        repository.getRelatedArtist(it)
+    }
+
+    val getAppearsOn = Transformations.switchMap(id) {
+        repository.getAppearsOn(it)
+    }
+
+
     var followed = MutableLiveData(true)
 
     fun setArtist(id: String) {
