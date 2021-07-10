@@ -49,6 +49,7 @@ fun Library(
     val isGrid by libraryViewModel.isGrid.observeAsState(initial = true)
     val userDetails by libraryViewModel.userDetails.observeAsState(initial = UserPrivate())
     val chipItem by libraryViewModel.chipSelected.observeAsState()
+    val sortMode by libraryViewModel.sortMode.observeAsState()
 
     libraryViewModel.isChipSelected.observeForever {
         if (!it)
@@ -85,10 +86,11 @@ fun Library(
             }, chipSelected = { type, sortModeBool ->
 
 
-                libraryViewModel.sortItems(type, isSort = sortModeBool)
+                libraryViewModel.groupItems(type, isSort = sortModeBool)
 
 
-            }, chipItemSelected = chipItem
+            }, chipItemSelected = chipItem,
+            sortMode=sortMode
         )
 
 

@@ -28,7 +28,14 @@ object AppConstants {
     val SORT_ITEMS = arrayOf("Recently Played", "Recently Added", "Alphabetical", "Creator")
 
     const val CACHE_SIZE = (5 * 1024 * 1024).toLong()
-    const val DUMMY_IMAGE="https://i.scdn.co/image/ab67616d0000b273d7fb3e4c63020039d1cff6b2"
+    const val DUMMY_IMAGE = "https://i.scdn.co/image/ab67616d0000b273d7fb3e4c63020039d1cff6b2"
+
+
+    const val RECENTLY_PLAYED = "Recently Played"
+    const val RECENTLY_ADDED = "Recently Added"
+    const val ALPHABETICAL = "Alphabetical"
+    const val CREATOR = "Creator"
+
 
 }
 

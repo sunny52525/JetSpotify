@@ -49,6 +49,7 @@ import com.shaun.spotonmusic.presentation.ui.components.library.LibraryBottomShe
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.green
 import com.shaun.spotonmusic.ui.theme.spotifyGray
+import com.shaun.spotonmusic.utils.AppConstants
 import com.shaun.spotonmusic.viewmodel.*
 import com.spotify.android.appremote.api.SpotifyAppRemote
 import kaaes.spotify.webapi.android.models.UserPrivate
@@ -127,9 +128,7 @@ fun HomeScreen(
     }
 
 
-    var currentSort by remember {
-        mutableStateOf("Recently Played")
-    }
+    val currentSort by libraryViewModel.sortMode.observeAsState()
 
 
     BottomSheetScaffold(
@@ -151,9 +150,13 @@ fun HomeScreen(
 
         ModalBottomSheetLayout(
             sheetContent = {
-                LibraryBottomSheet(state, scope, currentSort, onSortItemClicked = {
-                    currentSort = it
-                })
+                LibraryBottomSheet(
+                    state,
+                    scope,
+                    currentSort.toString(),
+                    onSortItemClicked = {
+                        libraryViewModel.sortItems(it)
+                    })
             },
             sheetState = state,
             scrimColor = MaterialTheme.colors.onSurface.copy(alpha = 0.1f)

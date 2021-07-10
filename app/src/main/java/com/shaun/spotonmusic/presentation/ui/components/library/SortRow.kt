@@ -26,7 +26,8 @@ import kotlinx.coroutines.launch
 fun SortRow(
     modalBottomSheetState: ModalBottomSheetState,
     onChangeViewCLicked: () -> Unit,
-    isGrid: Boolean
+    isGrid: Boolean,
+    sortMode: String?
 ) {
     val coroutineScope = rememberCoroutineScope()
     Row(
@@ -48,7 +49,7 @@ fun SortRow(
                 colorFilter = ColorFilter.tint(Color.White)
             )
             Spacer(modifier = Modifier.width(10.dp))
-            Text(text = "Recently Played", color = Color.White, fontSize = 14.sp)
+            Text(text = sortMode.toString(), color = Color.White, fontSize = 14.sp)
 
         }
         Box(

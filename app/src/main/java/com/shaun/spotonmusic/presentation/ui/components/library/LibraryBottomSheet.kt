@@ -17,10 +17,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.shaun.spotonmusic.utils.AppConstants
 import com.shaun.spotonmusic.R
 import com.shaun.spotonmusic.ui.theme.green
 import com.shaun.spotonmusic.ui.theme.spotifyGray
+import com.shaun.spotonmusic.utils.AppConstants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -101,7 +101,7 @@ fun SortItemRow(
             .fillMaxWidth()
             .padding(start = 30.dp, end = 20.dp, bottom = 10.dp, top = 10.dp)
     ) {
-        Text(text = title, color = Color.White)
+        Text(text = title, color = if (isTickVisible) green else Color.White)
         if (isTickVisible)
             Column(
                 modifier = Modifier.fillMaxWidth()

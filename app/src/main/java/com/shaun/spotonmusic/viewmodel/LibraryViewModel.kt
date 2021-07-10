@@ -15,6 +15,10 @@ import com.shaun.spotonmusic.network.model.LikedSongs
 import com.shaun.spotonmusic.network.model.Playlists
 import com.shaun.spotonmusic.network.model.SavedAlbums
 import com.shaun.spotonmusic.repository.LibraryRepositoryImpl
+import com.shaun.spotonmusic.utils.AppConstants.ALPHABETICAL
+import com.shaun.spotonmusic.utils.AppConstants.CREATOR
+import com.shaun.spotonmusic.utils.AppConstants.RECENTLY_ADDED
+import com.shaun.spotonmusic.utils.AppConstants.RECENTLY_PLAYED
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kaaes.spotify.webapi.android.models.*
 import kotlinx.coroutines.launch
@@ -49,6 +53,7 @@ class LibraryViewModel @Inject constructor(
     val chipSelected = MutableLiveData("")
     val isChipSelected = MutableLiveData(false)
 
+    val sortMode = MutableLiveData(RECENTLY_PLAYED)
 
     init {
         isGrid.postValue(true)
@@ -149,11 +154,6 @@ class LibraryViewModel @Inject constructor(
             libraryItemOriginal.postValue(LibraryModel(libraryList))
 
 
-//            libraryList.forEach {
-//                Log.d(TAG, "getLibraryItems: ${it.title}")
-//            }
-//            Log.d(TAG, "getLibraryItems: ${chipSelected.value.toString()},${chipSelected.value}")
-
 
             chipSelected.postValue("")
             isChipSelected.postValue(false)
@@ -165,9 +165,46 @@ class LibraryViewModel @Inject constructor(
 
     fun updateGrid() {
         isGrid.postValue(!isGrid.value!!)
+
     }
 
-    fun sortItems(mode: String, isSort: Boolean) {
+    fun sortItems(mode: String) {
+
+        sortMode.postValue(mode)
+
+        val allItems = libraryItemOriginal.value?.items
+        when (mode) {
+            RECENTLY_PLAYED -> {
+                Log.d(TAG, "sortItems: ${libraryItemOriginal.value}")
+                libraryItemsList.postValue(libraryItemOriginal.value)
+                return
+            }
+            RECENTLY_ADDED -> {
+                allItems?.sortBy {
+                    it.addedAt
+                }
+            }
+            CREATOR -> {
+                allItems?.sortBy {
+                    it.creator
+                }
+            }
+            ALPHABETICAL -> {
+                allItems?.sortBy {
+                    it.title
+                }
+            }
+        }
+
+
+        libraryItemsList.postValue(allItems?.let { LibraryModel(it) })
+
+
+
+
+    }
+
+    fun groupItems(mode: String, isSort: Boolean) {
 
         if (!isSort) {
             libraryItemsList.postValue(libraryItemOriginal.value)

@@ -47,7 +47,8 @@ fun LibraryItemRow(
     sortRowCLick: () -> Unit,
     onClick: (String, String) -> Unit,
     chipSelected: (String, Boolean) -> Unit,
-    chipItemSelected: String?
+    chipItemSelected: String?,
+    sortMode: String?
 
 ) {
     var previousOffset = 0
@@ -97,9 +98,14 @@ fun LibraryItemRow(
             }
         }
         item {
-            SortRow(modalBottomSheetState, onChangeViewCLicked = {
-                sortRowCLick()
-            }, isGrid)
+            SortRow(
+                modalBottomSheetState,
+                onChangeViewCLicked = {
+                    sortRowCLick()
+                },
+                isGrid = isGrid,
+                sortMode = sortMode
+            )
         }
 
         itemsIndexed(libraryItems.items) { index, item ->
