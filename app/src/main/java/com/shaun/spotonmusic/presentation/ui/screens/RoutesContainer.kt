@@ -506,7 +506,7 @@ fun HomeScreenNavigationConfiguration(
                     libraryViewModel,
                     scope = scope,
                     listStateLibrary = listStateLibrary, onPlaylistClicked = {
-                        Log.d("", "MOODD: $it")
+
                         navHostController.navigate(Routes.PlaylistDetail.route + "/$it") {
                             restoreState = true
 

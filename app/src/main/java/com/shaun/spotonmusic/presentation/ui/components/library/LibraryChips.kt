@@ -25,7 +25,10 @@ import com.shaun.spotonmusic.utils.AppConstants
 
 @ExperimentalAnimationApi
 @Composable
-fun LibraryChips(chipSelected: (String, Boolean) -> Unit, chipItemSelected: String?) {
+fun LibraryChips(
+    chipSelected: (String, Boolean) -> Unit,
+    chipItemSelected: String?
+) {
 
 
     LazyRow(

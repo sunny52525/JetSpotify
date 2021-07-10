@@ -22,9 +22,7 @@ import com.shaun.spotonmusic.viewmodel.LibraryViewModel
 import com.shaun.spotonmusic.viewmodel.SharedViewModel
 import kaaes.spotify.webapi.android.models.UserPrivate
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.DelicateCoroutinesApi
 
-@DelicateCoroutinesApi
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
@@ -51,6 +49,11 @@ fun Library(
     val isGrid by libraryViewModel.isGrid.observeAsState(initial = true)
     val userDetails by libraryViewModel.userDetails.observeAsState(initial = UserPrivate())
     val chipItem by libraryViewModel.chipSelected.observeAsState()
+
+    libraryViewModel.isChipSelected.observeForever {
+        if (!it)
+            libraryViewModel.chipSelected.postValue("")
+    }
     Column(
         Modifier
             .fillMaxSize()
@@ -72,9 +75,11 @@ fun Library(
 
                 if (type == TYPE.PLAYLIST) {
                     onPlaylistClicked(id)
-                }
-                if (type == TYPE.ALBUM) {
+                } else if (type == TYPE.ALBUM) {
                     onAlbumClicked(id)
+                } else if (type == TYPE.ARTIST
+                ) {
+                    onArtistClicked(id)
                 }
 
             }, chipSelected = { type, sortModeBool ->
@@ -83,8 +88,7 @@ fun Library(
                 libraryViewModel.sortItems(type, isSort = sortModeBool)
 
 
-
-            }, chipItem
+            }, chipItemSelected = chipItem
         )
 
 

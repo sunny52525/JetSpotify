@@ -17,12 +17,10 @@ import com.shaun.spotonmusic.network.model.SavedAlbums
 import com.shaun.spotonmusic.repository.LibraryRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kaaes.spotify.webapi.android.models.*
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-@DelicateCoroutinesApi
 @HiltViewModel
 class LibraryViewModel @Inject constructor(
     context: SpotOnApplication,
@@ -49,6 +47,7 @@ class LibraryViewModel @Inject constructor(
     var isGrid = MutableLiveData<Boolean>()
 
     val chipSelected = MutableLiveData("")
+    val isChipSelected = MutableLiveData(false)
 
 
     init {
@@ -71,7 +70,7 @@ class LibraryViewModel @Inject constructor(
 
 
     fun getLibraryItems() {
-        chipSelected.postValue("")
+
 
         viewModelScope.launch {
             var savedPlaylist = Playlists(listOf())
@@ -150,9 +149,15 @@ class LibraryViewModel @Inject constructor(
             libraryItemOriginal.postValue(LibraryModel(libraryList))
 
 
-            libraryList.forEach {
-                Log.d(TAG, "getLibraryItems: ${it.title}")
-            }
+//            libraryList.forEach {
+//                Log.d(TAG, "getLibraryItems: ${it.title}")
+//            }
+//            Log.d(TAG, "getLibraryItems: ${chipSelected.value.toString()},${chipSelected.value}")
+
+
+            chipSelected.postValue("")
+            isChipSelected.postValue(false)
+
 
         }
     }
@@ -167,6 +172,7 @@ class LibraryViewModel @Inject constructor(
         if (!isSort) {
             libraryItemsList.postValue(libraryItemOriginal.value)
             chipSelected.postValue("")
+            isChipSelected.postValue(false)
             return
         }
 
@@ -175,6 +181,9 @@ class LibraryViewModel @Inject constructor(
         chipSelected.postValue(mode)
 
         var allItems = libraryItemOriginal.value?.items
+
+        isChipSelected
+            .postValue(true)
 
         allItems = allItems?.filter {
             it.type == mode
