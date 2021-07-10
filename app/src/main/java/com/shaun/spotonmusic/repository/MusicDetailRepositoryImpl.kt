@@ -6,8 +6,7 @@ import com.shaun.spotonmusic.network.api.RetrofitEnqueue.Companion.Result
 import com.shaun.spotonmusic.network.api.RetrofitEnqueue.Companion.enqueue
 import com.shaun.spotonmusic.network.api.SpotifyAppService
 import kaaes.spotify.webapi.android.SpotifyApi
-import kaaes.spotify.webapi.android.models.Album
-import kaaes.spotify.webapi.android.models.Playlist
+import kaaes.spotify.webapi.android.models.*
 import retrofit.Callback
 import retrofit.RetrofitError
 import retrofit.client.Response
@@ -91,30 +90,6 @@ class MusicDetailRepositoryImpl(
             }
 
         })
-//        retrofit.hasLikedSong(id, header).enqueue {
-//            when (it) {
-//                is Result.Success -> {
-//                    Log.d(TAG, "hasLikedThisSong: ${it.response.body()}")
-//                    result.postValue(it.response.body()?.get(0))
-//                }
-//                is Result.Failure -> {
-//                    Log.d(TAG, "hasLikedThisSong: ${it.error}")
-//                }
-//            }
-//        }
-
-//        spotify.containsMySavedTracks(id, object : Callback<BooleanArray> {
-//            override fun success(t: BooleanArray?, response: Response?) {
-//
-//
-//                result.postValue(t?.get(0))
-//            }
-//
-//            override fun failure(error: RetrofitError?) {
-//                Log.d(TAG, "failure: $error")
-//            }
-//
-//        })
         return result
     }
 
@@ -217,6 +192,57 @@ class MusicDetailRepositoryImpl(
             override fun failure(error: RetrofitError?) {
 
                 Log.d(TAG, "failure: get Album ${error}")
+            }
+
+        })
+        return result
+    }
+
+
+    fun getArtist(id: String): MutableLiveData<Artist?> {
+
+        val result = MutableLiveData<Artist?>()
+        spotify.getArtist(id, object : Callback<Artist> {
+            override fun success(t: Artist?, response: Response?) {
+                result.postValue(t)
+            }
+
+            override fun failure(error: RetrofitError?) {
+                Log.d(TAG, "failure: $error")
+            }
+
+        })
+        return result
+    }
+
+    fun getArtistTopTrack(id: String): MutableLiveData<Tracks?> {
+
+        val result = MutableLiveData<Tracks?>()
+        spotify.getArtistTopTrack(id, "IN", object : Callback<Tracks> {
+            override fun success(t: Tracks?, response: Response?) {
+                result.postValue(t)
+            }
+
+            override fun failure(error: RetrofitError?) {
+                Log.d(TAG, "failure: ${error?.message}")
+            }
+
+        })
+        return result
+    }
+
+
+    fun getArtistTopAlbums(id: String): MutableLiveData<Pager<Album>> {
+
+        val result = MutableLiveData<Pager<Album>>()
+
+        spotify.getArtistAlbums(id, object : Callback<Pager<Album>> {
+            override fun success(t: Pager<Album>?, response: Response?) {
+                result.postValue(t)
+            }
+
+            override fun failure(error: RetrofitError?) {
+                Log.d(TAG, "failure: ${error?.message}")
             }
 
         })

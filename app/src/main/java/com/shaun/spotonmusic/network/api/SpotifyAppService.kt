@@ -1,10 +1,7 @@
 package com.shaun.spotonmusic.network.api
 
-import com.shaun.spotonmusic.network.model.ArtistsArray
-import com.shaun.spotonmusic.network.model.Playlists
-import com.shaun.spotonmusic.network.model.RecentlyPlayed
-import com.shaun.spotonmusic.network.model.SavedAlbums
-import kaaes.spotify.webapi.android.models.Artists
+import com.shaun.spotonmusic.network.model.*
+import kaaes.spotify.webapi.android.models.Artist
 import kaaes.spotify.webapi.android.models.Playlist
 import retrofit2.Call
 import retrofit2.http.*
@@ -70,16 +67,30 @@ interface SpotifyAppService {
 
     @GET("/v1/me/following")
     suspend fun getFollowedArtists(
-        @Query("type") type: String="artist",
-        @Query("limit") limit: Int=50,
+        @Query("type") type: String = "artist",
+        @Query("limit") limit: Int = 50,
         @Header("Authorization") authorization: String,
     ): ArtistsArray
 
 
     @GET("v1/me/albums")
     suspend fun getSavedAlbum(
-        @Query("limit") limit: Int=50,
+        @Query("limit") limit: Int = 50,
         @Header("Authorization") authorization: String,
-    ):SavedAlbums
+    ): SavedAlbums
 
+
+    @GET("v1/artists/{id}")
+    suspend fun getAArtist(
+        @Path("/id") id: String,
+        @Header("Authorization") authorization: String,
+    ): Artist
+
+
+    @GET("v1/me/tracks")
+    fun getLikedSongs(
+        @Query("limit") limit: Int = 50,
+        @Query("offset") offset: Int = 0,
+        @Header("Authorization") authorization: String
+    ): Call<LikedSongs>
 }

@@ -1,5 +1,7 @@
 package com.shaun.spotonmusic.utils
 
+import kaaes.spotify.webapi.android.models.ArtistSimple
+import kaaes.spotify.webapi.android.models.Image
 import java.text.DateFormatSymbols
 import java.util.*
 
@@ -21,6 +23,12 @@ fun getGreeting(): String {
             "Good Night"
         }
     }
+}
+
+fun List<Image>.toListString(): List<String> {
+
+    return this.map { it.url }
+
 }
 
 fun getImageUrl(list: List<String>, demand: Int): String {
@@ -61,7 +69,23 @@ fun dateToString(date: String): String {
 
 }
 
-//
-//fun getHexColor(color: ArrayList<Int>): Int {
-//    return Color.rgb(color[0], color[1], color[2])
-//}
+
+fun getArtistName(artist: MutableList<ArtistSimple>): String {
+
+    val list = artist.map {
+        it.name
+    }
+
+
+    var artistName = ""
+
+    list.forEachIndexed { index, s ->
+
+        artistName += s
+
+        if (index != list.size - 1)
+            artistName += ","
+    }
+    return artistName
+
+}

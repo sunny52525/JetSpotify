@@ -2,8 +2,11 @@ package com.shaun.spotonmusic.repository
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.shaun.spotonmusic.network.api.RetrofitEnqueue
+import com.shaun.spotonmusic.network.api.RetrofitEnqueue.Companion.enqueue
 import com.shaun.spotonmusic.network.api.SpotifyAppService
 import com.shaun.spotonmusic.network.model.ArtistsArray
+import com.shaun.spotonmusic.network.model.LikedSongs
 import com.shaun.spotonmusic.network.model.Playlists
 import com.shaun.spotonmusic.network.model.SavedAlbums
 import kaaes.spotify.webapi.android.SpotifyApi
@@ -72,7 +75,7 @@ class LibraryRepositoryImpl @Inject constructor(
     }
 
 
-   suspend fun getSavedAlbumSynchronously(): SavedAlbums =
+    suspend fun getSavedAlbumSynchronously(): SavedAlbums =
         retrofit.getSavedAlbum(authorization = auth)
 
     fun getSavedAlbum(): MutableLiveData<Pager<SavedAlbum>?> {
@@ -107,6 +110,24 @@ class LibraryRepositoryImpl @Inject constructor(
             }
 
         })
+        return result
+    }
+
+    fun getLikedSongs(): MutableLiveData<LikedSongs> {
+
+        val result =MutableLiveData<LikedSongs>()
+
+        retrofit.getLikedSongs(authorization = auth).enqueue {
+            when(it){
+
+                is RetrofitEnqueue.Companion.Result.Success->{
+                    result.postValue(it.response.body())
+                }
+                is RetrofitEnqueue.Companion.Result.Failure->{
+                    Log.d(TAG, "getLikedSongs: ${it.error.message}")
+                }
+            }
+        }
         return result
     }
 

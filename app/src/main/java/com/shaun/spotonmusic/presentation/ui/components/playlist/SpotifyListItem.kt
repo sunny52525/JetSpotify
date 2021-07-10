@@ -27,18 +27,21 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.glide.rememberGlidePainter
 import com.shaun.spotonmusic.ui.theme.lightGreen
 import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
+import com.shaun.spotonmusic.utils.getArtistName
 import kaaes.spotify.webapi.android.models.ArtistSimple
 
-
+@Preview
 @Composable
 fun SpotifySongListItem(
     album: String = "Test",
     explicit: Boolean = true,
-    singer: MutableList<ArtistSimple> = mutableListOf(),
+    singer: String = "Lana Del Ray",
     imageUrl: String = "",
     showImage: Boolean = true,
     liked: Boolean = false,
     count: Int = 0,
+    imageSize:Int=55,
+    showMore:Boolean=true,
     onSongClicked: () -> Unit = {}
 ) {
 
@@ -63,7 +66,7 @@ fun SpotifySongListItem(
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(55.dp)
+                    .size(imageSize.dp)
                     .padding(4.dp)
             )
         }
@@ -84,7 +87,7 @@ fun SpotifySongListItem(
                     Spacer(modifier = Modifier.width(5.dp))
                 }
                 Text(
-                    text = getArtistName(singer),
+                    text = singer,
                     style = typography.subtitle2,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -105,6 +108,8 @@ fun SpotifySongListItem(
 
                 )
 
+
+        if (showMore)
         Icon(
             imageVector = Icons.Default.MoreVert,
             contentDescription = null,
@@ -114,25 +119,7 @@ fun SpotifySongListItem(
     }
 }
 
-fun getArtistName(artist: MutableList<ArtistSimple>): String {
 
-    val list = artist.map {
-        it.name
-    }
-
-
-    var artistName = ""
-
-    list.forEachIndexed { index, s ->
-
-        artistName += s
-
-        if (index != list.size - 1)
-            artistName += ","
-    }
-    return artistName
-
-}
 
 @Composable
 @Preview

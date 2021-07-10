@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
+import com.shaun.spotonmusic.utils.getArtistName
 import com.shaun.spotonmusic.utils.getImageUrl
 import com.shaun.spotonmusic.viewmodel.PlaylistDetailViewModel
 import kaaes.spotify.webapi.android.models.Pager
@@ -85,7 +86,7 @@ fun SongList(
                     SpotifySongListItem(
                         album = it.track.name,
                         liked = false,
-                        singer = it.track.artists,
+                        singer = getArtistName(it.track.artists),
                         explicit = it.track.explicit,
                         imageUrl = getImageUrl(it.track.album.images.map { url ->
                             url.url

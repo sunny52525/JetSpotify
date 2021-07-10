@@ -11,6 +11,7 @@ import com.shaun.spotonmusic.database.model.TYPE
 import com.shaun.spotonmusic.di.DatastoreManager
 import com.shaun.spotonmusic.network.api.SpotifyAppService
 import com.shaun.spotonmusic.network.model.ArtistsArray
+import com.shaun.spotonmusic.network.model.LikedSongs
 import com.shaun.spotonmusic.network.model.Playlists
 import com.shaun.spotonmusic.network.model.SavedAlbums
 import com.shaun.spotonmusic.repository.LibraryRepositoryImpl
@@ -38,6 +39,8 @@ class LibraryViewModel @Inject constructor(
     var followedArtists = MutableLiveData<ArtistsCursorPager?>()
     val followedAlbums = MutableLiveData<Pager<SavedAlbum>?>()
 
+    var likedSongs=MutableLiveData<LikedSongs>()
+
     var libraryItemsList = MutableLiveData<LibraryModel>()
     var libraryItemOriginal = MutableLiveData<LibraryModel>()
 
@@ -58,6 +61,7 @@ class LibraryViewModel @Inject constructor(
         repo = LibraryRepositoryImpl(accessToken.toString(), retrofit)
 
         userDetails = repo.getUserDetails()
+        likedSongs=repo.getLikedSongs()
         getLibraryItems()
     }
 
@@ -76,6 +80,7 @@ class LibraryViewModel @Inject constructor(
                 savedPlaylist = repo.getSavedPlaylistSynchronously()
                 followedArtist = repo.getFollowedArtistsSynchronously()
                 savedAlbums = repo.getSavedAlbumSynchronously()
+
 
             } catch (e: Exception) {
 
@@ -120,7 +125,7 @@ class LibraryViewModel @Inject constructor(
             }
 
 
-            savedAlbums?.items?.forEach { it ->
+            savedAlbums.items.forEach {
                 val libraryItem = LibraryItem(
                     title = it.album.name,
                     typeID = TYPE.ALBUM,
@@ -134,6 +139,8 @@ class LibraryViewModel @Inject constructor(
                 )
                 libraryList.add(libraryItem)
             }
+
+
 
 
             libraryItemsList.postValue(LibraryModel(libraryList))

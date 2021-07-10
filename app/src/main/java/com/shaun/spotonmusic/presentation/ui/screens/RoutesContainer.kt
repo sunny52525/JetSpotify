@@ -453,6 +453,11 @@ fun HomeScreenNavigationConfiguration(
                         restoreState = true
 
                     }
+                }, onArtistClicked = {
+                    navHostController.navigate(Routes.Artist.route + "/$it") {
+                        restoreState = true
+
+                    }
                 }
                 )
             }
@@ -512,7 +517,11 @@ fun HomeScreenNavigationConfiguration(
 
                         }
 
+                    }, onArtistClicked = {
+                        navHostController.navigate(Routes.Artist.route + "/$it") {
+                            restoreState = true
 
+                        }
                     }
                 )
             }
@@ -591,6 +600,27 @@ fun HomeScreenNavigationConfiguration(
                     }
                 )
             }
+        }
+
+        composable(Routes.Artist.route + "/{id}") {
+            val id = it.arguments?.getString("id")
+            val albumDetailViewModel = hiltViewModel<ArtistDetailViewModel>()
+            albumDetailViewModel.setArtist(id.toString())
+
+            val likedSongs by libraryViewModel.likedSongs.observeAsState()
+
+
+            val artist by albumDetailViewModel.artist.observeAsState()
+            SlideInEnterAnimation {
+                ArtistPage(artist, albumDetailViewModel, onAlbumClicked = {
+                    navHostController.navigate(Routes.AlbumDetail.route + "/$it") {
+                        restoreState = true
+                    }
+                }, onSongClicked = { id ->
+                    playSpotifyMedia(musicPlayerViewModel.spotifyRemote.value, id)
+                },likedSongs?.items)
+            }
+
         }
 
 

@@ -12,9 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.shaun.spotonmusic.presentation.ui.components.playlist.SpotifySongListItem
-import com.shaun.spotonmusic.presentation.ui.components.playlist.getArtistName
 import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
 import com.shaun.spotonmusic.utils.dateToString
+import com.shaun.spotonmusic.utils.getArtistName
 import com.shaun.spotonmusic.utils.getImageUrl
 import kaaes.spotify.webapi.android.models.Album
 import kaaes.spotify.webapi.android.models.TrackSimple
@@ -51,7 +51,7 @@ fun AlbumSongList(
                 SpotifySongListItem(
                     album = it.name,
                     explicit = it.explicit,
-                    singer = it.artists,
+                    singer = getArtistName(it.artists),
                     showImage = false,
                     onSongClicked = {
                         onSongClicked(it.uri)
