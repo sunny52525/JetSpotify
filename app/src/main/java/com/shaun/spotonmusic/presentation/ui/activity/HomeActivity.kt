@@ -15,7 +15,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.shaun.spotonmusic.R
 import com.shaun.spotonmusic.presentation.ui.screens.HomeScreen
 import com.shaun.spotonmusic.ui.theme.SpotOnMusicTheme
+import com.shaun.spotonmusic.viewmodel.LibraryViewModel
 import com.shaun.spotonmusic.viewmodel.MusicPlayerViewModel
+import com.shaun.spotonmusic.viewmodel.SharedViewModel
 import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
 import com.spotify.protocol.types.Track
@@ -31,6 +33,9 @@ class HomeActivity : BaseSpotifyActivity(), Stopwatch.OnTickListener {
     var spotifyAppRemote: SpotifyAppRemote? = null
     private val stopwatch = Stopwatch()
     private val musicPlayerViewModel: MusicPlayerViewModel by viewModels()
+    private val homeViewModel: SharedViewModel by viewModels()
+    private val libraryViewModel: LibraryViewModel by viewModels()
+
 
     @ExperimentalMaterialApi
     @ExperimentalFoundationApi
@@ -58,8 +63,11 @@ class HomeActivity : BaseSpotifyActivity(), Stopwatch.OnTickListener {
         setContent {
             SpotOnMusicTheme(darkTheme = true) {
                 HomeScreen(
-                    this,
-                    musicPlayerViewModel
+
+                    context = this,
+                    musicPlayerViewModel = musicPlayerViewModel,
+                    homeViewModel = homeViewModel,
+                    libraryViewModel = libraryViewModel
                 )
             }
 
@@ -166,6 +174,14 @@ class HomeActivity : BaseSpotifyActivity(), Stopwatch.OnTickListener {
         Log.d(TAG, "onRefreshAccessTokenSucceed: ${tokenResponse?.tokenType}")
         Log.d(TAG, "onRefreshAccessTokenSucceed: ${tokenResponse?.accessToken}")
         Toast.makeText(this, "Refresh access token succeed ", Toast.LENGTH_SHORT).show()
+        homeViewModel.tokenExpired.postValue(false)
+        libraryViewModel.tokenExpired.postValue(false)
+
+        homeViewModel.setToken()
+        libraryViewModel.setToken()
+
+
+
 
     }
 

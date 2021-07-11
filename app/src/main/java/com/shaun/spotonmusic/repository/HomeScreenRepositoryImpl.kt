@@ -63,7 +63,7 @@ class HomeScreenRepositoryImpl @Inject constructor(
 
             override fun failure(error: RetrofitError?) {
                 Log.d(TAG, "onFailure: ${error?.message}")
-//                tokenExpired.postValue(true)
+                tokenExpired.postValue(true)
 
             }
 

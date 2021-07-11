@@ -32,7 +32,7 @@ class SharedViewModel @Inject constructor(
 
     private val _currentScreen = MutableLiveData<BottomNavRoutes>(BottomNavRoutes.Home)
     val currentScreen: LiveData<BottomNavRoutes> = _currentScreen
-    private var accessToken = datastoreManager.accessToken
+
     private lateinit var repo: HomeScreenRepositoryImpl
     private var albums = MutableLiveData<Album>()
 
@@ -66,16 +66,10 @@ class SharedViewModel @Inject constructor(
     }
 
 
-    private fun setToken() {
-        repo = HomeScreenRepositoryImpl(accessToken.toString(), retrofit)
+    fun setToken() {
+        repo = HomeScreenRepositoryImpl(datastoreManager.accessToken.toString(), retrofit)
         albums = repo.album
-
-
-
-        Log.d(TAG, "setToken: $accessToken")
-
         myDetails = repo.getUserDetail()
-
 
         getCharts()
 

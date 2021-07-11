@@ -33,7 +33,6 @@ class LibraryViewModel @Inject constructor(
     private val hasInternetConnection: Boolean
 ) : ViewModel() {
 
-    private var accessToken = datastoreManager.accessToken
     private lateinit var repo: LibraryRepositoryImpl
     var tokenExpired = MutableLiveData<Boolean>()
 
@@ -61,8 +60,8 @@ class LibraryViewModel @Inject constructor(
         getAccessToken()
     }
 
-    private fun setToken() {
-        repo = LibraryRepositoryImpl(accessToken.toString(), retrofit)
+     fun setToken() {
+        repo = LibraryRepositoryImpl( datastoreManager.accessToken.toString(), retrofit)
 
         userDetails = repo.getUserDetails()
         likedSongs = repo.getLikedSongs()

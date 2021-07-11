@@ -16,7 +16,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.shaun.spotonmusic.navigation.BottomNavRoutes
 import com.shaun.spotonmusic.presentation.ui.activity.HomeActivity
@@ -39,13 +38,12 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     context: HomeActivity,
     musicPlayerViewModel: MusicPlayerViewModel,
+    homeViewModel: SharedViewModel,
+    libraryViewModel: LibraryViewModel,
 ) {
 
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
-
-    val libraryViewModel: LibraryViewModel = viewModel()
-    val homeViewModel: SharedViewModel = viewModel()
 
 
     libraryViewModel.tokenExpired.observeForever {
@@ -60,6 +58,8 @@ fun HomeScreen(
         if (it == true) {
             Toast.makeText(context, "Expired", Toast.LENGTH_SHORT).show()
             context.spotifyAuthClient.refreshAccessToken()
+
+
         }
     }
 
@@ -201,7 +201,6 @@ fun playSpotifyMedia(
     shuffle: Boolean = false,
     isPlaylist: Boolean = false
 ) {
-
 
 
     spotifyUri?.let {

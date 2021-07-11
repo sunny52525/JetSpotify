@@ -23,6 +23,7 @@ class LibraryRepositoryImpl @Inject constructor(
     private var api = SpotifyApi()
     private var spotify: kaaes.spotify.webapi.android.SpotifyService
     private val auth = "Authorization: Bearer $accessToken"
+    val tokenExpired = MutableLiveData(false)
 
     init {
 
@@ -46,6 +47,7 @@ class LibraryRepositoryImpl @Inject constructor(
             }
 
             override fun failure(error: RetrofitError?) {
+
                 Log.d(TAG, "failure:$error ")
             }
 
@@ -107,6 +109,7 @@ class LibraryRepositoryImpl @Inject constructor(
 
             override fun failure(error: RetrofitError?) {
                 Log.d(TAG, "failure: $error")
+                tokenExpired.postValue(true)
             }
 
         })
@@ -115,15 +118,15 @@ class LibraryRepositoryImpl @Inject constructor(
 
     fun getLikedSongs(): MutableLiveData<LikedSongs> {
 
-        val result =MutableLiveData<LikedSongs>()
+        val result = MutableLiveData<LikedSongs>()
 
         retrofit.getLikedSongs(authorization = auth).enqueue {
-            when(it){
+            when (it) {
 
-                is RetrofitEnqueue.Companion.Result.Success->{
+                is RetrofitEnqueue.Companion.Result.Success -> {
                     result.postValue(it.response.body())
                 }
-                is RetrofitEnqueue.Companion.Result.Failure->{
+                is RetrofitEnqueue.Companion.Result.Failure -> {
                     Log.d(TAG, "getLikedSongs: ${it.error.message}")
                 }
             }

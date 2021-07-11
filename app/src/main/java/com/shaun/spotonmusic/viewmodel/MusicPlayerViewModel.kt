@@ -36,10 +36,10 @@ class MusicPlayerViewModel @Inject constructor(
     val isCollapsed = MutableLiveData(true)
 
 
-    val volume=MutableLiveData(0f)
+    val volume = MutableLiveData(0f)
     private var _devices = MutableLiveData<Devices>()
 
-    var trackDuration=MutableLiveData<Long>(0)
+    var trackDuration = MutableLiveData<Long>(0)
     val devices get() = _devices
 
     init {
@@ -71,16 +71,16 @@ class MusicPlayerViewModel @Inject constructor(
         seekState.postValue(newPosition)
     }
 
-    fun seekTo(newPosition: Float){
+    fun seekTo(newPosition: Float) {
 
-        val position = (newPosition*(trackDuration.value?:0)).toLong()
+        val position = (newPosition * (trackDuration.value ?: 0)).toLong()
 
         spotifyRemote.value?.playerApi?.seekTo(position)
     }
+
     fun updateRepeatMode(repeatMode: Int) {
         this.repeatMode.postValue(repeatMode)
     }
-
 
 
 }
