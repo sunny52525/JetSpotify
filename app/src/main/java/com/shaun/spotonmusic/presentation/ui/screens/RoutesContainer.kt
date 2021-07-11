@@ -3,6 +3,7 @@ package com.shaun.spotonmusic.presentation.ui.screens
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -10,10 +11,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -24,6 +23,7 @@ import com.shaun.spotonmusic.presentation.ui.activity.HomeActivity
 import com.shaun.spotonmusic.presentation.ui.components.library.LibraryBottomSheet
 import com.shaun.spotonmusic.presentation.ui.components.navigaiton.BottomNavigationSpotOnMusic
 import com.shaun.spotonmusic.presentation.ui.components.navigaiton.HomeScreenNavigationConfiguration
+import com.shaun.spotonmusic.presentation.ui.components.nowplaying.PlayerBottomSheet
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.viewmodel.LibraryViewModel
 import com.shaun.spotonmusic.viewmodel.MusicPlayerViewModel
@@ -80,6 +80,9 @@ fun HomeScreen(
     )
 
 
+    val isPlayerOpening = remember {
+        mutableStateOf(true)
+    }
     musicPlayerViewModel.isCollapsed.observeForever {
         it?.let { collapsed ->
 
@@ -102,9 +105,13 @@ fun HomeScreen(
     val currentSort by libraryViewModel.sortMode.observeAsState()
 
 
+
     BottomSheetScaffold(
         sheetContent = {
-            NowPlaying(musicPlayerViewModel)
+            PlayerBottomSheet(
+                isPlayer = isPlayerOpening.value,
+                musicPlayerViewModel = musicPlayerViewModel
+            )
         },
         sheetPeekHeight = 0.dp,
         scaffoldState = bottomSheetScaffoldState,
@@ -112,9 +119,7 @@ fun HomeScreen(
         ) {
 
         BackHandler(bottomSheetScaffoldState.bottomSheetState.isExpanded) {
-            scope.launch {
-                bottomSheetScaffoldState.bottomSheetState.collapse()
-            }
+            musicPlayerViewModel.isCollapsed.postValue(true)
         }
 
 
@@ -146,6 +151,14 @@ fun HomeScreen(
                             items = bottomNavItems,
                             musicPlayerViewModel = musicPlayerViewModel,
                             nowPlayingClicked = {
+                                isPlayerOpening.value = true
+                                musicPlayerViewModel.isCollapsed.postValue(false)
+                            },
+                            onChangePlayerClicked = {
+
+                                Log.d("TAG", "HomeScreen: clicked change player")
+                                isPlayerOpening.value = false
+                                musicPlayerViewModel.updateDevices()
                                 musicPlayerViewModel.isCollapsed.postValue(false)
                             }
                         )
@@ -188,6 +201,7 @@ fun playSpotifyMedia(
     shuffle: Boolean = false,
     isPlaylist: Boolean = false
 ) {
+
 
 
     spotifyUri?.let {

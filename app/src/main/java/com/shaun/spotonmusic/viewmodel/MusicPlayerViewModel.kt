@@ -2,9 +2,27 @@ package com.shaun.spotonmusic.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.shaun.spotonmusic.di.DatastoreManager
+import com.shaun.spotonmusic.network.api.SpotifyAppService
+import com.shaun.spotonmusic.network.model.Devices
+import com.shaun.spotonmusic.repository.PlaybackChangerRepository
 import com.spotify.android.appremote.api.SpotifyAppRemote
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class MusicPlayerViewModel : ViewModel() {
+
+@HiltViewModel
+class MusicPlayerViewModel @Inject constructor(
+    datastoreManager: DatastoreManager,
+    spotifyAppService: SpotifyAppService
+) : ViewModel() {
+    private var accessToken = datastoreManager.accessToken
+
+
+    private var repository: PlaybackChangerRepository =
+        PlaybackChangerRepository(accessToken = accessToken.toString(), spotifyAppService)
+
+
     var spotifyRemote = MutableLiveData<SpotifyAppRemote>()
 
 
@@ -14,8 +32,26 @@ class MusicPlayerViewModel : ViewModel() {
     val isPlaying = MutableLiveData(false)
     val seekState = MutableLiveData(0.0f)
 
-    val repeatMode = MutableLiveData<Int>(0)
+    val repeatMode = MutableLiveData(0)
     val isCollapsed = MutableLiveData(true)
+
+
+    private var _devices = MutableLiveData<Devices>()
+
+    val devices get() = _devices
+
+    init {
+        _devices = repository.devices
+    }
+
+
+    fun updateDevices() {
+        repository.getPlayers()
+    }
+
+    fun changePlayer(id: String) {
+        repository.changePlayer(id)
+    }
 
     fun setSpotifyRemote(spotifyAppRemote: SpotifyAppRemote?) {
         this.spotifyRemote.postValue(spotifyAppRemote)
@@ -36,6 +72,7 @@ class MusicPlayerViewModel : ViewModel() {
     fun updateRepeatMode(repeatMode: Int) {
         this.repeatMode.postValue(repeatMode)
     }
+
 
     companion object {
         private const val TAG = "MusicPlayerViewModel"

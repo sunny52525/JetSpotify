@@ -16,8 +16,10 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Cache
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
 
 
 @Module
@@ -27,14 +29,14 @@ object NetworkModule {
     private val gson: Gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
         .setLenient().create()
 
-//    val interceptor = HttpLoggingInterceptor().apply {
+//    private val interceptor = HttpLoggingInterceptor().apply {
 //        level = HttpLoggingInterceptor.Level.BODY
 //    }
-//    val client = OkHttpClient.Builder().addInterceptor(interceptor)
-//        .build()
+
 
 
     @Provides
+    @Singleton
     fun hasInternetConnection(@ApplicationContext context: Context): Boolean {
 
         var result = false
@@ -69,7 +71,7 @@ object NetworkModule {
     }
 
     @Provides
-//    @Singleton
+    @Singleton
     fun spotifyService(@ApplicationContext context: Context): SpotifyAppService {
 
 

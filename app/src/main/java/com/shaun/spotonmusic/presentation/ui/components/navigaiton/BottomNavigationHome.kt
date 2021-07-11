@@ -31,6 +31,7 @@ fun BottomNavigationSpotOnMusic(
     navController: NavController,
     items: List<BottomNavRoutes>,
     musicPlayerViewModel: MusicPlayerViewModel,
+    onChangePlayerClicked:()->Unit,
     nowPlayingClicked: () -> Unit
 ) {
 
@@ -55,7 +56,8 @@ fun BottomNavigationSpotOnMusic(
             nowPlayingClicked = nowPlayingClicked,
             artistName = artistName,
             isPlaying = isPlaying,
-            spotifyAppRemote = spotifyAppRemote
+            spotifyAppRemote = spotifyAppRemote,
+            onChangePlayerClicked = onChangePlayerClicked
         )
         BottomNavigationHome(
             navController = navController,

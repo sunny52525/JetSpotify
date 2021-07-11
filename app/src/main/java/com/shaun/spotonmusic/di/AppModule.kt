@@ -16,8 +16,7 @@ import javax.inject.Singleton
 object AppModule {
 
 
-
-    //    @Singleton
+    @Singleton
     @Provides
     fun provideApplication(@ApplicationContext app: Context): SpotOnApplication {
         return app as SpotOnApplication
@@ -27,11 +26,6 @@ object AppModule {
 //
 //    fun dataStoreManager(@ApplicationContext appContext: Context): DatastoreManager =
 //        DatastoreManager(appContext)
-
-
-
-
-
 
 
     @Provides

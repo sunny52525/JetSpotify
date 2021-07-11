@@ -31,7 +31,8 @@ fun BottomTrackController(
     nowPlayingClicked: () -> Unit,
     artistName: String,
     isPlaying: Boolean,
-    spotifyAppRemote: SpotifyAppRemote?
+    spotifyAppRemote: SpotifyAppRemote?,
+    onChangePlayerClicked: () -> Unit
 ) {
     //Player
     if (trackName.isNotEmpty()) {
@@ -106,7 +107,11 @@ fun BottomTrackController(
                     Image(
                         painter = painterResource(id = R.drawable.ic_cast),
                         contentDescription = "Cast",
-                        modifier = Modifier.size(32.dp),
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clickable {
+                                onChangePlayerClicked()
+                            },
                         colorFilter = ColorFilter.tint(Color.Gray)
                     )
                     Image(
@@ -116,7 +121,9 @@ fun BottomTrackController(
                         colorFilter = ColorFilter.tint(green)
                     )
                     Image(
-                        painter = if (isPlaying) painterResource(id = R.drawable.ic_pause) else painterResource(
+                        painter = if (isPlaying)
+                            painterResource(id = R.drawable.ic_pause)
+                        else painterResource(
                             id = R.drawable.ic_play
                         ),
                         contentDescription = "Like",
