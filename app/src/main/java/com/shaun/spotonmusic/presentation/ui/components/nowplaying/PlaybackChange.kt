@@ -3,9 +3,9 @@ package com.shaun.spotonmusic.presentation.ui.components.nowplaying
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Slider
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -76,11 +76,17 @@ fun PlaybackChange(musicPlayerViewModel: MusicPlayerViewModel) {
                     .fillMaxSize()
                     .fillMaxWidth()
             ) {
+
                 Slider(
                     value = it, onValueChange = {
                         musicPlayerViewModel.spotifyRemote.value?.connectApi?.connectSetVolume(it)
                     }, modifier = Modifier
-                        .align(Alignment.Bottom)
+                        .align(Alignment.Bottom),
+                    colors = SliderDefaults.colors(
+                        thumbColor = Color.White,
+                        inactiveTrackColor = Color.Gray
+
+                    )
                 )
             }
 

@@ -1,57 +1,29 @@
 package com.shaun.spotonmusic.presentation.ui.components.nowplaying
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.requiredSizeIn
+import androidx.compose.material.Slider
+import androidx.compose.material.SliderDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SeekBar(seekPosition: Float) {
-
-    Column(Modifier) {
-        Card(
-            shape = RoundedCornerShape(10.dp),
-            backgroundColor = Color.Unspecified,
-            modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 0.dp, top = 0.dp)
-        ) {
-            Row(
-                Modifier
-                    .height(7.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth(seekPosition)
-                        .background(Color.White)
-                        .height(3.dp)
-                ) {
-
-                }
-                Card(
-                    shape = CircleShape,
-                    contentColor = Color.White,
-                    modifier = Modifier
-                        .size(7.dp)
-
-                ) {
-
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color.White)
-                    ) {
-
-                    }
+fun SeekBar(seekPosition: Float,
+            onValueChanged:()->Unit,
+            onSeek:(Float)->Unit,
+) {
 
 
-                }
-            }
-        }
-    }
+    Slider(
+        value = seekPosition, onValueChange = onSeek, colors = SliderDefaults.colors(
+            activeTrackColor = Color.White,
+            thumbColor = Color.White,
+            inactiveTrackColor = Color.Gray
+        ),
+        modifier = Modifier.height(5.dp).padding(horizontal = 20.dp).requiredSizeIn(minHeight = 10.dp),onValueChangeFinished = onValueChanged
+    )
 }
