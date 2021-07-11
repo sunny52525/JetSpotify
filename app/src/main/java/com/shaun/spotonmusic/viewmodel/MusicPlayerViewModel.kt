@@ -36,6 +36,7 @@ class MusicPlayerViewModel @Inject constructor(
     val isCollapsed = MutableLiveData(true)
 
 
+    val volume=MutableLiveData(0f)
     private var _devices = MutableLiveData<Devices>()
 
     val devices get() = _devices

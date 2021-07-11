@@ -79,8 +79,9 @@ class HomeActivity : BaseSpotifyActivity(), Stopwatch.OnTickListener {
 
 
 
-                spotifyAppRemote?.let { _ ->
-                    spotifyAppRemote.playerApi.subscribeToPlayerState()
+
+                spotifyAppRemote?.let { it ->
+                    it.playerApi.subscribeToPlayerState()
                         .setEventCallback { playerState ->
 
                             val track: Track = playerState.track
@@ -97,12 +98,16 @@ class HomeActivity : BaseSpotifyActivity(), Stopwatch.OnTickListener {
 //                                stopwatch.start()
 
 
-
                             musicPlayerViewModel.setPlayerDetails(
                                 track.name, track.artist.name,
                                 track.imageUri.raw ?: ""
                             )
                         }
+
+                    it.connectApi.subscribeToVolumeState().setEventCallback {
+                        musicPlayerViewModel.volume.postValue(it.mVolume    )
+                    }
+
                 }
 
 

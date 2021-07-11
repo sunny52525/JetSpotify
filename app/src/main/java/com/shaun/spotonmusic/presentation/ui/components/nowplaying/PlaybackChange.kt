@@ -1,14 +1,15 @@
 package com.shaun.spotonmusic.presentation.ui.components.nowplaying
 
+import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Slider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -21,6 +22,8 @@ import com.shaun.spotonmusic.viewmodel.MusicPlayerViewModel
 fun PlaybackChange(musicPlayerViewModel: MusicPlayerViewModel) {
 
     val devices by musicPlayerViewModel.devices.observeAsState()
+
+    val volume by musicPlayerViewModel.volume.observeAsState()
     Column(
         Modifier
             .fillMaxSize()
@@ -36,11 +39,13 @@ fun PlaybackChange(musicPlayerViewModel: MusicPlayerViewModel) {
         }?.let {
             if (it.isNotEmpty()) {
                 it[0].let { device ->
+
                     CurrentDevice(deviceName = device.name, isPhone = device.type == "Smartphone")
                 }
             }
         }
 
+        Log.d("TAG", "PlaybackChange: ")
 
         Text(
             text = "Select a device",
@@ -60,5 +65,26 @@ fun PlaybackChange(musicPlayerViewModel: MusicPlayerViewModel) {
         }
 
 
+
+
+
+        volume?.let {
+
+
+            Row(
+                Modifier
+                    .fillMaxSize()
+                    .fillMaxWidth()
+            ) {
+                Slider(
+                    value = it, onValueChange = {
+                        musicPlayerViewModel.spotifyRemote.value?.connectApi?.connectSetVolume(it)
+                    }, modifier = Modifier
+                        .align(Alignment.Bottom)
+                )
+            }
+
+
+        }
     }
 }
