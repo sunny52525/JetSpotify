@@ -1,16 +1,11 @@
 package com.shaun.spotonmusic.presentation.ui.screens
 
 import android.util.Log
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import com.shaun.spotonmusic.presentation.ui.components.Progress
 import com.shaun.spotonmusic.presentation.ui.components.album.AlbumSongList
 import com.shaun.spotonmusic.presentation.ui.components.album.TopBar
 import com.shaun.spotonmusic.ui.theme.black
@@ -88,14 +83,6 @@ fun AlbumDetail(
             })
         }
     } else {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .background(spotifyDarkBlack)
-        ) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
-        }
+        Progress()
     }
 }

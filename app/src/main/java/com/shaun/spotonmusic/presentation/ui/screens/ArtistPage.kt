@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.shaun.spotonmusic.network.model.LikedSongsTrack
 import com.shaun.spotonmusic.presentation.ui.components.LikedSongCount
+import com.shaun.spotonmusic.presentation.ui.components.Progress
 import com.shaun.spotonmusic.presentation.ui.components.SongListItemWithNumber
 import com.shaun.spotonmusic.presentation.ui.components.TopSpace
 import com.shaun.spotonmusic.presentation.ui.components.album.TopBar
@@ -52,116 +53,122 @@ fun ArtistPage(
     val appearsOn by artistDetailViewModel.getAppearsOn.observeAsState()
 
     val topAlbums by artistDetailViewModel.topAlbums.observeAsState()
-    artist?.let {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .background(spotifyDarkBlack)
-        ) {
-            TopBar(title = it.name)
 
-            LazyColumn {
-                item {
-                    TopSpace(
-                        artistName = it.name,
-                        followers = it.followers.total,
-                        isFollowing = follows?.get(0)?: false,
-                        imageUrl = getImageUrl(artist.images.map { it.url }, 2)
-                    ) {
+    if (artist?.id.isNullOrBlank()) {
 
-                        if (follows?.get(0) == false)
-                            artistDetailViewModel.followArtist(artist.id, onFollowed = {
-                                updatePlaylist()
-                            })
-                        else
-                            artistDetailViewModel.unFollowArtist(artist.id, onUnFollowed = {
-                                updatePlaylist()
-                            })
-                    }
-                }
-                likeCount?.let {
-                    if (it > 0)
-                        item {
-                            LikedSongCount(
-                                imageUrl = getImageUrl(artist.images.toListString(), 0),
-                                likeCount = it,
-                                artistName = artist.name
-                            )
+        Progress()
+    } else {
+        artist?.let {
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .background(spotifyDarkBlack)
+            ) {
+                TopBar(title = it.name)
+
+                LazyColumn {
+                    item {
+                        TopSpace(
+                            artistName = it.name,
+                            followers = it.followers.total,
+                            isFollowing = follows?.get(0) ?: false,
+                            imageUrl = getImageUrl(artist.images.map { it.url }, 2)
+                        ) {
+
+                            if (follows?.get(0) == false)
+                                artistDetailViewModel.followArtist(artist.id, onFollowed = {
+                                    updatePlaylist()
+                                })
+                            else
+                                artistDetailViewModel.unFollowArtist(artist.id, onUnFollowed = {
+                                    updatePlaylist()
+                                })
                         }
-                }
+                    }
+                    likeCount?.let {
+                        if (it > 0)
+                            item {
+                                LikedSongCount(
+                                    imageUrl = getImageUrl(artist.images.toListString(), 0),
+                                    likeCount = it,
+                                    artistName = artist.name
+                                )
+                            }
+                    }
 
-                topArtistTracks?.tracks?.forEachIndexed { index, track ->
-                    track?.let { oneTrack ->
-                        item {
-                            Spacer(modifier = Modifier.height(8.dp))
-                            SongListItemWithNumber(
-                                number = index + 1,
-                                title = oneTrack.name,
-                                author = getArtistName(oneTrack.artists),
-                                isExplicit = oneTrack.explicit,
-                                image = getImageUrl(oneTrack.album.images.toListString(), 0)
-                            ) {
-                                onSongClicked(oneTrack.uri)
+                    topArtistTracks?.tracks?.forEachIndexed { index, track ->
+                        track?.let { oneTrack ->
+                            item {
+                                Spacer(modifier = Modifier.height(8.dp))
+                                SongListItemWithNumber(
+                                    number = index + 1,
+                                    title = oneTrack.name,
+                                    author = getArtistName(oneTrack.artists),
+                                    isExplicit = oneTrack.explicit,
+                                    image = getImageUrl(oneTrack.album.images.toListString(), 0)
+                                ) {
+                                    onSongClicked(oneTrack.uri)
+                                }
                             }
                         }
                     }
-                }
 
 
-                item {
-                    Text(
-                        text = "Popular Releases",
-                        color = Color.White,
-                        fontSize = 20.sp,
-                        modifier = Modifier.padding(20.dp),
-                        fontWeight = FontWeight.Bold
-                    )
-                    topAlbums?.items?.subList(0, 5)?.forEach {
-
-                        SpotifySongListItem(
-                            imageUrl = getImageUrl(it.images.toListString(), 0),
-                            album = it.name,
-                            imageSize = 80,
-                            singer = it.release_date,
-                            explicit = false,
-                            showMore = false,
-                            onSongClicked = {
-                                onAlbumClicked(it.id)
-                            }
+                    item {
+                        Text(
+                            text = "Popular Releases",
+                            color = Color.White,
+                            fontSize = 20.sp,
+                            modifier = Modifier.padding(20.dp),
+                            fontWeight = FontWeight.Bold
                         )
+                        topAlbums?.items?.subList(0, 5)?.forEach {
 
-                    }
-                }
-                item {
-
-                    relatedArtist?.let { it1 ->
-                        SuggestionsRow(
-                            title = "Fans also like",
-                            data = it1,
-                            cornerRadius = 50
-                        ) {
-                            onArtistClicked(it)
-
-                        }
-                    }
-
-                }
-                item {
-
-                    appearsOn?.let { it1 ->
-                        SuggestionsRow(
-                            title = "Appears On",
-                            data = it1
-                        ) {
-                            onAlbumClicked(it)
+                            SpotifySongListItem(
+                                imageUrl = getImageUrl(it.images.toListString(), 0),
+                                album = it.name,
+                                imageSize = 80,
+                                singer = it.release_date,
+                                explicit = false,
+                                showMore = false,
+                                onSongClicked = {
+                                    onAlbumClicked(it.id)
+                                }
+                            )
 
                         }
                     }
+                    item {
 
+                        relatedArtist?.let { it1 ->
+                            SuggestionsRow(
+                                title = "Fans also like",
+                                data = it1,
+                                cornerRadius = 50
+                            ) {
+                                onArtistClicked(it)
+
+                            }
+                        }
+
+                    }
+                    item {
+
+                        appearsOn?.let { it1 ->
+                            SuggestionsRow(
+                                title = "Appears On",
+                                data = it1
+                            ) {
+                                onAlbumClicked(it)
+
+                            }
+                        }
+
+                    }
                 }
+
+
             }
-
-
         }
     }
 }

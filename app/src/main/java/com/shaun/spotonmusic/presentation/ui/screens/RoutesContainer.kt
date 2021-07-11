@@ -245,100 +245,101 @@ fun BottomNavigationSpotOnMusic(
                     .fillMaxWidth()
                     .background(spotifyGray)
             ) {
-                Row(
-                    Modifier
-                        .fillMaxHeight()
-                        .background(Color.White)
-                        .fillMaxWidth(seekState)
-                        .animateContentSize()
-                ) {
-
-                }
-            }
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    .background(spotifyGray)
-            ) {
-
-                Image(
-                    painter = rememberGlidePainter(request = imageUrl),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .width(60.dp),
-                )
-
-                Column(
-                    Modifier
-                        .padding(start = 10.dp)
-                        .align(Alignment.CenterVertically)
-                        .clickable {
-                            nowPlayingClicked()
-                        }
-                        .fillMaxWidth(0.7f)
-                ) {
-                    Text(
-                        text = trackName,
-                        color = Color.White,
-                        fontWeight = Bold,
-                        fontSize = 15.sp,
-                        maxLines = 1
-                    )
-                    Text(
-                        text = artistName,
-                        color = Color.Gray,
-                        fontWeight = Normal,
-                        fontSize = 13.sp
-                    )
-                }
-                Box(
-                    contentAlignment = Alignment.CenterEnd,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight()
-                ) {
-
+                if (trackName.isNotBlank()) {
                     Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier
-                            .width(150.dp)
-                            .padding(end = 10.dp)
+                        Modifier
+                            .fillMaxHeight()
+                            .background(Color.White)
+                            .fillMaxWidth(seekState)
+                            .animateContentSize()
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_cast),
-                            contentDescription = "Cast",
-                            modifier = Modifier.size(32.dp),
-                            colorFilter = ColorFilter.tint(Color.Gray)
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_like),
-                            contentDescription = "Like",
-                            modifier = Modifier.size(32.dp),
-                            colorFilter = ColorFilter.tint(green)
-                        )
-                        Image(
-                            painter = if (isPlaying) painterResource(id = R.drawable.ic_pause) else painterResource(
-                                id = R.drawable.ic_play
-                            ),
-                            contentDescription = "Like",
-                            modifier = Modifier
-                                .size(32.dp)
-                                .clickable {
-                                    if (isPlaying)
-                                        spotifyAppRemote?.playerApi?.pause()
-                                    else
-                                        spotifyAppRemote?.playerApi?.resume()
 
-                                },
-                            colorFilter = ColorFilter.tint(Color.White),
-                        )
                     }
                 }
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .background(spotifyGray)
+                ) {
+
+                    Image(
+                        painter = rememberGlidePainter(request = imageUrl),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .width(60.dp),
+                    )
+
+                    Column(
+                        Modifier
+                            .padding(start = 10.dp)
+                            .align(Alignment.CenterVertically)
+                            .clickable {
+                                nowPlayingClicked()
+                            }
+                            .fillMaxWidth(0.7f)
+                    ) {
+                        Text(
+                            text = trackName,
+                            color = Color.White,
+                            fontWeight = Bold,
+                            fontSize = 15.sp,
+                            maxLines = 1
+                        )
+                        Text(
+                            text = artistName,
+                            color = Color.Gray,
+                            fontWeight = Normal,
+                            fontSize = 13.sp
+                        )
+                    }
+                    Box(
+                        contentAlignment = Alignment.CenterEnd,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight()
+                    ) {
+
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            modifier = Modifier
+                                .width(150.dp)
+                                .padding(end = 10.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_cast),
+                                contentDescription = "Cast",
+                                modifier = Modifier.size(32.dp),
+                                colorFilter = ColorFilter.tint(Color.Gray)
+                            )
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_like),
+                                contentDescription = "Like",
+                                modifier = Modifier.size(32.dp),
+                                colorFilter = ColorFilter.tint(green)
+                            )
+                            Image(
+                                painter = if (isPlaying) painterResource(id = R.drawable.ic_pause) else painterResource(
+                                    id = R.drawable.ic_play
+                                ),
+                                contentDescription = "Like",
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .clickable {
+                                        if (isPlaying)
+                                            spotifyAppRemote?.playerApi?.pause()
+                                        else
+                                            spotifyAppRemote?.playerApi?.resume()
+
+                                    },
+                                colorFilter = ColorFilter.tint(Color.White),
+                            )
+                        }
+                    }
+                }
+
             }
-
-
             Spacer(
                 modifier = Modifier
                     .height(2.dp)
@@ -674,8 +675,8 @@ fun playSpotifyMedia(
     isPlaylist: Boolean = false
 ) {
 
-    println(spotifyUri)
-    println(spotifyAppRemote)
+
+//    spotifyAppRemote?.
     spotifyUri?.let {
         if (isPlaylist)
             spotifyAppRemote?.playerApi?.setShuffle(shuffle)
