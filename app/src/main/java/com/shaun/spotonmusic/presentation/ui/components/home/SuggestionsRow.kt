@@ -22,8 +22,6 @@ import com.shaun.spotonmusic.database.model.SpotOnMusicModel
 import com.shaun.spotonmusic.presentation.ui.Heading
 import com.shaun.spotonmusic.utils.getImageUrl
 
-private const val TAG = "SuggestionsRow"
-
 
 @Composable
 fun SuggestionsRow(
@@ -38,29 +36,24 @@ fun SuggestionsRow(
 
 
         Heading(title = title)
-        LazyRow() {
+        LazyRow {
 
 
-            data.let {
+            itemsIndexed(data) { index, item ->
 
-                itemsIndexed(it) { index, item ->
-
-                    SuggestionCard(
-                        cornerRadius = cornerRadius,
-                        imageUrl = getImageUrl(item.imageUrls, 1),
-                        item.title,
-                        paddingValues = if (index == 0) 20 else 10,
-                        size = size,
-                        modifier = Modifier
-                            .clickable {
-                                onCardClicked(item.id)
-                            }
+                SuggestionCard(
+                    cornerRadius = cornerRadius,
+                    imageUrl = getImageUrl(item.imageUrls, 1),
+                    item.title,
+                    paddingValues = if (index == 0) 20 else 10,
+                    size = size,
+                    modifier = Modifier
+                        .clickable {
+                            onCardClicked(item.id)
+                        }
 
 
-                    )
-                }
-
-
+                )
             }
 
         }

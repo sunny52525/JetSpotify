@@ -13,7 +13,6 @@ import com.shaun.spotonmusic.presentation.ui.screens.LoginScreen
 import com.spotify.sdk.android.authentication.AuthenticationResponse
 import io.github.kaaes.spotify.webapi.core.models.UserPrivate
 import net.openid.appauth.TokenResponse
-import kotlin.math.log
 
 
 class LoginActivity : BaseSpotifyActivity() {
@@ -59,7 +58,7 @@ class LoginActivity : BaseSpotifyActivity() {
                 }
                 AuthenticationResponse.Type.ERROR -> {
 
-                    Toast.makeText(this, "Eror", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
                     Log.d(TAG, "onNewIntent: Error")
                 }
                 else -> {
@@ -98,7 +97,7 @@ class LoginActivity : BaseSpotifyActivity() {
             Log.d(TAG, "onAuthorizationSucceed: ${tokenResponse.refreshToken}")
             Log.d(TAG, "onAuthorizationSucceed: ${tokenResponse.tokenType}")
         }
-        Toast.makeText(this, "AccessTokenwo: " + tokenResponse!!.accessToken, Toast.LENGTH_SHORT)
+        Toast.makeText(this, "AccessTokenNo: " + tokenResponse!!.accessToken, Toast.LENGTH_SHORT)
             .show()
         Handler(Looper.getMainLooper()).postDelayed({
             val intent = getTokenActivityIntent()

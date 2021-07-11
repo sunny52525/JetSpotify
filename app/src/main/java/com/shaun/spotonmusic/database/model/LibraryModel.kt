@@ -20,10 +20,10 @@ data class LibraryItem(
     val creator: String
 )
 
- class TYPE() {
+ class TYPE {
    companion object{
-       val PLAYLIST="playlist"
-       val ARTIST="artist"
-       val ALBUM="album"
+       const val PLAYLIST="playlist"
+       const val ARTIST="artist"
+       const val ALBUM="album"
    }
 }

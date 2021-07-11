@@ -19,7 +19,6 @@ import kaaes.spotify.webapi.android.models.Album
 import kaaes.spotify.webapi.android.models.Pager
 
 
-private const val TAG = "CustomizedSuggestionRow"
 
 @Composable
 fun FavouriteArtistSongs(

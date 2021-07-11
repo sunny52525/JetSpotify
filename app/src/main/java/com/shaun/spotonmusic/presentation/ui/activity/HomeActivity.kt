@@ -97,6 +97,7 @@ class HomeActivity : BaseSpotifyActivity(), Stopwatch.OnTickListener {
 //                                stopwatch.start()
 
 
+
                             musicPlayerViewModel.setPlayerDetails(
                                 track.name, track.artist.name,
                                 track.imageUri.raw ?: ""
@@ -109,7 +110,7 @@ class HomeActivity : BaseSpotifyActivity(), Stopwatch.OnTickListener {
 
             override fun onFailure(throwable: Throwable?) {
 
-                Log.e("MainActivity", throwable?.message, throwable);
+                Log.e("MainActivity", throwable?.message, throwable)
             }
 
         })

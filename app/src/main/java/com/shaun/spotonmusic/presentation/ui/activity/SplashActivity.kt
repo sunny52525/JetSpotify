@@ -41,7 +41,7 @@ class SplashActivity : BaseSpotifyActivity() {
         spotifyAuthClient.addRefreshTokenCallback(object :
             SpotifyAuthorizationCallback.RefreshToken {
             override fun onRefreshAccessTokenStarted() {
-                Log.d("TAG", "onRefreshAccessTokenStarted: Staretd")
+                Log.d("TAG", "onRefreshAccessTokenStarted: Started")
             }
 
             override fun onRefreshAccessTokenSucceed(

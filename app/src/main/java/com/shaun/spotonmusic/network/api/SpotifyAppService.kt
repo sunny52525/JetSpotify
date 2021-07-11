@@ -1,7 +1,6 @@
 package com.shaun.spotonmusic.network.api
 
 import com.shaun.spotonmusic.network.model.*
-import kaaes.spotify.webapi.android.models.Artist
 import kaaes.spotify.webapi.android.models.Playlist
 import retrofit2.Call
 import retrofit2.http.*
@@ -78,13 +77,6 @@ interface SpotifyAppService {
         @Query("limit") limit: Int = 50,
         @Header("Authorization") authorization: String,
     ): SavedAlbums
-
-
-    @GET("v1/artists/{id}")
-    suspend fun getAArtist(
-        @Path("/id") id: String,
-        @Header("Authorization") authorization: String,
-    ): Artist
 
 
     @GET("v1/me/tracks")

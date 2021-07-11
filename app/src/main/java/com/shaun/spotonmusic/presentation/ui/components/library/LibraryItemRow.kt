@@ -108,7 +108,7 @@ fun LibraryItemRow(
             )
         }
 
-        itemsIndexed(libraryItems.items) { index, item ->
+        itemsIndexed(libraryItems.items) { _, item ->
 
             if (isGrid)
                 Item(

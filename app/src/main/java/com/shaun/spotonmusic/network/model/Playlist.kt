@@ -1,6 +1,5 @@
 package com.shaun.spotonmusic.network.model
 
-import kaaes.spotify.webapi.android.models.Playlist
 import kaaes.spotify.webapi.android.models.PlaylistSimple
 
 data class Playlists(

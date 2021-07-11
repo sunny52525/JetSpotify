@@ -14,8 +14,6 @@ import com.shaun.spotonmusic.utils.AppConstants.AUTH_SCOPES
 import com.shaun.spotonmusic.utils.AppConstants.CLIENT_ID
 import com.shaun.spotonmusic.utils.AppConstants.REDIRECT_URL
 import com.spotify.android.appremote.api.ConnectionParams
-import com.spotify.android.appremote.api.Connector
-import com.spotify.android.appremote.api.SpotifyAppRemote
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.kaaes.spotify.webapi.core.models.UserPrivate
 import kotlinx.coroutines.launch
