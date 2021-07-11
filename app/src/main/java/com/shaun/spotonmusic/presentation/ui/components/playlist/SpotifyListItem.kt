@@ -6,10 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
+import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.typography
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.MoreVert
@@ -17,6 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -27,9 +27,8 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.glide.rememberGlidePainter
 import com.shaun.spotonmusic.ui.theme.lightGreen
 import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
-import com.shaun.spotonmusic.utils.getArtistName
-import kaaes.spotify.webapi.android.models.ArtistSimple
 
+@ExperimentalMaterialApi
 @Preview
 @Composable
 fun SpotifySongListItem(
@@ -40,8 +39,10 @@ fun SpotifySongListItem(
     showImage: Boolean = true,
     liked: Boolean = false,
     count: Int = 0,
-    imageSize:Int=55,
-    showMore:Boolean=true,
+    imageSize: Int = 55,
+    showMore: Boolean = true,
+    shape: Shape = RectangleShape,
+    paddingStart:Int=8,
     onSongClicked: () -> Unit = {}
 ) {
 
@@ -49,7 +50,7 @@ fun SpotifySongListItem(
     Row(
         modifier = Modifier
             .background(spotifyDarkBlack)
-            .padding(start = 8.dp, bottom = 5.dp)
+            .padding(start = paddingStart.dp, bottom = 5.dp)
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = {
@@ -61,14 +62,16 @@ fun SpotifySongListItem(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (showImage) {
-            Image(
-                painter = rememberGlidePainter(request = imageUrl),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(imageSize.dp)
-                    .padding(4.dp)
-            )
+            Card(onClick = { onSongClicked() }, shape = shape) {
+                Image(
+                    painter = rememberGlidePainter(request = imageUrl),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(imageSize.dp)
+                        .padding(4.dp)
+                )
+            }
         }
         Column(
             modifier = Modifier
@@ -110,15 +113,14 @@ fun SpotifySongListItem(
 
 
         if (showMore)
-        Icon(
-            imageVector = Icons.Default.MoreVert,
-            contentDescription = null,
-            tint = Color.LightGray,
-            modifier = Modifier.padding(4.dp)
-        )
+            Icon(
+                imageVector = Icons.Default.MoreVert,
+                contentDescription = null,
+                tint = Color.LightGray,
+                modifier = Modifier.padding(4.dp)
+            )
     }
 }
-
 
 
 @Composable

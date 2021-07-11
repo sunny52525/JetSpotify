@@ -49,7 +49,6 @@ import com.shaun.spotonmusic.presentation.ui.components.library.LibraryBottomShe
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.ui.theme.green
 import com.shaun.spotonmusic.ui.theme.spotifyGray
-import com.shaun.spotonmusic.utils.AppConstants
 import com.shaun.spotonmusic.viewmodel.*
 import com.spotify.android.appremote.api.SpotifyAppRemote
 import kaaes.spotify.webapi.android.models.UserPrivate
@@ -494,8 +493,33 @@ fun HomeScreenNavigationConfiguration(
 
             }
             composable(Routes.SearchScreen.route) {
+                val searchScreenMainViewModel = hiltViewModel<SearchViewModel>()
 
-                SearchScreen()
+
+                SearchScreen(
+                    searchScreenMainViewModel = searchScreenMainViewModel,
+                    scope = scope,
+                    onPlaylistClicked = {
+                        navHostController.navigate(Routes.PlaylistDetail.route + "/$it") {
+                            restoreState = true
+
+                        }
+                    },
+                    onArtistClicked = {
+                        navHostController.navigate(Routes.Artist.route + "/$it") {
+                            restoreState = true
+
+                        }
+                    },
+                    onAlbumClicked = {
+                        navHostController.navigate(Routes.AlbumDetail.route + "/$it")
+                        {
+                            restoreState = true
+
+                        }
+                    }) {
+                    playSpotifyMedia(musicPlayerViewModel.spotifyRemote.value, it)
+                }
             }
         }
 

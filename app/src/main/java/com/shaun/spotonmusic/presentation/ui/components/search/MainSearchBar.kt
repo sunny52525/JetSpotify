@@ -104,8 +104,9 @@ fun MainSearchBar(query: String = "", onQuery: (String) -> Unit = { }) {
                 onValueChange = { onQuery(it) },
                 textStyle = TextStyle(
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colors.onSecondary
-                ),
+                    color = Color.White,
+
+                    ),
                 modifier = Modifier
                     .fillMaxHeight()
                     .fillMaxWidth(1f)

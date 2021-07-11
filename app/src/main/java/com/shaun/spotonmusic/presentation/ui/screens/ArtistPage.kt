@@ -1,10 +1,9 @@
 package com.shaun.spotonmusic.presentation.ui.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,6 +27,7 @@ import com.shaun.spotonmusic.utils.toListString
 import com.shaun.spotonmusic.viewmodel.ArtistDetailViewModel
 import kaaes.spotify.webapi.android.models.Artist
 
+@ExperimentalMaterialApi
 @Composable
 fun ArtistPage(
     artist: Artist?,
@@ -93,6 +93,7 @@ fun ArtistPage(
                 topArtistTracks?.tracks?.forEachIndexed { index, track ->
                     track?.let { oneTrack ->
                         item {
+                            Spacer(modifier = Modifier.height(8.dp))
                             SongListItemWithNumber(
                                 number = index + 1,
                                 title = oneTrack.name,

@@ -2,7 +2,10 @@ package com.shaun.spotonmusic.presentation.ui.components.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,12 +14,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.glide.rememberGlidePainter
 import com.shaun.spotonmusic.database.model.SpotOnMusicModel
+import com.shaun.spotonmusic.presentation.ui.Heading
 import com.shaun.spotonmusic.utils.getImageUrl
 
 private const val TAG = "SuggestionsRow"
@@ -34,16 +37,7 @@ fun SuggestionsRow(
     Column(Modifier.padding(top = 30.dp)) {
 
 
-        Text(
-            text = title, textAlign = TextAlign.Left,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 20.dp),
-            fontSize = 23.sp,
-            color = Color.White
-
-        )
+        Heading(title = title)
         LazyRow() {
 
 

@@ -116,4 +116,6 @@ interface SpotifyAppService {
         @Query("ids") ids: String,
         @Header("Authorization") authorization: String
     ):Call<BooleanArray>
+
+
 }
