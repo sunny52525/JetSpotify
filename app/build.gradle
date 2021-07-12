@@ -135,6 +135,6 @@ dependencies {
     //to update seek
     implementation 'com.yashovardhan99.timeit:timeit:1.2.0'
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.6'
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.6'
 
 }
