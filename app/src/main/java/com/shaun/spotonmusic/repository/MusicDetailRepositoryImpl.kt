@@ -21,6 +21,7 @@ class MusicDetailRepositoryImpl(
     private var api = SpotifyApi()
     private var spotify: kaaes.spotify.webapi.android.SpotifyService
 
+    val tokenExpired=MutableLiveData(false)
     init {
 
         api.setAccessToken(accessToken);
@@ -110,9 +111,10 @@ class MusicDetailRepositoryImpl(
                 is Result.Success -> {
                     Log.d(TAG, "followsPlayList: ${it.response.body()?.get(0)}")
                     result.postValue(it.response.body()?.get(0))
+                    tokenExpired.postValue(false)
                 }
                 is Result.Failure -> {
-
+                tokenExpired.postValue(true)
                     Log.d(TAG, "followsPlayList: ${it.error}")
                 }
             }
@@ -171,11 +173,12 @@ class MusicDetailRepositoryImpl(
         spotify.containsMySavedAlbums(albumId, object : Callback<BooleanArray> {
             override fun success(t: BooleanArray?, response: Response?) {
                 result.postValue(t?.get(0))
+                tokenExpired.postValue(false)
 
             }
 
             override fun failure(error: RetrofitError?) {
-
+                tokenExpired.postValue(true)
             }
 
         })
@@ -331,10 +334,12 @@ class MusicDetailRepositoryImpl(
         retrofit.follows(ids = id, authorization = header).enqueue {
             when (it) {
                 is Result.Success -> {
+                    tokenExpired.postValue(false)
                     result.postValue(it.response.body())
 
                 }
                 is Result.Failure -> {
+                    tokenExpired.postValue(true)
                     Log.d(TAG, "followsArtist: ${it.error.message}")
                 }
             }

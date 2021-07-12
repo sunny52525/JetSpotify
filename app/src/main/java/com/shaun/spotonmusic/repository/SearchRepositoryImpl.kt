@@ -22,6 +22,8 @@ class SearchRepositoryImpl(
     private var spotify: kaaes.spotify.webapi.android.SpotifyService
     var header = "Authorization: Bearer $accessToken"
 
+    val tokenExpired=MutableLiveData(false)
+
     init {
 
         api.setAccessToken(accessToken);
@@ -35,10 +37,12 @@ class SearchRepositoryImpl(
         spotify.searchAlbums(query, object : retrofit.Callback<AlbumsPager> {
             override fun success(t: AlbumsPager?, response: Response?) {
                 result.postValue(t)
+                tokenExpired.postValue(false)
             }
 
             override fun failure(error: RetrofitError?) {
                 Log.d(TAG, "failure: ${error?.message}")
+                tokenExpired.postValue(true)
             }
 
         })

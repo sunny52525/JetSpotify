@@ -47,7 +47,7 @@ fun HomeScreen(
 
 
     libraryViewModel.tokenExpired.observeForever {
-        if (it == true) {
+        if (it ) {
             Toast.makeText(context, "Expired", Toast.LENGTH_SHORT).show()
             context.spotifyAuthClient.refreshAccessToken()
         }
@@ -55,7 +55,7 @@ fun HomeScreen(
 
 
     homeViewModel.tokenExpired.observeForever {
-        if (it == true) {
+        if (it  ) {
             Toast.makeText(context, "Expired", Toast.LENGTH_SHORT).show()
             context.spotifyAuthClient.refreshAccessToken()
 
@@ -180,7 +180,8 @@ fun HomeScreen(
                         libraryViewModel = libraryViewModel,
                         scope = scope,
                         paddingValues = it,
-                        musicPlayerViewModel = musicPlayerViewModel
+                        musicPlayerViewModel = musicPlayerViewModel,
+                        context=context
                     )
 
 

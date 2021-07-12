@@ -24,8 +24,6 @@ class SplashActivity : BaseSpotifyActivity() {
 
         setContent {
             SpotOnMusicTheme {
-
-//                val homeViewModel: SharedViewModel = viewModel()
                 Surface(color = black) {
                     Splash()
                 }

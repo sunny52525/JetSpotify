@@ -21,8 +21,10 @@ class SearchViewModel @Inject constructor(
     private var accessToken = datastoreManager.accessToken
     private val repository = SearchRepositoryImpl(accessToken.toString(), retrofit)
 
+    var tokenExpired=MutableLiveData(false)
 
     private val query = MutableLiveData("")
+
 
     val artists = Transformations.switchMap(query) {
         repository.searchArtists(it)
@@ -40,6 +42,7 @@ class SearchViewModel @Inject constructor(
 
     fun searchQuery(query: String) {
         this.query.postValue(query)
+        tokenExpired=repository.tokenExpired
     }
 
 }

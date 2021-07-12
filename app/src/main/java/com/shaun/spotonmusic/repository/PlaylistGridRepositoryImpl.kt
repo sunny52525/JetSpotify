@@ -18,6 +18,8 @@ class PlaylistGridRepositoryImpl @Inject constructor(
     private var api = SpotifyApi()
     private var spotify: kaaes.spotify.webapi.android.SpotifyService
 
+    var tokenExpired = MutableLiveData<Boolean>()
+
     init {
 
         api.setAccessToken(accessToken);
@@ -61,9 +63,11 @@ class PlaylistGridRepositoryImpl @Inject constructor(
                     Log.d(TAG, "success: $response")
                     Log.d(TAG, "success: Playlist $v")
                     result.postValue(t)
+                    tokenExpired.postValue(false)
                 }
 
                 override fun failure(error: RetrofitError?) {
+                    tokenExpired.postValue(true)
                     Log.d(TAG, "onFailure: ${error?.message}")
                 }
 
