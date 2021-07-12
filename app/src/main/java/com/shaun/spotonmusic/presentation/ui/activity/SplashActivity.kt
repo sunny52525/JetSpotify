@@ -38,35 +38,35 @@ class SplashActivity : BaseSpotifyActivity() {
 
     private fun check() {
 
-        spotifyAuthClient.addRefreshTokenCallback(object :
-            SpotifyAuthorizationCallback.RefreshToken {
-            override fun onRefreshAccessTokenStarted() {
-                Log.d("TAG", "onRefreshAccessTokenStarted: Started")
-            }
-
-            override fun onRefreshAccessTokenSucceed(
-                tokenResponse: TokenResponse?,
-                user: UserPrivate?
-            ) {
-                Log.d("TAG", "onRefreshAccessTokenSucceed: ${tokenResponse?.accessToken} ")
+//        spotifyAuthClient.addRefreshTokenCallback(object :
+//            SpotifyAuthorizationCallback.RefreshToken {
+//            override fun onRefreshAccessTokenStarted() {
+//                Log.d("TAG", "onRefreshAccessTokenStarted: Started")
+//            }
+//
+//            override fun onRefreshAccessTokenSucceed(
+//                tokenResponse: TokenResponse?,
+//                user: UserPrivate?
+//            ) {
+//                Log.d("TAG", "onRefreshAccessTokenSucceed: ${tokenResponse?.accessToken} ")
                 Intent(this@SplashActivity, HomeActivity::class.java).apply {
                     startApp(this)
                 }
-            }
+//            }
+//
+//        })
 
-        })
 
-
-        lifecycleScope.launch {
-            delay(1000)
-            if (!spotifyAuthClient.isAuthorized())
-                Intent(this@SplashActivity, LoginActivity::class.java).apply {
-                    startApp(this)
-                }
-            else {
-                spotifyAuthClient.refreshAccessToken()
-            }
-        }
+//        lifecycleScope.launch {
+//            delay(1000)
+//            if (!spotifyAuthClient.isAuthorized())
+//                Intent(this@SplashActivity, LoginActivity::class.java).apply {
+//                    startApp(this)
+//                }
+//            else {
+//                spotifyAuthClient.refreshAccessToken()
+//            }
+//        }
     }
 
     private fun startApp(intent: Intent) {

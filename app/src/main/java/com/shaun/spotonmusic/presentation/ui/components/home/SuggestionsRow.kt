@@ -25,12 +25,16 @@ import com.shaun.spotonmusic.utils.getImageUrl
 
 @Composable
 fun SuggestionsRow(
-    title: String, data: List<SpotOnMusicModel>,
+    title: String, data: List<SpotOnMusicModel>?,
     size: Int = 170,
     cornerRadius: Int = 0,
     onCardClicked: (String) -> Unit,
 ) {
 
+
+    if(data.isNullOrEmpty()){
+        return
+    }
 
     Column(Modifier.padding(top = 30.dp)) {
 
