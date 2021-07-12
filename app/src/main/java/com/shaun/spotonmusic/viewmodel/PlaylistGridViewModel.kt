@@ -17,7 +17,6 @@ class PlaylistGridViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var accessToken = datastoreManager.accessToken
-    var tokenExpired = MutableLiveData<Boolean>()
 
     private val repository =
         PlaylistGridRepositoryImpl(accessToken = accessToken.toString(), spotifyAppService)
@@ -31,6 +30,5 @@ class PlaylistGridViewModel @Inject constructor(
         categoryId.postValue(query)
 
         playlistList = repository.getCategoryPlaylist(query)
-        tokenExpired=repository.tokenExpired
     }
 }

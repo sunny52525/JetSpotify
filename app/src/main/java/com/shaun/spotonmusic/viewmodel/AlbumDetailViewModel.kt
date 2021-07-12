@@ -34,7 +34,6 @@ class AlbumDetailViewModel @Inject constructor(
     fun setUserId(id: String) {
         this.albumId.postValue(id)
         liked = repo.followsAlbum(id)
-        tokenExpired=repo.tokenExpired
 
     }
 

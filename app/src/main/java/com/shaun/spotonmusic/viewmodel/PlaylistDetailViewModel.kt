@@ -22,7 +22,6 @@ class PlaylistDetailViewModel @Inject constructor(
     private var repository: MusicDetailRepositoryImpl =
         MusicDetailRepositoryImpl(accessToken = accessToken.toString(), spotifyAppService)
 
-    var tokenExpired=MutableLiveData(false)
 
     var id = MutableLiveData("")
     var playList = MutableLiveData(Playlist())
@@ -37,8 +36,6 @@ class PlaylistDetailViewModel @Inject constructor(
         this.id.postValue(id)
         follows = repository.followsPlayList(userId = userId, playList = id)
         playList = repository.getPlaylistAsync(id)
-
-        tokenExpired=repository.tokenExpired
 
     }
 

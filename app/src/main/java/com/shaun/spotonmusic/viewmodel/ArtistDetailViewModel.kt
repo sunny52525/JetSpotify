@@ -26,8 +26,6 @@ class ArtistDetailViewModel @Inject constructor(
     var artist: LiveData<Artist?> = Transformations.switchMap(id) {
         repository.getArtist(it)
     }
-    var tokenExpired = MutableLiveData<Boolean>()
-
 
     val artistTopTracks: LiveData<Tracks?> = Transformations.switchMap(id) {
         repository.getArtistTopTrack(it)
@@ -52,7 +50,6 @@ class ArtistDetailViewModel @Inject constructor(
         this.id.postValue(id)
 
         followed=repository.followsArtist(id = id)
-        tokenExpired=repository.tokenExpired
     }
 
 

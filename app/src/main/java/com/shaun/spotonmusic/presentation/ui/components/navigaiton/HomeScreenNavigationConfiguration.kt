@@ -21,11 +21,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.shaun.spotonmusic.navigation.BottomNavRoutes
 import com.shaun.spotonmusic.navigation.Routes
-import com.shaun.spotonmusic.presentation.ui.activity.HomeActivity
 import com.shaun.spotonmusic.presentation.ui.animation.SlideInEnterAnimation
 import com.shaun.spotonmusic.presentation.ui.screens.*
 import com.shaun.spotonmusic.ui.theme.black
-import com.shaun.spotonmusic.utils.observeToken
 import com.shaun.spotonmusic.viewmodel.*
 import kaaes.spotify.webapi.android.models.UserPrivate
 import kotlinx.coroutines.CoroutineScope
@@ -45,7 +43,6 @@ fun HomeScreenNavigationConfiguration(
     scope: CoroutineScope,
     paddingValues: PaddingValues,
     musicPlayerViewModel: MusicPlayerViewModel,
-    context: HomeActivity,
 
     ) {
     val listState = rememberLazyListState()
@@ -122,7 +119,6 @@ fun HomeScreenNavigationConfiguration(
             composable(Routes.SearchScreen.route) {
                 val searchScreenMainViewModel = hiltViewModel<SearchViewModel>()
 
-                observeToken(context = context, searchScreenMainViewModel)
 
                 SearchScreen(
                     searchScreenMainViewModel = searchScreenMainViewModel,
@@ -187,7 +183,6 @@ fun HomeScreenNavigationConfiguration(
             val id = it.arguments?.getString("id")
             val playlistDetailViewModel = hiltViewModel<PlaylistDetailViewModel>()
 
-            observeToken(context, playlistDetailViewModel)
 
             val myDetails: UserPrivate by sharedViewModel.myDetails.observeAsState(UserPrivate())
 
@@ -221,10 +216,6 @@ fun HomeScreenNavigationConfiguration(
             val id = it.arguments?.getString("id")
 
             val albumDetailViewModel = hiltViewModel<AlbumDetailViewModel>()
-
-            observeToken(context, albumDetailViewModel)
-
-
             albumDetailViewModel.setUserId(id.toString())
 
 
@@ -244,8 +235,6 @@ fun HomeScreenNavigationConfiguration(
         composable(Routes.PlaylistGrid.route + "/{id}") {
             val id = it.arguments?.getString("id")
             val playlistGridViewModel = hiltViewModel<PlaylistGridViewModel>()
-
-            observeToken(context, playlistGridViewModel)
 
             playlistGridViewModel.setCategory(id.toString())
 
@@ -267,9 +256,6 @@ fun HomeScreenNavigationConfiguration(
         composable(Routes.Artist.route + "/{id}") {
             val id = it.arguments?.getString("id")
             val albumDetailViewModel = hiltViewModel<ArtistDetailViewModel>()
-
-            observeToken(context, albumDetailViewModel)
-
             albumDetailViewModel.setArtist(id.toString())
 
             val likedSongs by libraryViewModel.likedSongs.observeAsState()
@@ -303,4 +289,3 @@ fun HomeScreenNavigationConfiguration(
 
     }
 }
-
