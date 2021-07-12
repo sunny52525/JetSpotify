@@ -14,7 +14,6 @@ JetSpotify is a Spotify App (made in Jetpack Compose) and functionalites (using 
 * Jetpack Datastore
 * Remote player using Spotify SDK
 * All functionalities from Spotify APP
-* Caching
 
 
 ### [DEMO](https://drive.google.com/file/d/1i2H3RXwlgeDhb52lWR-HHWy6PcmXxSIT/view?usp=drivesdk)
