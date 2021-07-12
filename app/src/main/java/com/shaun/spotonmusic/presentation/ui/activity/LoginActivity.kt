@@ -25,6 +25,7 @@ class LoginActivity : BaseSpotifyActivity() {
                 Log.d(TAG, "onCreate: Login")
                 startLoginFlow()
             }, onSingUpButton = {
+                startLoginFlow()
 
             })
         }
