@@ -19,7 +19,6 @@ import kaaes.spotify.webapi.android.models.Album
 import kaaes.spotify.webapi.android.models.Pager
 
 
-
 @Composable
 fun FavouriteArtistSongs(
     title: String, data: Pager<Album>?, image: String,
