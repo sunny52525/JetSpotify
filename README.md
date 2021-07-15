@@ -17,6 +17,10 @@ JetSpotify is a Spotify App (made in Jetpack Compose) and functionalites (using 
 
 
 ### [DEMO](https://drive.google.com/file/d/1i2H3RXwlgeDhb52lWR-HHWy6PcmXxSIT/view?usp=drivesdk)
+
+### Screenshots
+<img src="https://user-images.githubusercontent.com/30768018/125823133-a6f6f3b9-99cc-4d32-8d5e-100d033c9488.png" height="600px" width="300dp"/> | <img src="https://user-images.githubusercontent.com/30768018/125823137-5c6d6a9c-328a-45f7-9f13-4ab24695f37f.png" height="600px" width="300dp"/> |  <img src="https://user-images.githubusercontent.com/30768018/125823150-c206d970-2f41-41ba-9d6f-1e26f2202f0c.png" height="600px" width="300dp"/> 
+
    
 
 ### Special Thanks to [Kaaes](https://github.com/kaaes/spotify-web-api-android) 
