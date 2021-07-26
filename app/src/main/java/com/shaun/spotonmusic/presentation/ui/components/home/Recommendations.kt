@@ -1,6 +1,8 @@
 package com.shaun.spotonmusic.presentation.ui.components.home
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
@@ -26,13 +28,16 @@ fun RecommendationsRow(
 
         CustomizedHeading(image, title, artistName[index].title)
 
-        LazyRow {
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 20.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
             recommendations.let {
                 it.forEachIndexed { index, its ->
                     item {
                         CustomizedSuggestionCard(
                             album = Pair(its.imageUrls[0], its.title),
-                            paddingValues = if (index == 0) 20 else 10, onCardClick = {
+                            onCardClick = {
 
                                 onCardClicked(its.id)
 

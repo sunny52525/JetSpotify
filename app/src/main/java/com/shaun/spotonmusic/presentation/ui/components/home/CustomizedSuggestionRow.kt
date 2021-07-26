@@ -33,13 +33,16 @@ fun FavouriteArtistSongs(
 
         CustomizedHeading(image, title, data.items?.get(0)?.artists?.get(0)?.name)
 
-        LazyRow {
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 20.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
             data.items?.let {
                 it.forEachIndexed { index, its ->
                     item {
                         CustomizedSuggestionCard(
                             album = Pair(its.images[0].url, its.name),
-                            paddingValues = if (index == 0) 20 else 10,
+
                             onCardClick = {
                                 albumClicked(its.id)
                             }
@@ -96,15 +99,13 @@ fun CustomizedHeading(
 fun CustomizedSuggestionCard(
     cornerRadius: Int = 0,
     album: Pair<String, String>,
-    paddingValues: Int,
     onCardClick: () -> Unit
 ) {
 
 
     Column(
         Modifier
-            .padding(start = paddingValues.dp, bottom = 10.dp, top = 10.dp)
-            .clickable {
+              .clickable {
                 onCardClick()
             }) {
         Card(shape = RoundedCornerShape(cornerRadius.dp)) {

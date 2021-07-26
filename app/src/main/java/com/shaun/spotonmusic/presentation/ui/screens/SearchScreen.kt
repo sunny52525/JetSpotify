@@ -10,11 +10,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -46,8 +43,10 @@ fun SearchScreen(
     onTrackClicked: (String) -> Unit
 ) {
 
-    val isVisible = remember {
-        mutableStateOf(false)
+    val isVisible = produceState(initialValue = false)
+    {
+        delay(100)
+        value = true
     }
 
     val searchQuery = remember {
@@ -59,11 +58,9 @@ fun SearchScreen(
     val tracks = searchScreenMainViewModel.tracks.observeAsState()
     val albums = searchScreenMainViewModel.albums.observeAsState()
 
-    SideEffect {
-        android.os.Handler(Looper.getMainLooper()).postDelayed({
-            isVisible.value = true
-        }, 100)
-    }
+
+
+
 
     Column(
         Modifier
