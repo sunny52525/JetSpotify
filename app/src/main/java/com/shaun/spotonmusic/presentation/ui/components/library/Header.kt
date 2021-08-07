@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.glide.rememberGlidePainter
 import com.shaun.spotonmusic.R
 import com.shaun.spotonmusic.ui.theme.spotifyDarkBlack
+import com.shaun.spotonmusic.utils.getImageUrl
+import com.shaun.spotonmusic.utils.toListString
 import kaaes.spotify.webapi.android.models.UserPrivate
 
 @ExperimentalAnimationApi
@@ -41,8 +43,9 @@ fun Header(userDetails: UserPrivate?) {
             ) {
 
                 Card(shape = RoundedCornerShape(50)) {
+
                     Image(
-                        painter = rememberGlidePainter(request = userDetails?.images?.get(0)?.url),
+                        painter = rememberGlidePainter(request = getImageUrl(userDetails?.images?.toListString(),0)),
                         contentDescription = null,
 
                         modifier = Modifier.size(32.dp)

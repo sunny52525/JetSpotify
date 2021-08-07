@@ -28,3 +28,5 @@ JetSpotify is a Spotify App (made in Jetpack Compose) and functionalites (using 
     
 #### Note: [Spotify web api wrapper](https://github.com/kaaes/spotify-web-api-android) Uses retrofit v1 for api calls.
      I have written some api calls in retrofit2  
+
+##### You need official spotify app installed for remote play

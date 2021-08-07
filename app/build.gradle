@@ -68,8 +68,8 @@ dependencies {
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.ui:ui-tooling:1.0.0-beta09"
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation 'androidx.activity:activity-compose:1.3.0-rc01'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.activity:activity-compose:1.3.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -107,7 +107,7 @@ dependencies {
 
     //Compose nav
 
-    implementation "androidx.navigation:navigation-compose:2.4.0-alpha04"
+    implementation "androidx.navigation:navigation-compose:2.4.0-alpha06"
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0-alpha03'
     implementation 'androidx.hilt:hilt-navigation-fragment:1.0.0'
 
@@ -116,15 +116,15 @@ dependencies {
     implementation 'com.github.kaaes:spotify-web-api-android:0.4.1'
 
     //Datastore
-    implementation "androidx.datastore:datastore-preferences:1.0.0-rc01"
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
 
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
 
     //retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.1.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.8.0'
 
     // Coil
     implementation "com.google.accompanist:accompanist-glide:0.10.0"

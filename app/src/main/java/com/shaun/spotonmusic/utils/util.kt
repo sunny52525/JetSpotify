@@ -31,27 +31,29 @@ fun List<Image>.toListString(): List<String> {
 
 }
 
-fun getImageUrl(list: List<String>, demand: Int): String {
+fun getImageUrl(list: List<String>?, demand: Int/* refers size, 0 for smallest,1 for medium,2 for largest*/): String {
 
-
-    when (list.size) {
-        3 -> {
-            if (demand == 0)
-                return list[2]
-            if (demand == 1)
-                return list[1]
-            return list[0]
+    list?.let {
+        when (list.size) {
+            3 -> {
+                if (demand == 0)
+                    return list[2]
+                if (demand == 1)
+                    return list[1]
+                return list[0]
+            }
+            2 -> {
+                return if (demand == 2)
+                    list[0]
+                else list[1]
+            }
+            1 -> {
+                return list[0]
+            }
+            else -> return ""
         }
-        2 -> {
-            return if (demand == 2)
-                list[0]
-            else list[1]
-        }
-        1 -> {
-            return list[0]
-        }
-        else -> return ""
     }
+    return ""
 
 }
 
