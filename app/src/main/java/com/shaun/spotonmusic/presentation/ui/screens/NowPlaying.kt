@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.shaun.spotonmusic.presentation.ui.components.nowplaying.*
 import com.shaun.spotonmusic.ui.theme.black
@@ -28,12 +27,13 @@ fun NowPlaying(musicPlayerViewModel: MusicPlayerViewModel) {
 
     val scrollState = rememberScrollState()
 
-    val context = LocalContext.current
 
     val albumArtLink by musicPlayerViewModel.imageUrl.observeAsState()
     val songName: String? by musicPlayerViewModel.trackName.observeAsState(initial = "")
     val singerName: String? by musicPlayerViewModel.singerName.observeAsState(initial = "")
     val seekPosition: Float by musicPlayerViewModel.seekState.observeAsState(initial = 0.0f)
+    val albumName by musicPlayerViewModel.albumName.observeAsState()
+    val likesThisSong by musicPlayerViewModel.likesThisSong.observeAsState(initial = false)
     var temporarySeekPosition by remember {
         mutableStateOf(0f)
     }
@@ -75,13 +75,13 @@ fun NowPlaying(musicPlayerViewModel: MusicPlayerViewModel) {
             }
     ) {
 
-        Top {
+        Top(albumName = albumName) {
             musicPlayerViewModel.isCollapsed.postValue(true)
         }
         AlbumArt(albumArtLink)
         CurrentSong(
             songName = songName,
-            singerName = singerName
+            singerName = singerName,
         )
         SeekBar(seekPosition, onValueChanged = {
             musicPlayerViewModel.updateSeekState(temporarySeekPosition)
@@ -105,17 +105,21 @@ fun NowPlaying(musicPlayerViewModel: MusicPlayerViewModel) {
             onPrevious = {
                 musicPlayerViewModel.spotifyRemote.value?.playerApi?.skipPrevious()
 
-            }) {
+            }, likesThisSong = likesThisSong, onHeartClick = {
+                musicPlayerViewModel.toggleLikeSong()
+            }, onPause = {
 
-            if (!isPaused) {
-                Log.d("TAG", "NowPlaying: Resuming")
-                musicPlayerViewModel.spotifyRemote.value?.playerApi?.resume()
-            } else {
+                if (!isPaused) {
+                    Log.d("TAG", "NowPlaying: Resuming")
+                    musicPlayerViewModel.spotifyRemote.value?.playerApi?.resume()
+                } else {
 
-                Log.d("TAG", "NowPlaying: Pausing")
-                musicPlayerViewModel.spotifyRemote.value?.playerApi?.pause()
+                    Log.d("TAG", "NowPlaying: Pausing")
+                    musicPlayerViewModel.spotifyRemote.value?.playerApi?.pause()
+                }
             }
-        }
+
+        )
     }
 
 

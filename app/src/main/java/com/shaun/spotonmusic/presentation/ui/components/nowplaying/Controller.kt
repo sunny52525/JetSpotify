@@ -10,10 +10,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.shaun.spotonmusic.R
+import com.shaun.spotonmusic.ui.theme.green
 
 
 @ExperimentalMaterialApi
@@ -24,6 +26,8 @@ fun Controller(
     isPaused: Boolean,
     onLiked: () -> Unit,
     onNext: () -> Unit,
+    likesThisSong: Boolean,
+    onHeartClick: () -> Unit,
     onPrevious: () -> Unit,
     onPause: () -> Unit
 ) {
@@ -83,9 +87,16 @@ fun Controller(
                     onNext()
                 }
         )
+
         Image(
-            painter = painterResource(id = R.drawable.ic_negativ), contentDescription = "",
-            modifier = Modifier.size(30.dp)
+            painter = painterResource(id = R.drawable.ic_like),
+            colorFilter = if (likesThisSong) ColorFilter.tint(green) else ColorFilter.tint(
+                Color.Gray
+            ),
+            contentDescription = null,
+            modifier = Modifier.clickable {
+                onHeartClick()
+            }
         )
     }
 }

@@ -108,9 +108,14 @@ class HomeActivity : BaseSpotifyActivity(), Stopwatch.OnTickListener {
 //                                stopwatch.start()
 
 
+                            val currentTrackId= track.uri.split(":")[2]
+
                             musicPlayerViewModel.setPlayerDetails(
                                 track.name, track.artist.name,
-                                track.imageUri.raw ?: ""
+                                track.imageUri.raw ?: "",
+                                track.album.name,
+                                currentTrackId
+
                             )
                         }
 

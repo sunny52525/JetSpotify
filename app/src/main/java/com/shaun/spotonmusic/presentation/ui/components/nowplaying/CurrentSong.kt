@@ -22,7 +22,8 @@ fun CurrentSong(
     songName: String?,
     singerName: String?,
 
-) {
+
+    ) {
     Row(
         Modifier
             .fillMaxWidth()
@@ -45,14 +46,6 @@ fun CurrentSong(
             Text(text = singerName ?: "", color = Color.Gray)
         }
 
-        Image(
-            painter = painterResource(id = R.drawable.ic_like),
-            colorFilter = ColorFilter.tint(green),
-            contentDescription = null,
-            modifier = Modifier.clickable {
-
-            }
-        )
 
 
     }

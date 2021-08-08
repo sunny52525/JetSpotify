@@ -32,8 +32,11 @@ fun BottomTrackController(
     artistName: String,
     isPlaying: Boolean,
     spotifyAppRemote: SpotifyAppRemote?,
-    onChangePlayerClicked: () -> Unit
+    onChangePlayerClicked: () -> Unit,
+    hasLiked: Boolean,
+    onLikeClicked:()->Unit
 ) {
+
     //Player
     if (trackName.isNotEmpty()) {
         Column(
@@ -117,8 +120,11 @@ fun BottomTrackController(
                     Image(
                         painter = painterResource(id = R.drawable.ic_like),
                         contentDescription = "Like",
-                        modifier = Modifier.size(32.dp),
-                        colorFilter = ColorFilter.tint(green)
+                        modifier = Modifier.size(32.dp).clickable {
+                                   onLikeClicked()
+                        },
+                        colorFilter = if (hasLiked) ColorFilter.tint(green) else ColorFilter.tint(
+                            Color.Gray)
                     )
                     Image(
                         painter = if (isPlaying)

@@ -20,7 +20,9 @@ import com.shaun.spotonmusic.R
 import java.util.*
 
 @Composable
-fun Top (dropDown:()->Unit){
+fun Top (
+    albumName:String?,
+    dropDown:()->Unit){
     Row(
         Modifier
             .fillMaxWidth()
@@ -40,14 +42,14 @@ fun Top (dropDown:()->Unit){
 
         Column(Modifier.weight(0.8f)) {
             Text(
-                text = "PLAYING FROM YOUR PLAYLIST".uppercase(Locale.US),
+                text = "PLAYING FROM PLAYLIST".uppercase(Locale.US),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
                 color = Color.White,
                 fontSize = 10.sp
             )
             Text(
-                text = "Liked Songs",
+                text = albumName?:"",
                 color = Color.White,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),

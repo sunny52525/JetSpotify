@@ -41,6 +41,7 @@ fun BottomNavigationSpotOnMusic(
     val seekState: Float by musicPlayerViewModel.seekState.observeAsState(0.0f)
     var spotifyAppRemote: SpotifyAppRemote? = null
 
+    val likesTheSong by musicPlayerViewModel.likesThisSong.observeAsState(initial = false)
     val isPlaying by musicPlayerViewModel.isPlaying.observeAsState(initial = false)
 
     musicPlayerViewModel.spotifyRemote.observeForever {
@@ -57,7 +58,11 @@ fun BottomNavigationSpotOnMusic(
             artistName = artistName,
             isPlaying = isPlaying,
             spotifyAppRemote = spotifyAppRemote,
-            onChangePlayerClicked = onChangePlayerClicked
+            hasLiked = likesTheSong,
+            onChangePlayerClicked = onChangePlayerClicked,
+            onLikeClicked = {
+                musicPlayerViewModel.toggleLikeSong()
+            }
         )
         BottomNavigationHome(
             navController = navController,

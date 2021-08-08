@@ -32,8 +32,10 @@ class MusicPlayerViewModel @Inject constructor(
     val isPlaying = MutableLiveData(false)
     val seekState = MutableLiveData(0.0f)
 
+    val albumName = MutableLiveData<String>()
     val repeatMode = MutableLiveData(0)
     val isCollapsed = MutableLiveData(true)
+    val id = MutableLiveData("")
 
 
     val volume = MutableLiveData(0f)
@@ -42,10 +44,27 @@ class MusicPlayerViewModel @Inject constructor(
     var trackDuration = MutableLiveData<Long>(0)
     val devices get() = _devices
 
+    var likesThisSong = MutableLiveData(false)
+
     init {
         _devices = repository.devices
     }
 
+
+    fun toggleLikeSong() {
+
+        id.value?.let {
+            if (likesThisSong.value == false) {
+                repository.likeASong(it){
+                likesThisSong.postValue(true)
+                }
+            } else {
+                repository.unLikeASong(it){
+                likesThisSong.postValue(false)
+                }
+            }
+        }
+    }
 
     fun updateDevices() {
         repository.getPlayers()
@@ -59,11 +78,24 @@ class MusicPlayerViewModel @Inject constructor(
         this.spotifyRemote.postValue(spotifyAppRemote)
     }
 
-    fun setPlayerDetails(songName: String, singerName: String, imageUrl: String) {
+    fun setPlayerDetails(
+        songName: String,
+        singerName: String,
+        imageUrl: String,
+        albumName: String,
+        currentTrackId: String
+    ) {
 
-        this.trackName.postValue(songName)
-        this.singerName.postValue(singerName)
-        this.imageUrl.postValue("https://i.scdn.co/image/${imageUrl.split(':')[2]}")
+        if (this.id.value != currentTrackId) {
+            likesThisSong = repository.hasLikedTheSong(id = currentTrackId)
+
+            this.trackName.postValue(songName)
+            this.singerName.postValue(singerName)
+            this.imageUrl.postValue("https://i.scdn.co/image/${imageUrl.split(':')[2]}")
+            this.albumName.postValue(albumName)
+            this.id.postValue(currentTrackId)
+        }
+
     }
 
 
