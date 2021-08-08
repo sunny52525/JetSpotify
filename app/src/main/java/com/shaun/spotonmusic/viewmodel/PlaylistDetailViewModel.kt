@@ -2,6 +2,7 @@ package com.shaun.spotonmusic.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.shaun.spotonmusic.di.DatastoreManager
 import com.shaun.spotonmusic.network.api.SpotifyAppService
@@ -30,6 +31,7 @@ class PlaylistDetailViewModel @Inject constructor(
 
     var follows = MutableLiveData(false)
 
+    val likedSongs=repository.likedSongs
 
     fun setUserId(id: String, userId: String) {
         this.userId.postValue(userId)
@@ -37,14 +39,13 @@ class PlaylistDetailViewModel @Inject constructor(
         follows = repository.followsPlayList(userId = userId, playList = id)
         playList = repository.getPlaylistAsync(id)
 
+
     }
 
     fun getAlbum(id: String): MutableLiveData<Album> {
 
         if (id.isEmpty())
             return MutableLiveData(Album())
-
-
         return repository.getAlbum(id)
     }
 
@@ -57,9 +58,6 @@ class PlaylistDetailViewModel @Inject constructor(
     }
 
 
-    fun hasLikedThisSong(songId: String): MutableLiveData<Boolean> {
-        return repository.hasLikedThisSong(songId)
-    }
 
 
 

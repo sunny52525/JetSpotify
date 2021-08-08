@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,6 +22,7 @@ import com.shaun.spotonmusic.utils.getImageUrl
 import com.shaun.spotonmusic.viewmodel.PlaylistDetailViewModel
 import kaaes.spotify.webapi.android.models.Pager
 import kaaes.spotify.webapi.android.models.PlaylistTrack
+import kotlin.math.min
 
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
@@ -32,16 +33,10 @@ fun SongList(
     onFollowClicked: () -> Unit,
     viewModel: PlaylistDetailViewModel,
     shuffleClicked: () -> Unit,
-    onSongClicked: (String) -> Unit
+    onSongClicked: (String) -> Unit,
+    likedSongs: BooleanArray?
 ) {
 
-//
-//    val hasLiked by remember {
-//        mutableStateOf(mutableMapOf("sds" to false))
-//    }
-//    var count by remember {
-//        mutableStateOf(1)
-//    }
 
     LazyColumn(state = scrollState) {
         item {
@@ -79,22 +74,20 @@ fun SongList(
             }
         }
         tracks?.let { tracksPager ->
-            items(tracksPager.items) {
+            itemsIndexed(tracksPager.items) { index, track ->
 
-                if (it != null) {
-                    Log.d("TAG", "SongList: ${it.track.id}, ${it.track.name}")
+                if (track != null) {
                     SpotifySongListItem(
-                        album = it.track.name,
-                        liked = false,
-                        singer = getArtistName(it.track.artists),
-                        explicit = it.track.explicit,
-                        imageUrl = getImageUrl(it.track.album.images.map { url ->
+                        album = track.track.name,
+                        liked = likedSongs?.get(index = min(48,index)) ?: false,
+                        singer = getArtistName(track.track.artists),
+                        explicit = track.track.explicit,
+                        imageUrl = getImageUrl(track.track.album.images.map { url ->
                             url.url
                         }, 0),
-//                        count = count
                         onSongClicked = {
-                            onSongClicked(it.track.uri)
-                        }
+                            onSongClicked(track.track.uri)
+                        },
                     )
 
                 }

@@ -47,13 +47,14 @@ fun PlaylistDetail(
     val currentPlaylist
             : Playlist? by viewModel.playList.observeAsState(initial = Playlist())
 
+    val likedSongs by viewModel.likedSongs.observeAsState()
 
     viewModel.playList.observeForever {
-
         if (it.images != null)
             isLoaded = true
         Log.d(TAG, "PlaylistDetail: ${it.images}")
     }
+
     val colors = remember {
         mutableStateOf(arrayListOf<Color>(black, spotifyDarkBlack, black))
     }
@@ -125,7 +126,8 @@ fun PlaylistDetail(
                 },
                 onSongClicked = {
                     onSongClicked(it)
-                }
+                },
+                likedSongs=likedSongs
             )
             AnimatedToolBar(
                 album = currentPlaylist?.name ?: "",

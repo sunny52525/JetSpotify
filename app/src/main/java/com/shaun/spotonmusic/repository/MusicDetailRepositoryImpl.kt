@@ -13,6 +13,8 @@ import retrofit.Callback
 import retrofit.RetrofitError
 import retrofit.client.Response
 import retrofit2.Call
+import java.util.Collections.min
+import kotlin.math.min
 
 class MusicDetailRepositoryImpl(
     private val accessToken: String,
@@ -20,7 +22,7 @@ class MusicDetailRepositoryImpl(
 ) {
     private var api = SpotifyApi()
     private var spotify: kaaes.spotify.webapi.android.SpotifyService
-
+    var likedSongs = MutableLiveData<BooleanArray>()
     init {
 
         api.setAccessToken(accessToken);
@@ -49,14 +51,20 @@ class MusicDetailRepositoryImpl(
         val result = MutableLiveData<Playlist?>()
 
         retrofit.getAPlayList(playList_id = playlistId, "IN", "Authorization: Bearer $accessToken")
-            .enqueue {
-                when (it) {
+            .enqueue { response ->
+                when (response) {
                     is Result.Success -> {
-                        Log.d(TAG, "getPlaylistAsync: ${it.response.body()}")
-                        result.postValue(it.response.body())
+                        Log.d(TAG, "getPlaylistAsync: ${response.response.body()}")
+
+                        response.response.body()?.let {playlist->
+                            hasLikedThisSong(
+                               playlist.tracks)
+                        }
+
+                        result.postValue(response.response.body())
                     }
                     is Result.Failure -> {
-                        Log.d(TAG, "getRecentlyPlayed: ${it.error}")
+                        Log.d(TAG, "getRecentlyPlayed: ${response.error}")
                     }
                 }
             }
@@ -66,33 +74,35 @@ class MusicDetailRepositoryImpl(
     }
 
 
-    fun hasLikedThisSong(id: String): MutableLiveData<Boolean> {
+    private fun hasLikedThisSong(ids: Pager<PlaylistTrack>) {
 
-        val result = MutableLiveData<Boolean>()
+        Log.d(TAG, "hasLikedThisSong: $ids")
 
-        retrofit.hasLikedSong(id, header).enqueue(object : retrofit2.Callback<BooleanArray> {
-            override fun onResponse(
-                call: Call<BooleanArray>,
-                response: retrofit2.Response<BooleanArray>
-            ) {
-                if (response.raw().cacheResponse != null) {
-                    Log.d(TAG, "onResponse: ${response.raw().cacheResponse}")
-                    Log.e("Network", "response came from cache");
+
+
+        val tracks=ids
+            .items
+        val subtracks=tracks.subList(0,min(49,tracks.size))
+        val id=subtracks.joinToString(separator = ",") {
+            it.track.id
+        }
+        retrofit.hasLikedSong(id, header)
+            .enqueue(object : retrofit2.Callback<BooleanArray> {
+                override fun onResponse(
+                    call: Call<BooleanArray>,
+                    response: retrofit2.Response<BooleanArray>
+                ) {
+
+
+                    likedSongs.postValue(response.body())
                 }
 
-                if (response.raw().networkResponse != null) {
-                    Log.e("Network", "response came from server");
-                }
-
-                result.postValue(response.body()?.get(0))
-            }
-
-            override fun onFailure(call: Call<BooleanArray>, t: Throwable) {
-                Log.d(TAG, "onFailure: ${t.message}")
+                override fun onFailure(call: Call<BooleanArray>, t: Throwable) {
+                    Log.d(TAG, "onFailure: ${t.message}")
             }
 
         })
-        return result
+
     }
 
 

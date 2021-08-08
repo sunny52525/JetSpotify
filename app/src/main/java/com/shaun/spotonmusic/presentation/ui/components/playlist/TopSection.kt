@@ -39,7 +39,6 @@ fun BoxTopSection(
 ) {
 
 
-    Log.d("TAG", "BoxTopSection: $imageUrl")
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
             .background(
