@@ -21,7 +21,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.shaun.spotonmusic.navigation.BottomNavRoutes
 import com.shaun.spotonmusic.navigation.Routes
-import com.shaun.spotonmusic.presentation.ui.animation.SlideInEnterAnimation
 import com.shaun.spotonmusic.presentation.ui.screens.*
 import com.shaun.spotonmusic.ui.theme.black
 import com.shaun.spotonmusic.viewmodel.*
@@ -65,7 +64,6 @@ fun HomeScreenNavigationConfiguration(
 
         composable(BottomNavRoutes.Home.route) {
 
-            SlideInEnterAnimation {
                 Home(viewModel = sharedViewModel, listState = listState, tokenExpired = {
                     tokenExpired()
                 }, onPlayListClicked = {
@@ -86,7 +84,6 @@ fun HomeScreenNavigationConfiguration(
                     }
                 }
                 )
-            }
         }
 
         navigation(
@@ -94,7 +91,6 @@ fun HomeScreenNavigationConfiguration(
             route = BottomNavRoutes.Search.route
         ) {
             composable(Routes.SearchMain.route) {
-                SlideInEnterAnimation {
 
                     Search(sharedViewModel, onSearchClicked = {
 
@@ -111,8 +107,6 @@ fun HomeScreenNavigationConfiguration(
 
                         }
                     })
-
-                }
 
 
             }
@@ -149,7 +143,6 @@ fun HomeScreenNavigationConfiguration(
 
         composable(route = BottomNavRoutes.Library.route) {
 
-            SlideInEnterAnimation {
 
                 Library(
                     viewModel = sharedViewModel,
@@ -175,7 +168,6 @@ fun HomeScreenNavigationConfiguration(
                         }
                     }
                 )
-            }
 
 
         }
@@ -190,7 +182,7 @@ fun HomeScreenNavigationConfiguration(
                 if (userId != null)
                     playlistDetailViewModel.setUserId(id.toString(), userId = userId)
             }
-            SlideInEnterAnimation {
+
                 PlaylistDetail(
                     id,
                     updatePlaylist = {
@@ -209,7 +201,6 @@ fun HomeScreenNavigationConfiguration(
                     }
                 )
 
-            }
         }
         composable(Routes.AlbumDetail.route + "/{id}") {
 
@@ -219,7 +210,6 @@ fun HomeScreenNavigationConfiguration(
             albumDetailViewModel.setUserId(id.toString())
 
 
-            SlideInEnterAnimation {
 
                 AlbumDetail(
                     id = id,
@@ -229,7 +219,6 @@ fun HomeScreenNavigationConfiguration(
                     }) { songId ->
                     playSpotifyMedia(musicPlayerViewModel.spotifyRemote.value, songId)
                 }
-            }
         }
 
         composable(Routes.PlaylistGrid.route + "/{id}") {
@@ -240,7 +229,6 @@ fun HomeScreenNavigationConfiguration(
 
             val color = navHostController.previousBackStackEntry?.arguments?.getInt("color")
 
-            SlideInEnterAnimation {
                 PlaylistGridScreen(
                     id = id,
                     color = color ?: 0,
@@ -250,7 +238,6 @@ fun HomeScreenNavigationConfiguration(
                         navHostController.navigate(Routes.PlaylistDetail.route + "/$playlistId")
                     }
                 )
-            }
         }
 
         composable(Routes.Artist.route + "/{id}") {
@@ -262,7 +249,6 @@ fun HomeScreenNavigationConfiguration(
 
 
             val artist by albumDetailViewModel.artist.observeAsState()
-            SlideInEnterAnimation {
                 ArtistPage(artist = artist,
                     albumDetailViewModel,
                     onAlbumClicked = { albumId ->
@@ -282,7 +268,6 @@ fun HomeScreenNavigationConfiguration(
                             restoreState = true
                         }
                     })
-            }
 
         }
 
