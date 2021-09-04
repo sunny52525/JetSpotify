@@ -23,7 +23,6 @@ fun SearchGrid(
     albumId: Pair<String, String>,
     imageUrl: Pair<String, String>,
     title: Pair<String, String>,
-    heading: String = "Your top genres",
     color: Pair<Color?, Color?>,
     onCardClicked: (String,Int) -> Unit
 ) {

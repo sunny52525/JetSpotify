@@ -232,7 +232,6 @@ fun HomeScreenNavigationConfiguration(
                     id = id,
                     color = color ?: 0,
                     viewModel = playlistGridViewModel,
-                    title = id,
                     onPlaylistClicked = { playlistId ->
                         navHostController.navigate(Routes.PlaylistDetail.route + "/$playlistId")
                     }
@@ -247,26 +246,28 @@ fun HomeScreenNavigationConfiguration(
             val likedSongs by libraryViewModel.likedSongs.observeAsState()
 
 
-            val artist by albumDetailViewModel.artist.observeAsState()
-                ArtistPage(artist = artist,
-                    albumDetailViewModel,
-                    onAlbumClicked = { albumId ->
-                        navHostController.navigate(Routes.AlbumDetail.route + "/$albumId") {
-                            restoreState = true
-                        }
-                    },
-                    onSongClicked = {
-                        playSpotifyMedia(musicPlayerViewModel.spotifyRemote.value, it)
-                    },
-                    items = likedSongs?.items,
-                    updatePlaylist = {
-                        libraryViewModel.getLibraryItems()
-                    },
-                    onArtistClicked = { artistName: String ->
-                        navHostController.navigate(Routes.Artist.route + "/$artistName") {
-                            restoreState = true
-                        }
-                    })
+
+            ArtistPage(
+
+                albumDetailViewModel,
+                onAlbumClicked = { albumId ->
+                    navHostController.navigate(Routes.AlbumDetail.route + "/$albumId") {
+                        restoreState = true
+                    }
+                },
+                onSongClicked = {songId->
+                    playSpotifyMedia(musicPlayerViewModel.spotifyRemote.value, songId)
+                },
+                items = likedSongs?.items,
+                updatePlaylist = {
+                    libraryViewModel.getLibraryItems()
+                },
+
+                onArtistClicked = { artistID ->
+                    navHostController.navigate(Routes.Artist.route + "/$artistID") {
+                        restoreState = true
+                    }
+                })
 
         }
 

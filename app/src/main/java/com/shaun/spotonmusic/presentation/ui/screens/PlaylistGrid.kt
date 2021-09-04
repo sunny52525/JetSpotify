@@ -30,7 +30,6 @@ fun PlaylistGridScreen(
     color: Int = 0,
     id: String? = "chill",
     viewModel: PlaylistGridViewModel,
-    title: String?,
     onPlaylistClicked: (String) -> Unit
 ) {
 

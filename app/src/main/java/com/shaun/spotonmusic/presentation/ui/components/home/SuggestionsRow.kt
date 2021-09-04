@@ -43,7 +43,7 @@ fun SuggestionsRow(
         ) {
 
 
-            itemsIndexed(data) { index, item ->
+            itemsIndexed(data) { _, item ->
 
                 SuggestionCard(
                     cornerRadius = cornerRadius,

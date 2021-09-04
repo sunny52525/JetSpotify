@@ -216,6 +216,7 @@ class MusicDetailRepositoryImpl(
         val result = MutableLiveData<Artist?>()
         spotify.getArtist(id, object : Callback<Artist> {
             override fun success(t: Artist?, response: Response?) {
+                Log.d(TAG, "success: ${t?.name}")
                 result.postValue(t)
             }
 

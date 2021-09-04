@@ -59,7 +59,7 @@ fun Search(
 
         categories.let {
 
-            if (gridColors?.size!! > 2)
+            if (gridColors.size > 2)
                 for (i in 0..it.size step (2)) {
                     if (i + 1 >= it.size)
                         break

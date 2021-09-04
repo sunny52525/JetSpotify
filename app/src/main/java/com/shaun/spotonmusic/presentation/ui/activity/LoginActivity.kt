@@ -8,16 +8,21 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.annotation.MainThread
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.ui.ExperimentalComposeUiApi
 import com.shaun.spotonmusic.presentation.ui.screens.LoginScreen
 import com.spotify.sdk.android.authentication.AuthenticationResponse
 import io.github.kaaes.spotify.webapi.core.models.UserPrivate
 import net.openid.appauth.TokenResponse
 
-
+@ExperimentalAnimationApi
+@ExperimentalComposeUiApi
+@ExperimentalFoundationApi
+@ExperimentalMaterialApi
 class LoginActivity : BaseSpotifyActivity() {
 
-    @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -107,12 +112,14 @@ class LoginActivity : BaseSpotifyActivity() {
         }, 1000)
     }
 
+
     override fun onRefreshAccessTokenSucceed(tokenResponse: TokenResponse?, user: UserPrivate?) {
         super.onRefreshAccessTokenSucceed(tokenResponse, user)
         val intent = getTokenActivityIntent()
         startActivity(intent)
         finish()
     }
+
 
     private fun getTokenActivityIntent(): Intent {
         return Intent(this, HomeActivity::class.java)
