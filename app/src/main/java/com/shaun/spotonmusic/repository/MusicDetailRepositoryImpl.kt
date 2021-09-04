@@ -230,16 +230,16 @@ class MusicDetailRepositoryImpl(
     fun getArtistTopTrack(id: String): MutableLiveData<Tracks?> {
 
         val result = MutableLiveData<Tracks?>()
-//        spotify.getArtistTopTrack(id, "IN", object : Callback<Tracks> {
-//            override fun success(t: Tracks?, response: Response?) {
-//                result.postValue(t)
-//            }
-//
-//            override fun failure(error: RetrofitError?) {
-//                Log.d(TAG, "failure: ${error?.message}")
-//            }
-//
-//        })
+        spotify.getArtistTopTrack(id, "IN", object : Callback<Tracks> {
+            override fun success(t: Tracks?, response: Response?) {
+                result.postValue(t)
+            }
+
+            override fun failure(error: RetrofitError?) {
+                Log.d(TAG, "failure: ${error?.message}")
+            }
+
+        })
         return result
     }
 
