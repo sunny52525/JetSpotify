@@ -13,7 +13,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    context: SpotOnApplication,
     private val retrofit: SpotifyAppService,
     datastoreManager: DatastoreManager,
 ) : ViewModel() {

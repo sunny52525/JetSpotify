@@ -120,7 +120,6 @@ fun PlaylistDetail(
 
 
                 },
-                viewModel = viewModel,
                 shuffleClicked = {
                     onShufflePlayListClicked(currentPlaylist?.uri)
                 },

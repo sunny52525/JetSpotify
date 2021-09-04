@@ -38,7 +38,7 @@ fun FavouriteArtistSongs(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             data.items?.let {
-                it.forEachIndexed { index, its ->
+                it.forEachIndexed { _, its ->
                     item {
                         CustomizedSuggestionCard(
                             album = Pair(its.images[0].url, its.name),

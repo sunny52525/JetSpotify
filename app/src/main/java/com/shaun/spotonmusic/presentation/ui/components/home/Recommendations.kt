@@ -33,7 +33,7 @@ fun RecommendationsRow(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             recommendations.let {
-                it.forEachIndexed { index, its ->
+                it.forEachIndexed { _, its ->
                     item {
                         CustomizedSuggestionCard(
                             album = Pair(its.imageUrls[0], its.title),

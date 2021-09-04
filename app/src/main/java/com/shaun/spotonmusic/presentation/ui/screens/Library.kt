@@ -28,7 +28,6 @@ import kotlinx.coroutines.CoroutineScope
 @ExperimentalAnimationApi
 @Composable
 fun Library(
-    viewModel: SharedViewModel,
     modalBottomSheetState: ModalBottomSheetState,
     libraryViewModel: LibraryViewModel,
     scope: CoroutineScope,

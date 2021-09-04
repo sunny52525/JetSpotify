@@ -35,7 +35,6 @@ fun Home(
     tokenExpired: () -> Unit,
     onAlbumClicked: (String) -> Unit = {},
     onPlayListClicked: (String) -> Unit = {},
-    onUserPlayListClicked: (String) -> Unit = {},
     onArtistClicked: (String) -> Unit = {},
 
     ) {

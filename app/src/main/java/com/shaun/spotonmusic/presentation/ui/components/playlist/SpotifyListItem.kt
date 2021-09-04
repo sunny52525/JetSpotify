@@ -38,7 +38,6 @@ fun SpotifySongListItem(
     imageUrl: String = "",
     showImage: Boolean = true,
     liked: Boolean = false,
-    count: Int = 0,
     imageSize: Int = 55,
     showMore: Boolean = true,
     shape: Shape = RectangleShape,

@@ -24,7 +24,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SharedViewModel @Inject constructor(
-    context: SpotOnApplication,
     private val retrofit: SpotifyAppService,
     private val datastoreManager: DatastoreManager,
     private val hasInternetConnection: Boolean

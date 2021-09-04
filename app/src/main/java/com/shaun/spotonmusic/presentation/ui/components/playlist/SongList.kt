@@ -31,7 +31,6 @@ fun SongList(
     scrollState: LazyListState,
     tracks: Pager<PlaylistTrack?>?,
     onFollowClicked: () -> Unit,
-    viewModel: PlaylistDetailViewModel,
     shuffleClicked: () -> Unit,
     onSongClicked: (String) -> Unit,
     likedSongs: BooleanArray?

@@ -27,7 +27,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LibraryViewModel @Inject constructor(
-    context: SpotOnApplication,
     private val retrofit: SpotifyAppService,
     private val datastoreManager: DatastoreManager,
     private val hasInternetConnection: Boolean

@@ -145,9 +145,8 @@ fun HomeScreenNavigationConfiguration(
 
 
                 Library(
-                    viewModel = sharedViewModel,
                     modalBottomSheetState = modalBottomSheetState,
-                    libraryViewModel,
+                    libraryViewModel = libraryViewModel,
                     scope = scope,
                     listStateLibrary = listStateLibrary, onPlaylistClicked = {
 
@@ -256,15 +255,15 @@ fun HomeScreenNavigationConfiguration(
                             restoreState = true
                         }
                     },
-                    onSongClicked = { id ->
-                        playSpotifyMedia(musicPlayerViewModel.spotifyRemote.value, id)
+                    onSongClicked = {
+                        playSpotifyMedia(musicPlayerViewModel.spotifyRemote.value, it)
                     },
                     items = likedSongs?.items,
                     updatePlaylist = {
                         libraryViewModel.getLibraryItems()
                     },
-                    onArtistClicked = { artist ->
-                        navHostController.navigate(Routes.Artist.route + "/$artist") {
+                    onArtistClicked = { artistName: String ->
+                        navHostController.navigate(Routes.Artist.route + "/$artistName") {
                             restoreState = true
                         }
                     })

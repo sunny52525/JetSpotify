@@ -28,6 +28,10 @@ import net.openid.appauth.TokenResponse
 
 
 @AndroidEntryPoint
+@ExperimentalMaterialApi
+@ExperimentalFoundationApi
+@ExperimentalComposeUiApi
+@ExperimentalAnimationApi
 class HomeActivity : BaseSpotifyActivity(), Stopwatch.OnTickListener {
 
     var spotifyAppRemote: SpotifyAppRemote? = null
@@ -37,10 +41,7 @@ class HomeActivity : BaseSpotifyActivity(), Stopwatch.OnTickListener {
     private val libraryViewModel: LibraryViewModel by viewModels()
 
 
-    @ExperimentalMaterialApi
-    @ExperimentalFoundationApi
-    @ExperimentalComposeUiApi
-    @ExperimentalAnimationApi
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

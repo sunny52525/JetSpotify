@@ -67,7 +67,7 @@ fun NowPlaying(musicPlayerViewModel: MusicPlayerViewModel) {
             )
             .pointerInput(Unit) {
 
-                detectVerticalDragGestures { change, dragAmount ->
+                detectVerticalDragGestures { change, _ ->
                     if (change.position.y - change.previousPosition.y > 20f) {
                         musicPlayerViewModel.isCollapsed.postValue(true)
                     }

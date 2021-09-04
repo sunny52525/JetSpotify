@@ -2,10 +2,7 @@ package com.shaun.spotonmusic.presentation.ui.components.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,7 +37,10 @@ fun SuggestionsRow(
 
 
         Heading(title = title)
-        LazyRow {
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 20.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
 
 
             itemsIndexed(data) { index, item ->
@@ -49,7 +49,7 @@ fun SuggestionsRow(
                     cornerRadius = cornerRadius,
                     imageUrl = getImageUrl(item.imageUrls, 1),
                     item.title,
-                    paddingValues = if (index == 0) 20 else 10,
+
                     size = size,
                     modifier = Modifier
                         .clickable {
@@ -72,7 +72,7 @@ fun SuggestionCard(
     imageUrl: String,
     title: String,
     size: Int,
-    paddingValues: Int,
+
     modifier: Modifier,
 
     ) {
@@ -80,7 +80,7 @@ fun SuggestionCard(
 
     Column(
         modifier
-            .padding(bottom = 10.dp, top = 10.dp, start = paddingValues.dp)
+            .padding(bottom = 10.dp, top = 10.dp)
             .width(size.dp)
 
 
