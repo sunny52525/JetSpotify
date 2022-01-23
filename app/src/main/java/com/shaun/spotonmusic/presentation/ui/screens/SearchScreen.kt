@@ -14,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
 import com.shaun.spotonmusic.presentation.ui.Heading
 import com.shaun.spotonmusic.presentation.ui.components.home.SuggestionsRow
@@ -47,7 +48,10 @@ fun SearchScreen(
     {
         delay(100)
         value = true
+
     }
+
+
 
     val searchQuery = remember {
         mutableStateOf("")
@@ -76,7 +80,7 @@ fun SearchScreen(
                 100
             }),
         ) {
-            MainSearchBar(query = searchQuery.value) {
+            MainSearchBar(query = searchQuery.value ) {
                 if (searchQuery.value == it)
                     return@MainSearchBar
 

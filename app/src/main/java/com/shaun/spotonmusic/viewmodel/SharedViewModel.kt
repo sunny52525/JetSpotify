@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.shaun.spotonmusic.SpotOnApplication
 import com.shaun.spotonmusic.database.model.SpotOnMusicModel
 import com.shaun.spotonmusic.di.DatastoreManager
 import com.shaun.spotonmusic.navigation.BottomNavRoutes
@@ -17,6 +16,8 @@ import kaaes.spotify.webapi.android.models.Album
 import kaaes.spotify.webapi.android.models.Pager
 import kaaes.spotify.webapi.android.models.Playlist
 import kaaes.spotify.webapi.android.models.UserPrivate
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
@@ -130,21 +131,19 @@ class SharedViewModel @Inject constructor(
                 "37i9dQZF1DWUa8ZRTfalHk", //pop rising
                 "37i9dQZEVXbNG2KDcFcKOF" //top songs global (weekly)
             )
-            var responses = listOf<Playlist>()
+            var responses = listOf<Deferred<Playlist>>()
             try {
                 responses = chartsIDs.map {
-
-                    val res = repo.getAPlaylist(it)
-                    Log.d(TAG, "getCharts: $res")
-                    res
+                    async {
+                        repo.getAPlaylist(it)
+                    }
                 }
             } catch (e: Exception) {
                 Log.d("TAG", "getCharts: $e")
             }
 
-
             val response = responses.map {
-                it
+                it.await()
             }
             charts.postValue(response.toSpotOnMusicModel())
 
@@ -152,6 +151,8 @@ class SharedViewModel @Inject constructor(
 
     }
 
-}
+    companion object {
+        private const val TAG = "SharedViewModel"
+    }
 
-private const val TAG = "SharedViewModel"
+}

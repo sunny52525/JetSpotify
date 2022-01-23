@@ -17,6 +17,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -31,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import com.shaun.spotonmusic.ui.theme.searchBarColor
 import com.shaun.spotonmusic.ui.theme.searchQueryGray
 import com.shaun.spotonmusic.ui.theme.spotifyGray
+import kotlinx.coroutines.delay
 
 @ExperimentalAnimationApi
 @ExperimentalMaterialApi
@@ -39,6 +42,7 @@ import com.shaun.spotonmusic.ui.theme.spotifyGray
 @Composable
 fun MainSearchBar(query: String = "", onQuery: (String) -> Unit = { }) {
 
+    val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
     val expanded = remember {
         mutableStateOf(false)
@@ -56,6 +60,8 @@ fun MainSearchBar(query: String = "", onQuery: (String) -> Unit = { }) {
         else
             0.95f
     }
+
+
     Box(
         Modifier
             .fillMaxWidth()
@@ -114,7 +120,8 @@ fun MainSearchBar(query: String = "", onQuery: (String) -> Unit = { }) {
                     .animateContentSize()
                     .clickable {
                         expanded.value = !expanded.value
-                    },
+                    }
+                    .focusRequester(focusRequester),
                 placeholder = {
                     Text(
                         text = "Search query",
@@ -153,12 +160,16 @@ fun MainSearchBar(query: String = "", onQuery: (String) -> Unit = { }) {
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent
+                ),
+
+
                 )
-
-
-            )
         }
     }
 
+    LaunchedEffect(key1 = true, block = {
+        delay(150)
+        expanded.value = true
+    })
 
 }
