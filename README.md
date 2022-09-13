@@ -31,4 +31,4 @@ JetSpotify is a Spotify App (made in Jetpack Compose) and functionalites (using 
 
 ##### You need official spotify app installed for remote play
 
-#### To build in your local system, change cliend_id and redirect_url in AppConstants and add debug key in spotify dev console.
+#### To build in your local system, change cliend_id and redirect_url in AppConstants and add signing key in spotify dev console.
